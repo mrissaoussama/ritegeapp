@@ -13,7 +13,7 @@ namespace ritegeapp.Views
         {
             base.OnAppearing();
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            Task.Run(() => ((EventListViewViewModel)BindingContext).LoadList());
+            Task.Run(() => ((EventListPopupViewModel)BindingContext).LoadList());
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             //            Task.Run(async () =>
@@ -23,7 +23,7 @@ namespace ritegeapp.Views
         public EventListView(ObservableObject viewmodel)
         {
             InitializeComponent();
-            BindingContext = new EventListViewViewModel(viewmodel);
+            BindingContext = new EventListPopupViewModel(viewmodel);
         }
 
         private void OnClose(object sender, EventArgs e)

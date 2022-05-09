@@ -19,18 +19,17 @@
     using System.Threading.Tasks;
     using Xamarin.Essentials;
     using Xamarin.Forms;
-
     public class DataService
     {
         public bool Initialized;
-        NetworkAccess networkAccess;
         public HubConnection hubConnection;
+        public HttpClient httpClient;
         public TimeSpan TokenExpiresIn = TimeSpan.FromDays(9999);
         public string Token { get; set; }
         public DataService()
         {
+            httpClient = GetHttpClient();
         }
-
         public async Task Initialize()
         {
             if (Initialized == false)
@@ -147,7 +146,6 @@
                 var all = dbcontext.Token.Where(x => x.ID > 0).ToList();
             }
         }
-
         public async Task<string?> GetToken()
         {
             NotificationToken? t;
@@ -177,12 +175,9 @@
                 return Token;
             }
         }
-
-
         public async Task<string?> Login()
         {
 
-            using (HttpClient httpClient = GetHttpClient())
             {
                 HttpResponseMessage response = new HttpResponseMessage();
                 JsonContent content;
@@ -220,7 +215,7 @@
         public HttpClient GetHttpClient()
         {
 
-#if DEBUG
+            #if DEBUG
             var handler = new HttpClientHandler();
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback =
@@ -228,9 +223,9 @@
                 {
                     return true;
                 };
-#else
+            #else
 			var handler = new HttpClientHandler(); 
-#endif
+            #endif
             var httpclient = new HttpClient(handler);
             httpclient.Timeout = TimeSpan.FromSeconds(10);
             return httpclient;
@@ -238,7 +233,6 @@
         public async Task<T> GetData<T>(string DataURL, Dictionary<string, string> args)
         {
             _ = Task.Run(async () => await Connect());
-            using (HttpClient httpClient = GetHttpClient())
             {
                 HttpResponseMessage response = new HttpResponseMessage();
 
@@ -431,13 +425,12 @@
         }
         public async Task Disconnect()
         {
-            if (networkAccess == NetworkAccess.Internet)
-            {
+          
                 if (hubConnection.State == HubConnectionState.Connected)
                 {
                     await hubConnection.StopAsync();
                 }
-            }
+            
         }
         private void SendErrorMessage(Exception ex)
         {

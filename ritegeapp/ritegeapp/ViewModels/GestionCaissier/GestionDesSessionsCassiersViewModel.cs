@@ -23,13 +23,8 @@ namespace ritegeapp.ViewModels
     {
         #region variables 
         public List<InfoSessionsDTO> ListDto = new List<InfoSessionsDTO>();
-
-        [ObservableProperty]
-        public ObservableCollection<Caissier> listCaissier = new ObservableCollection<Caissier>();
         [ObservableProperty]
         public ObservableCollection<Caissier> listCaissierToShow = new ObservableCollection<Caissier>();
-        [ObservableProperty]
-        public ObservableCollection<DateCaissier> listDateCaissier = new ObservableCollection<DateCaissier>();
         [ObservableProperty]
         public ObservableCollection<DateCaissier> listDateCaissierToShow = new ObservableCollection<DateCaissier>();
         [ObservableProperty]
@@ -39,17 +34,13 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private string parking;
         [ObservableProperty]
-        private DateTime dateStartSession;
-        [ObservableProperty]
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
-        private DateTime dateEnd = DateTime.Today.AddDays(1);
+        private DateTime dateEnd = DateTime.Today;
         [ObservableProperty]
         private bool showNoFilterResultLabel = false;
         [ObservableProperty]
         private bool resetFilterButton = false;
-        [ObservableProperty]
-        private bool expandersAreExpanded;
         [ObservableProperty]
         private bool caissierSortMode;
         [ObservableProperty]
@@ -70,51 +61,17 @@ namespace ritegeapp.ViewModels
         private bool canTapFilterImages = false;
         [ObservableProperty]
         private decimal totalMoney;
-
-        [ObservableProperty]
-        private string statisticsToolBarItemName = "Statistiques";
-
-
-        [ObservableProperty]
-        private string expandOption1Text = "Développer Dates";
-
-
-        [ObservableProperty]
-        private ImageSource expandOption1Image = ImageSource.FromFile("expand.png");
-
-
         #endregion
-        public FilterData filterdata;
-        public DataService dataService;
         public GestionDesSessionsCaissiersViewModel()
         {
-            dataService = (Application.Current as App).dataService;
             CaissierSortMode = true;
             DateCaissierSortMode = false;
-
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connection Lost", async (sender) =>
-            {
-                await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connexion Perdue"));
-
-
-            }); MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connected", async (sender) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connected", async (sender) =>
             {
                 await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connecté")
-);
-
-
+            );
             });
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "No Connection", async (sender) =>
-            {
-                await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Pas De Connexion")
- );
-
-
-            });
-
-
         }
-
         private async Task FilteredDataReceivedAsync(List<InfoSessionsDTO> data)
         {
             if (data == null || data.Count == 0)
@@ -126,27 +83,24 @@ namespace ritegeapp.ViewModels
                 ListDto = (data); GroupByCaissier(); GroupByDateCaissier();
             }
         }
-
         private void GroupByCaissier()
         {
             var result = ListDto;
             result = result.GroupBy(p => p.Caissier).Select(grp => grp.FirstOrDefault()).ToList();
             ListCaissierToShow.Clear();
             foreach (var x in result)
-            {
-                if (ListCaissierToShow.Where(caissier => caissier.NomCaissier == x.Caissier).ToList().Count > 0)
+            { var caissier = ListCaissierToShow.Where(caissier => caissier.NomCaissier == x.Caissier).ToList();
+                if (caissier.Count > 0)
                 {
-                    ListCaissierToShow.Where(caissier => caissier.NomCaissier == x.Caissier).ToList()[0].ListSessions.Add(x);
+                    caissier[0].ListSessions.Add(x);
                 }
                 else
                 {
                     Caissier c = new Caissier(ListDto, x.Caissier);
                     ListCaissierToShow.Add(c);
                 }
-
             }
             ShowDataView();
-
         }
         private void GroupByDateCaissier()
         {
@@ -154,10 +108,11 @@ namespace ritegeapp.ViewModels
             result = result.GroupBy(p => p.DateStartSession).Select(grp => grp.FirstOrDefault()).ToList();
             ListDateCaissierToShow.Clear();
             foreach (var x in result)
-            {
-                if (ListDateCaissierToShow.Where(caissier => caissier.Date == x.DateStartSession).ToList().Count > 0)
+            { 
+                var caissier = ListDateCaissierToShow.Where(caissier => caissier.Date == x.DateStartSession).ToList();
+                if (caissier.Count > 0)
                 {
-                    ListDateCaissierToShow.Where(caissier => caissier.Date == x.DateStartSession).ToList()[0].ListSessions.Add(x);
+                    caissier[0].ListSessions.Add(x);
                 }
                 else
                 {
@@ -167,7 +122,6 @@ namespace ritegeapp.ViewModels
             }
 
         }
-
         public void ShowLoading()
         {
             CanTapFilterImages = false;
@@ -230,54 +184,11 @@ namespace ritegeapp.ViewModels
         [ICommand]
         private async void ClearFilter(object obj)
         {
-            dateStart = DateTime.Now;
-        dateEnd = DateTime.Today.AddDays(1);
-        SearchTextBox = "";
+            dateStart = DateTime.Today;
+            dateEnd = DateTime.Today;
+            SearchTextBox = "";
             ShowNoFilterResultLabel = false;
             await GetData();
-
-        }
-
-        private void UpdatePreferencesUI()
-        {
-            if (expandersAreExpanded)
-            {
-                expandOption1Text = "Reduire Dates";
-                expandOption1Image = ImageSource.FromFile("collapse.png");
-            }
-            else
-            {
-                expandOption1Text = "Developper Dates";
-                expandOption1Image = ImageSource.FromFile("expand.png");
-            }
-        }
-        private void LoadPreferences()
-        {
-            if (Preferences.ContainsKey("ExpandCaissierDates"))
-            {
-                expandersAreExpanded = Preferences.Get("ExpandCaissierDates", false);
-            }
-            else
-            {
-                expandersAreExpanded = false;
-
-                Preferences.Set("ExpandCaissierDates", expandersAreExpanded);
-            }
-            UpdatePreferencesUI();
-        }
-        private void SwitchViewPreferences()
-        {
-            Debug.WriteLine("value before switch" + expandersAreExpanded);
-
-            expandersAreExpanded = !expandersAreExpanded;
-            if (Preferences.ContainsKey("ExpandCaissierDates"))
-            {
-                Preferences.Set("ExpandCaissierDates", expandersAreExpanded);
-            }
-            UpdatePreferencesUI();
-
-            Debug.WriteLine("value after switch" + expandersAreExpanded);
-            Debug.WriteLine("pref after switch" + Preferences.Get("ExpandCaissierDates", false));
         }
         [ICommand]
         private async void SearchText(object obj)
@@ -290,21 +201,11 @@ namespace ritegeapp.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 ShowLoading();
-        
-                    await FilteredDataReceivedAsync(await dataService.GetFilteredCashierData(dateStart, dateEnd, SearchTextBox));
-
+                await FilteredDataReceivedAsync(await (Application.Current as App).dataService.GetFilteredCashierData(dateStart, dateEnd, SearchTextBox));
             }
             else
             if (ListDto.Count == 0)
                 ShowNoInternetView();
-            else
-            {
-                await Device.InvokeOnMainThreadAsync(() =>
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "Connection Lost"));
-
-            }
-            ListIsRefreshing = false;
-
         }
 
         [ICommand]
@@ -312,25 +213,11 @@ namespace ritegeapp.ViewModels
         {
             CaissierSortMode = !CaissierSortMode;
             DateCaissierSortMode = !DateCaissierSortMode; ShowTotalIfCountIsMoreThanOne();
-
         }
         [ICommand]
         private async void OpenStatisticsWindow(object obj)
         {
             await PopupNavigation.Instance.PushAsync(new GestionCaissierStatisticsPopup(this));
         }
-
-
-        [ICommand]
-        private void ExpandOption1(object obj)
-        {
-            SwitchViewPreferences();
-
-
-            UpdatePreferencesUI();
-        }
-
-
-
     }
 }

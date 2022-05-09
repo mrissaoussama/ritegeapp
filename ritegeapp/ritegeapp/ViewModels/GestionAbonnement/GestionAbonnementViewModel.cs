@@ -25,12 +25,10 @@ namespace ritegeapp.ViewModels
         #region variables   
         public List<InfoAbonnementDTO> ListDto = new List<InfoAbonnementDTO>();
 
-        [ObservableProperty]
-        public ObservableRangeCollection<GroupAbonnement> listAbonnement = new ObservableRangeCollection<GroupAbonnement>();
+        
         [ObservableProperty]
         public ObservableRangeCollection<GroupAbonnement> listAbonnementToShow = new ObservableRangeCollection<GroupAbonnement>();
-        [ObservableProperty]
-        public ObservableRangeCollection<DateAbonnement> listDateAbonnement = new ObservableRangeCollection<DateAbonnement>();
+       
         [ObservableProperty]
         public ObservableRangeCollection<DateAbonnement> listDateAbonnementToShow = new ObservableRangeCollection<DateAbonnement>();
         [ObservableProperty]
@@ -47,7 +45,7 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
-        private DateTime dateEnd = DateTime.Today.AddDays(1);
+        private DateTime dateEnd = DateTime.Today;
 
         [ObservableProperty]
         private bool showNoFilterResultLabel = false;
@@ -80,21 +78,10 @@ namespace ritegeapp.ViewModels
         #endregion
         public FilterData filterdata;
         public DataService dataService;
-
         public GestionAbonnementViewModel()
         {
-
-          
-            dataService = (Application.Current as App).dataService;
             AbonnementSortMode = true;
             DateAbonnementSortMode = false;
-
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connection Lost", async (sender) =>
-            {
-                await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connexion Perdue"));
-
-
-            }); 
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connected", async (sender) =>
             {
                 await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connecté")
@@ -108,8 +95,6 @@ namespace ritegeapp.ViewModels
             );
 
             });
-
-
         }
         private async Task FilteredDataReceivedAsync(List<InfoAbonnementDTO> data)
         {
@@ -139,22 +124,19 @@ namespace ritegeapp.ViewModels
             var Dto = new List<GroupAbonnement>(listAbonnementToShow);
             result = result.GroupBy(p => p.NomPrenomAbonne).Select(grp => grp.FirstOrDefault()).ToList();
             for (int i = 0; i < result.Count; i++)
-            {
-                if (Dto.Where(Abonnement => Abonnement.NomPrenomAbonne == result[i].NomPrenomAbonne).ToList().Count > 0)
+            { var abonnements = Dto.Where(Abonnement => Abonnement.NomPrenomAbonne == result[i].NomPrenomAbonne).ToList();
+                if (abonnements.Count > 0)
                 {
-                    Dto.Where(Abonnement => Abonnement.NomPrenomAbonne == result[i].NomPrenomAbonne).ToList()[0].ListAbonnement.Add(result[i]);
+                    abonnements[0].ListAbonnement.Add(result[i]);
                 }
                 else
                 {
                     GroupAbonnement c = new GroupAbonnement(ListDto, result[i].NomPrenomAbonne);
-
                     Dto.Add(c);
                 }
             }
             return Dto;
         }
-
-
         private async Task<List<DateAbonnement>> GroupByDateAbonnement()
         {
             var result = ListDto; 
@@ -162,10 +144,10 @@ namespace ritegeapp.ViewModels
 
             result = result.GroupBy(p => p.DateActivation).Select(grp => grp.FirstOrDefault()).ToList();
             foreach (var x in result)
-            {
-                if (ListDateAbonnementToShow.Where(Abonnement => Abonnement.dateStart == x.DateActivation).ToList().Count > 0)
+            { var abonnement = ListDateAbonnementToShow.Where(Abonnement => Abonnement.dateStart == x.DateActivation).ToList();
+                if (abonnement.Count > 0)
                 {
-                    ListDateAbonnementToShow.Where(Abonnement => Abonnement.dateStart == x.DateActivation).ToList()[0].ListAbonnement.Add(x);
+                    abonnement[0].ListAbonnement.Add(x);
                 }
                 else
                 {
@@ -175,8 +157,6 @@ namespace ritegeapp.ViewModels
             }
             return Dto;
         }
-
-
         public void ShowLoading()
         {
             ShowTotal = false;
@@ -243,7 +223,6 @@ namespace ritegeapp.ViewModels
         [ICommand]
         public async Task GetData()
         {
-            Debug.WriteLine("clicked");
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 ShowLoading();
@@ -253,15 +232,6 @@ namespace ritegeapp.ViewModels
             else
             if (ListDto.Count == 0)
                 ShowNoInternetView();
-            else
-            {
-                await Device.InvokeOnMainThreadAsync(() =>
-                 MessagingCenter.Send(Xamarin.Forms.Application.Current, "Connection Lost"));
-
-            }
-
-            ListIsRefreshing = false;
-
         }
         [ICommand]
         private void SortBy(object obj)
@@ -270,26 +240,19 @@ namespace ritegeapp.ViewModels
             DateAbonnementSortMode = !DateAbonnementSortMode;
             ShowTotalIfCountIsMoreThanOne();
         }
-
         [ICommand]
         private async void ClearFilter(object obj)
         {
-
-
             dateStart = DateTime.Now;
             dateEnd = DateTime.Today.AddDays(1);
             SearchTextBox = "";
             ShowNoFilterResultLabel = false;
             await GetData();
-
         }
-
-
         [ICommand]
         private async void OpenStatisticsWindow(object obj)
         {
             await PopupNavigation.Instance.PushAsync(new GestionAbonnementStatisticsPopup(this));
         }
-
     }
 }

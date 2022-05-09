@@ -9,9 +9,9 @@ using Xamarin.Forms;
 
 namespace ritegeapp.ViewModels
 {
-    public partial class EventListViewViewModel : ObservableObject
+    public partial class EventListPopupViewModel : ObservableObject
     {
-        public EventListViewViewModel(ObservableObject viewmodel)
+        public EventListPopupViewModel(ObservableObject viewmodel)
         {
             EventList = new();
             parentvm = viewmodel;
@@ -23,17 +23,12 @@ namespace ritegeapp.ViewModels
         private bool isLoading = true;
         [ObservableProperty]
         private bool showData = false;
-        // private ObservableCollection<string> EventList;
-
-        [ICommand]
+[ICommand]
         private async void BackgroundClicked(object parameter)
         {
             await PopupNavigation.Instance.PopAllAsync();
-
         }
-
-
-        public async Task LoadList()
+public async Task LoadList()
         {
             IsLoading = true; showData = false;
             foreach (var Event in ((TableauDeBordViewModel)parentvm).eventList)
@@ -42,10 +37,5 @@ namespace ritegeapp.ViewModels
             }
             IsLoading = false; showData = true;
         }
-
-        #region variables
-
-
-        #endregion
     }
 }

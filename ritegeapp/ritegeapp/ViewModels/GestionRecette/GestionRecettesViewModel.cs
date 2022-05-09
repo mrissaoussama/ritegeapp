@@ -23,32 +23,20 @@ namespace ritegeapp.ViewModels
     {
         #region variables      
         public List<InfoTicketDTO> ListDto = new List<InfoTicketDTO>();
-
-        [ObservableProperty]
-        public ObservableCollection<InfoTicketDTO> listRecette = new ObservableCollection<InfoTicketDTO>();
         [ObservableProperty]
         public ObservableCollection<InfoTicketDTO> listRecetteToShow = new ObservableCollection<InfoTicketDTO>();
-
         [ObservableProperty]
-
-        private DateTime dateHeureEntree;
-        [ObservableProperty]
-
         private bool showNoFilterResultLabel = false;
         [ObservableProperty]
-
         private bool resetFilterButton = false;
         [ObservableProperty]
-
         private string statisticsToolBarItemName = "Statistiques";
         [ObservableProperty]
-
         private string expandOption1Text = "Développer Dates";
         [ObservableProperty]
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
-        private DateTime dateEnd = DateTime.Today.AddDays(1);
-        private ImageSource expandOption1Image = ImageSource.FromFile("expand.png");
+        private DateTime dateEnd = DateTime.Today;
         [ObservableProperty]
         private bool showData;
         [ObservableProperty]
@@ -65,40 +53,20 @@ namespace ritegeapp.ViewModels
         private bool canTapFilterImages = false;
         [ObservableProperty]
         private decimal totalMoney;
-
-
         #endregion
         public FilterData filterdata;
-
         public DataService dataService;
-
         public GestionRecettesViewModel()
         {
-            dataService = (Application.Current as App).dataService;
-
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connection Lost", async (sender) =>
-            {
-                await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connexion Perdue"));
-
-
-            }); MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connected", async (sender) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connected", async (sender) =>
             {
                 await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connecté")
-);
-
-
+            );
             });
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "No Connection", async (sender) =>
-            {
-                await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Pas De Connexion")
- );
-            });
-
             dataService.hubConnection.On<InfoTicketDTO[]>("GetFilteredTicketData", async (data) =>
             {
                await FilteredDataReceivedAsync(data.ToList());
             });
-
         }
         private async Task FilteredDataReceivedAsync(List<InfoTicketDTO> data)
         {
@@ -112,16 +80,11 @@ namespace ritegeapp.ViewModels
                 await Device.InvokeOnMainThreadAsync(() => { GroupByDate(); });
             }
         }
-
         private void GroupByDate()
         {
-
-
             ListRecetteToShow.Clear();
             ListDto.ForEach(x => ListRecetteToShow.Add(x));
             ShowDataView();
-
-
         }
         public void ShowLoading()
         {
@@ -166,13 +129,9 @@ namespace ritegeapp.ViewModels
         }
         private void ShowTotalIfCountIsMoreThanOne()
         {
-            {
-                if (ListRecetteToShow.Count > 1)
-                    ShowTotal = true;
-                TotalMoney = ListRecetteToShow.Sum(x => x.MontantPaye);
-            }
-
-
+           if(ListRecetteToShow.Count > 1)
+              ShowTotal = true;
+              TotalMoney = ListRecetteToShow.Sum(x => x.MontantPaye);
         }
         [ICommand]
         private async void ClearFilter(object obj)
@@ -181,60 +140,25 @@ namespace ritegeapp.ViewModels
             dateEnd = DateTime.Today;
             ShowNoFilterResultLabel = false;
             await GetData();
-
         }
         [ICommand]
         public async Task GetData()
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-              
-                ShowLoading();
-                var data = await (Application.Current as App).dataService.GetFilteredTicketData(dateStart.ToUniversalTime(), dateEnd.ToUniversalTime());
-
+             ShowLoading();
+             var data = await (Application.Current as App).dataService.GetFilteredTicketData(dateStart, dateEnd);
                 await FilteredDataReceivedAsync(data);
-
-                 dataService.Connect();
-
+               _=Task.Run(async()=> await dataService.Connect());
             }
             else
             if (ListDto.Count == 0)
                 ShowNoInternetView();
-            else
-            {
-                await Device.InvokeOnMainThreadAsync(() =>
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "Connection Lost"));
-
             }
-            ListIsRefreshing = false;
-
-        }
-
-        private bool CanExpandOption1Command(object arg)
-        {
-            return CanCheckStatistics(arg);
-        }
-
-
-
-
-        private bool CanCheckStatistics(object arg)
-        {
-            return ShowNoFilterResultLabel == false || ListRecetteToShow.Count > 0;
-        }
-        private bool CanResetFilter(object arg)
-        {
-            return ResetFilterButton;
-        }
         [ICommand]
         private async void OpenStatisticsWindow(object obj)
         {
             await PopupNavigation.Instance.PushAsync(new GestionRecetteStatisticsPopup(this));
         }
-
-
-
-
-
     }
 }

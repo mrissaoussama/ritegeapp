@@ -22,49 +22,12 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private Flux? fluxBorne, fluxCaisse;
         [ObservableProperty]
-
-        private string parking;
+        private string parking,nomPrenomCaissier,caissier,caisse;
         [ObservableProperty]
-
-        private bool? etatCaisse;
+        private bool? etatCaisse,isLoading,eventListLoading,isRefreshing,showData;
         [ObservableProperty]
-        private bool isLoading;
+        private int? placeDisponible,placeMax,placeOccupe,nbTickets,nbAdministrateur,nbAutorite,nbEgress,nbAbonne,nbEvents;
         [ObservableProperty]
-        private bool eventListLoading;
-        [ObservableProperty]
-        private bool isRefreshing;
-        [ObservableProperty]
-        private bool showData;
-        [ObservableProperty]
-        private int? placeDisponible;
-        [ObservableProperty]
-        private int? placeMax;
-        [ObservableProperty]
-        private int? placeOccupe;
-        [ObservableProperty]
-        private int? nbTickets;
-        [ObservableProperty]
-        private int? nbAdministrateur;
-        [ObservableProperty]
-        private int? nbAutorite;
-        [ObservableProperty]
-        private int? nbEgress;
-        [ObservableProperty]
-        private int? nbAbonne;
-        [ObservableProperty]
-        private int? nbEvents;
-        [ObservableProperty]
-        private string nomPrenomCaissier;
-        [ObservableProperty]
-        private string caissier;
-        [ObservableProperty]
-
-        private string caisse;
-        [ObservableProperty]
-
-        private DateTime todayDate;
-        [ObservableProperty]
-
         Decimal? recetteParking, recetteCaissier, recetteCaisse, fluxBorneTotal, fluxCaisseTotal;
         public List<ParkingEvent> eventList = new();
         #endregion
@@ -72,24 +35,13 @@ namespace ritegeapp.ViewModels
 
         public TableauDeBordViewModel()
         {
-
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
-            {
-                TodayDate = DateTime.Now;
-                return true;
-            });
-        
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Internet Reestablished", async (sender) =>
             {
                 await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connexion Retablie"));
                 await GetData();
-
-
             });
-
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "No Connection", async (sender) =>
             {
-                await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Pas De Connexion"));
                 SetDataToNull();
             });
             MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(Xamarin.Forms.Application.Current, "ParkingClicked", async (sender, arg) =>
@@ -100,9 +52,7 @@ namespace ritegeapp.ViewModels
             {
                 await DataReceivedAsync(arg);
             });
-       
             InitData();
-
         }
         private void SetDataToNull()
         {
@@ -126,7 +76,6 @@ namespace ritegeapp.ViewModels
             this.PlaceOccupe = null;
             FluxBorneTotal = null;
             FluxCaisseTotal = null;
-            
         }
         private void InitData()
         {
@@ -150,9 +99,7 @@ namespace ritegeapp.ViewModels
             this.PlaceOccupe = null;
             FluxBorneTotal = 99999;
             FluxCaisseTotal = 99999;
-            
         }
-
         private async Task DataReceivedAsync(DashBoardDTO data)
         {
             if (data == null)
@@ -192,7 +139,6 @@ namespace ritegeapp.ViewModels
             this.PlaceDisponible = data.PlaceDisponible;
             this.PlaceOccupe = PlaceMax - data.PlaceDisponible; 
             ShowDataView();
-
         }
         public void ShowLoading()
         {
@@ -201,8 +147,6 @@ namespace ritegeapp.ViewModels
         public void ShowDataView()
         {
             IsLoading = false; IsRefreshing = false; ShowData = true;
-
-
         }
         public void ShowNoDataReceivedMessage()
         {
@@ -219,14 +163,12 @@ namespace ritegeapp.ViewModels
                 {
                     SetDataToNull();
                 }
-
-                else await GetEventList();
+                await GetEventList();
             }
             else
 
             {
                 SetDataToNull();
-
             }
             ShowDataView();
         }
@@ -236,7 +178,6 @@ namespace ritegeapp.ViewModels
             await PopupNavigation.Instance.PushAsync(new ParkingListView(this));
         }
         [ICommand]
-
         private async void OpenEventListView(object obj)
         {if(eventList!=null || eventList.Count!=0)
             await PopupNavigation.Instance.PushAsync(new EventListView(this));
@@ -260,8 +201,5 @@ namespace ritegeapp.ViewModels
                 NbEvents = eventList.Count;
             }
         }
-
-
-
     }
 }
