@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ritegeapp.Views.GestionAbonnement"
+             xmlns:extentions="clr-namespace:ritegeapp.Extentions"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
+             xmlns:viewmodels="clr-namespace:ritegeapp.ViewModels"
+             Title="Gestion Abonnement"
+             BackgroundColor="{StaticResource BackgroundColor}">
+ <ContentPage.ToolbarItems>
+  <ToolbarItem Text="Statistiques"
+               Command="{Binding OpenStatisticsWindowCommand}"
+               Order="Secondary"
+               Priority="0" />
+ </ContentPage.ToolbarItems>
+ <ContentPage.Content>
+  <Grid BackgroundColor="{StaticResource BackgroundColor}"
+        Margin="0,5,0,0">
+   <Grid.RowDefinitions>
+    <RowDefinition Height="140"></RowDefinition>
+   </Grid.RowDefinitions>
+   <extentions:FilterView             x:DataType="viewmodels:GestionAbonnementViewModel"
+                                      dateStart="{Binding DateStart}"
+                                      dateEnd="{Binding DateEnd}"
+                                      SearchSubjectText="Abonné"
+                                      SearchTextBoxEntry="{Binding SearchTextBox}"
+                                      CanTapSearchTextBool="{Binding CanTapFilterImages}"
+                                      CanTapSearchTextCommand="{Binding SearchTextCommand}"
+                                      CanClearFilterBool="{Binding CanTapFilterImages}"
+                                      CanClearFilterCommand="{Binding ClearFilterCommand}"
+                                      CanSortBool="{Binding CanTapFilterImages}"
+                                      CanSortCommand="{Binding SortByCommand}"></extentions:FilterView>
+   <ActivityIndicator   Scale="0.5"
+                        Color="{StaticResource Primary}"
+                        Grid.Row="1"
+                        IsVisible="{Binding ShowLoadingIndicator}"
+                        IsRunning="true" />
+   <Label FontSize="Medium"
+          Grid.Row="1"
+          TextColor="{StaticResource Primary}"
+          IsVisible="{Binding ShowNoFilterResultLabel}"
+          LineBreakMode="WordWrap">
+    <Label.FormattedText>
+     <!--no result label-->
+     <FormattedString>
+      <Span Text="Pas de resultat, Cliquer "
+            TextColor="{StaticResource LabelColor}" />
+      <Span Text="Ici"
+            TextColor="{StaticResource Primary}">
+       <Span.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding ClearFilterCommand}" />
+       </Span.GestureRecognizers>
+      </Span>
+      <Span Text=" pour désactiver le filtre"
+            TextColor="{StaticResource LabelColor}" />
+     </FormattedString>
+    </Label.FormattedText>
+   </Label>
+   <Label FontSize="Medium"
+          Grid.Row="1"
+          TextColor="{StaticResource Primary}"
+          IsVisible="{Binding ShowNoDataReceived}"
+          LineBreakMode="WordWrap">
+    <Label.FormattedText>
+     <!--no result label-->
+     <FormattedString>
+      <Span Text="Pas de resultat, Cliquer "
+            TextColor="{StaticResource LabelColor}" />
+      <Span Text="ici"
+            TextColor="{StaticResource Primary}">
+       <Span.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+       </Span.GestureRecognizers>
+      </Span>
+      <Span Text=" pour réessayer"
+            TextColor="{StaticResource LabelColor}" />
+     </FormattedString>
+    </Label.FormattedText>
+   </Label>
+   <Label FontSize="Medium"
+          Grid.Row="1"
+          TextColor="{StaticResource Primary}"
+          IsVisible="{Binding ShowNoInternetLabel}"
+          LineBreakMode="WordWrap">
+    <Label.FormattedText>
+     <!--no result label-->
+     <FormattedString>
+      <Span Text="Pas de connexion, Activer Wifi ou Données Mobile puis cliquer "
+            TextColor="{StaticResource LabelColor}" />
+      <Span Text="ici"
+            TextColor="{StaticResource Primary}">
+       <Span.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+       </Span.GestureRecognizers>
+      </Span>
+      <Span Text=" pour réessayer"
+            TextColor="{StaticResource LabelColor}" />
+     </FormattedString>
+    </Label.FormattedText>
+   </Label>
+   <RefreshView Grid.Row="1"
+                IsRefreshing="{Binding ListIsRefreshing}"
+                IsEnabled="{Binding ShowData}"
+                Command="{Binding GetDataCommand}"
+                IsVisible="{Binding ShowData}">
+    <ScrollView Grid.Row="1"
+                IsVisible="{Binding ShowNoFilterResultLabel,Converter={StaticResource BooleanNegation}}">
+     <StackLayout>
+      <Grid VerticalOptions="Fill"
+            IsVisible="{Binding AbonnementSortMode}"
+            HorizontalOptions="Fill">
+       <ListView x:Name="ItemsListView"
+                 ItemsSource="{Binding ListAbonnementToShow}"
+                 SeparatorVisibility="None"
+                 SeparatorColor="Transparent"
+                 BackgroundColor="{StaticResource BackgroundColor}"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill"
+                 HasUnevenRows="True">
+        <ListView.ItemTemplate>
+         <DataTemplate>
+          <ViewCell StyleId="no-selection">
+           <ViewCell.View>
+            <Grid VerticalOptions="FillAndExpand">
+             <Grid.RowDefinitions></Grid.RowDefinitions>
+             <Frame BorderColor="{StaticResource Primary}"
+                    Padding="10"
+                    Margin="0,0,0,1"
+                    BackgroundColor="{StaticResource BackgroundColor}">
+              <syncfusion:SfExpander IconColor="{StaticResource Primary}"
+                                     HeaderBackgroundColor="{StaticResource BackgroundColor}">
+               <syncfusion:SfExpander.Header>
+                <Grid>
+                 <Label FontSize="Medium"
+                        TextColor="{StaticResource Primary}"
+                        Grid.Row="0"
+                        FontAttributes="Bold">
+                  <Label.FormattedText>
+                   <FormattedString>
+                    <Span Text="{Binding NomPrenomAbonne}"></Span>
+                    <Span Text=" : "></Span>
+                    <Span Text="{Binding Total}"></Span>
+                    <Span Text=" DT"></Span>
+                   </FormattedString>
+                  </Label.FormattedText>
+                 </Label>
+                </Grid>
+               </syncfusion:SfExpander.Header>
+               <syncfusion:SfExpander.Content>
+                <Grid>
+                 <StackLayout BindableLayout.ItemsSource="{Binding ListAbonnement}">
+                  <BindableLayout.ItemTemplate>
+                   <DataTemplate>
+                    <Grid>
+                     <Frame BorderColor="{StaticResource Primary}"
+                            InputTransparent="True"
+                            BackgroundColor="{StaticResource BackgroundColor}">
+                      <syncfusion:SfExpander Grid.Row="1"
+                                             IconColor="{StaticResource Primary}"
+                                             HeaderBackgroundColor="{StaticResource BackgroundColor}">
+                       <syncfusion:SfExpander.Header>
+                        <!--Session Grid-->
+                        <Label FontSize="Small"
+                               TextColor="{StaticResource Primary}">
+                         <Label.FormattedText>
+                          <FormattedString>
+                           <Span Text="{Binding DateActivation, StringFormat='{0:dd/MM/yyyy}'}"></Span>
+                           <Span Text=" - "></Span>
+                           <Span Text="{Binding DateFinActivation, StringFormat='{0:dd/MM/yyyy}'}"></Span>
+                           <Span Text=" | "></Span>
+                           <Span Text="{Binding PrixAbonnement}"></Span>
+                           <Span Text=" DT"></Span>
+                          </FormattedString>
+                         </Label.FormattedText>
+                        </Label>
+                       </syncfusion:SfExpander.Header>
+                       <syncfusion:SfExpander.Content>
+                        <Grid>
+                         <Grid.RowDefinitions></Grid.RowDefinitions>
+                         <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+                         <Label Text="Date Affectation:"
+                                TextColor="{StaticResource LabelColor}"></Label>
+                         <Label  Grid.Column="1"
+                                 TextColor="{StaticResource Primary}"
+                                 Text="{Binding DateAffectation, StringFormat='{0:d}'}"></Label>
+                         <Label Grid.Row="1"
+                                Text="Prix Abonnement:"
+                                TextColor="{StaticResource LabelColor}"></Label>
+                         <Label Grid.Row="1"
+                                Grid.Column="1"
+                                TextColor="{StaticResource Primary}"
+                                Text="{Binding PrixAbonnement}">
+                          <Label.FormattedText>
+                           <FormattedString>
+                            <Span Text="{Binding PrixAbonnement}"></Span>
+                            <Span Text=" DT"></Span>
+                           </FormattedString>
+                          </Label.FormattedText>
+                         </Label>
+                         <Label Grid.Row="2"
+                                Text="Type Abonnement:"
+                                TextColor="{StaticResource LabelColor}"></Label>
+                         <Label Grid.Row="2"
+                                Grid.Column="1"
+                                TextColor="{StaticResource Primary}"
+                                Text="{Binding TypeAbonnement}"></Label>
+                         <Label Grid.Row="3"
+                                Text="Libelle Abonnement:"
+                                TextColor="{StaticResource LabelColor}"></Label>
+                         <Label Grid.Row="3"
+                                Grid.Column="1"
+                                TextColor="{StaticResource Primary}"
+                                Text="{Binding LibelleAbonnement}"></Label>
+                         <Label Grid.Row="3"
+                                Text="Libelle Abonnement:"
+                                TextColor="{StaticResource LabelColor}"></Label>
+                         <Label Grid.Row="3"
+                                Grid.Column="1"
+                                TextColor="{StaticResource Primary}"
+                                Text="{Binding LibelleAbonnement}"></Label>
+                        </Grid>
+                       </syncfusion:SfExpander.Content>
+                      </syncfusion:SfExpander>
+                     </Frame>
+                    </Grid>
+                   </DataTemplate>
+                  </BindableLayout.ItemTemplate>
+                 </StackLayout>
+                </Grid>
+               </syncfusion:SfExpander.Content>
+              </syncfusion:SfExpander>
+             </Frame>
+            </Grid>
+           </ViewCell.View>
+          </ViewCell>
+         </DataTemplate>
+        </ListView.ItemTemplate>
+       </ListView>
+      </Grid>
+      <!--Date Grid-->
+      <Grid VerticalOptions="Fill"
+            IsVisible="{Binding DateAbonnementSortMode}"
+            HorizontalOptions="Fill">
+       <ListView ItemsSource="{Binding ListDateAbonnementToShow}"
+                 SeparatorVisibility="None"
+                 SeparatorColor="Transparent"
+                 BackgroundColor="{StaticResource BackgroundColor}"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill"
+                 HasUnevenRows="True">
+        <ListView.ItemTemplate>
+         <DataTemplate>
+          <ViewCell StyleId="no-selection">
+           <ViewCell.View>
+            <Grid VerticalOptions="FillAndExpand">
+             <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+             </Grid.RowDefinitions>
+             <Frame BorderColor="{StaticResource Primary}"
+                    Padding="10"
+                    BackgroundColor="{StaticResource BackgroundColor}">
+              <syncfusion:SfExpander HeaderBackgroundColor="{StaticResource BackgroundColor}"
+                                     IconColor="{StaticResource Primary}">
+               <syncfusion:SfExpander.Header>
+                <Grid>
+                 <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="10*"></ColumnDefinition>
+                  <ColumnDefinition Width="90*"></ColumnDefinition>
+                 </Grid.ColumnDefinitions>
+                 <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
+                        WidthRequest="20"
+                        xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                 <Label FontSize="Medium"
+                        Grid.Column="1"
+                        BackgroundColor="{StaticResource BackgroundColor}"
+                        TextColor="{StaticResource Primary}"
+                        Grid.Row="0"
+                        FontAttributes="Bold">
+                  <Label.FormattedText>
+                   <FormattedString>
+                    <Span Text="{Binding dateStart, StringFormat='{0:dd/MM/yyyy}'}"></Span>
+                    <Span Text=" : "></Span>
+                    <Span Text="{Binding Total}"></Span>
+                    <Span Text=" DT"></Span>
+                   </FormattedString>
+                  </Label.FormattedText>
+                 </Label>
+                </Grid>
+               </syncfusion:SfExpander.Header >
+               <syncfusion:SfExpander.Content  Margin="0,10,0,0">
+                <Grid Margin="5">
+                 <StackLayout BindableLayout.ItemsSource="{Binding ListAbonnement}">
+                  <BindableLayout.ItemTemplate>
+                   <DataTemplate>
+                    <Grid>
+                     <Frame BorderColor="{StaticResource Primary}"
+                            InputTransparent="True"
+                            BackgroundColor="{StaticResource BackgroundColor}">
+                      <syncfusion:SfExpander IconColor="{StaticResource Primary}"
+                                             HeaderBackgroundColor="{StaticResource BackgroundColor}">
+                       <syncfusion:SfExpander.Header>
+                        <!--Session Grid-->
+                        <Grid  Margin="-10">
+                         <Grid.RowDefinitions>
+                          <RowDefinition Height="Auto" />
+                          <RowDefinition Height="Auto" />
+                         </Grid.RowDefinitions>
+                         <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto"></ColumnDefinition>
+                          <ColumnDefinition Width="Auto"></ColumnDefinition>
+                          <ColumnDefinition Width="Auto"></ColumnDefinition>
+                         </Grid.ColumnDefinitions>
+                         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.contract.png}"
+                                WidthRequest="20"
+                                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                         <Label Grid.Column="1"
+                                FontSize="Small"
+                                TextColor="{StaticResource Primary}"
+                                Text="{Binding DateAffectation, StringFormat='{0:dd/MM/yyyy}'}"></Label>
+                         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendarcheckmark.png}"
+                                Grid.Column="2"
+                                WidthRequest="20"
+                                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                         <Label FontSize="Small"
+                                TextColor="{StaticResource Primary}"
+                                Grid.Column="3"
+                                Text="{Binding DateFinActivation, StringFormat='{0:dd/MM/yyyy}'}"></Label>
+                         <Label Grid.Column="4"
+                                TextColor="{StaticResource Primary}">
+                          <Label.FormattedText>
+                           <FormattedString>
+                            <Span Text="{Binding PrixAbonnement}"></Span>
+                            <Span Text=" DT"></Span>
+                           </FormattedString>
+                          </Label.FormattedText>
+                         </Label>
+                        </Grid>
+                       </syncfusion:SfExpander.Header>
+                       <syncfusion:SfExpander.Content>
+                        <Grid>
+                         <Grid.RowDefinitions>
+                          <RowDefinition Height="*" />
+                          <RowDefinition Height="*" />
+                         </Grid.RowDefinitions>
+                         <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto"></ColumnDefinition>
+                          <ColumnDefinition Width="Auto"></ColumnDefinition>
+                         </Grid.ColumnDefinitions>
+                         <Label Text="Type Abonnement:"
+                                TextColor="{StaticResource LabelColor}"></Label>
+                         <Label Grid.Column="1"
+                                TextColor="{StaticResource Primary}"
+                                Text="{Binding TypeAbonnement}"></Label>
+                         <Label Grid.Row="1"
+                                Text="Libelle Abonnement:"
+                                TextColor="{StaticResource LabelColor}"></Label>
+                         <Label Grid.Row="1"
+                                Grid.Column="1"
+                                TextColor="{StaticResource Primary}"
+                                Text="{Binding LibelleAbonnement}"></Label>
+                        </Grid>
+                       </syncfusion:SfExpander.Content>
+                      </syncfusion:SfExpander>
+                     </Frame>
+                    </Grid>
+                   </DataTemplate>
+                  </BindableLayout.ItemTemplate>
+                 </StackLayout>
+                </Grid>
+               </syncfusion:SfExpander.Content>
+              </syncfusion:SfExpander>
+             </Frame>
+            </Grid>
+           </ViewCell.View>
+          </ViewCell>
+         </DataTemplate>
+        </ListView.ItemTemplate>
+       </ListView>
+      </Grid>
+     </StackLayout>
+    </ScrollView>
+   </RefreshView>
+  </Grid>
+ </ContentPage.Content>
+</ContentPage>

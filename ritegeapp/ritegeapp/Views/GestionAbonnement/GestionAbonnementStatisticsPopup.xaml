@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+ 
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages1="clr-namespace:ritegeapp.ViewModels"
+                 x:Class="ritegeapp.Views.GestionAbonnementStatisticsPopup"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                 xmlns:dtos="clr-namespace:ritegeapp.DTOs"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 x:DataType="pages1:GestionAbonnementStatisticsPopupViewModel"
+                 CloseWhenBackgroundIsClicked="True"
+                 BackgroundColor="Transparent"
+                 HasSystemPadding="True">
+ <pages:PopupPage.Content>
+  <Frame HasShadow="False"
+         CornerRadius="10"
+         Margin="10"
+         BorderColor="{StaticResource Primary}"
+         HorizontalOptions="Center"
+         VerticalOptions="Center"
+         BackgroundColor="{StaticResource BackgroundColor}">
+   <Grid>
+    <Grid.RowDefinitions></Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+     <ColumnDefinition Width="*" />
+     <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Label Text="Somme Abonnements"
+           Grid.Row="0"
+           TextColor="{StaticResource LabelColor}"
+           Grid.Column="0" />
+    <Label HorizontalOptions="EndAndExpand"
+           TextColor="{StaticResource Primary}"
+           Grid.Row="0"
+           Grid.Column="1"
+           >
+     <Label.FormattedText>
+      <FormattedString>
+       <Span Text="{Binding PrixAbonnementTotal}"></Span>
+       <Span Text=" DT"></Span>
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+    <Label Text="Nombre D'abonnements"
+           TextColor="{StaticResource LabelColor}"
+           Grid.Row="1"
+           Grid.Column="0" />
+    <Label Text="{Binding NbAbonnementTotal}"
+           TextColor="{StaticResource Primary}"
+           HorizontalOptions="EndAndExpand"
+           Grid.Row="1"
+           Grid.Column="1"
+            />
+    <Label Text="Abonnements Interval"
+           TextColor="{StaticResource LabelColor}"
+           Grid.Row="2"
+           Grid.Column="0" />
+    <Label Text="{Binding IntervalTotal}"
+           TextColor="{StaticResource Primary}"
+           HorizontalOptions="EndAndExpand"
+           Grid.Row="2"
+           Grid.Column="1"
+            />
+    <Label Text="Abonnements Annuels"
+           TextColor="{StaticResource LabelColor}"
+           Grid.Row="3"
+           Grid.Column="0" />
+    <Label Text="{Binding AnnuelTotal}"
+           TextColor="{StaticResource Primary}"
+           HorizontalOptions="EndAndExpand"
+           Grid.Row="3"
+           Grid.Column="1"
+            />
+    <Label Text="Abonnements Semestriels"
+           TextColor="{StaticResource LabelColor}"
+           Grid.Row="4"
+           Grid.Column="0" />
+    <Label Text="{Binding SemestrielTotal}"
+           TextColor="{StaticResource Primary}"
+           HorizontalOptions="EndAndExpand"
+           Grid.Row="4"
+           Grid.Column="1"
+            />
+    <Button TextColor="{StaticResource Primary}"
+            BackgroundColor="Transparent"
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            BorderColor="{StaticResource Primary}"
+            BorderWidth="3"
+            Text="Fermer"
+            Clicked="OnClose"></Button>
+   </Grid>
+  </Frame>
+ </pages:PopupPage.Content>
+</pages:PopupPage>

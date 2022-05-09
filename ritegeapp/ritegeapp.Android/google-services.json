@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "802689968010",
+    "project_id": "ritegeapp",
+    "storage_bucket": "ritegeapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802689968010:android:da97e8d6f13b3459a2ca73",
+        "android_client_info": {
+          "package_name": "com.SECA.RitegeParking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802689968010-2ta2r3ovr4fvep363nkgsa5k4vuptcp0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2KVBi5XHaKLidRKzous10EqL4s9GsBzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802689968010-2ta2r3ovr4fvep363nkgsa5k4vuptcp0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

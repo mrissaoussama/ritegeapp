@@ -1,0 +1,622 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<LangSettings>
+	<IsRtl>0</IsRtl>
+	<MinFontSize>10</MinFontSize>
+	<HeadingFontSize>12</HeadingFontSize>
+	<UIText>
+    <!--Import Export des deonnées-->
+    <Entry key="ExportUserTableToCSVFile">Exportation des données de ControlerDatabase vers des fichiers CSV)</Entry>
+    <Entry key="ImportUserTableToCSVFile">Importation des données de ControllerDatabase)</Entry> LabelImportWithData
+    <!-- Splash Screen -->
+    <Entry key="LabelCopyRight">Gestion de Contrôle d'Accès   Copyright SECA Entreprise - Tunisia (2016-2018) Version </Entry>
+    <Entry key="LabelUserAthent">Utilisateur Authentifié</Entry>
+    <Entry key="LabelInnitApp">Initialisation de L'application</Entry>
+    <Entry key="LabelInnitresau">Initialisation du réseau</Entry>
+    <Entry key="LabelCentralAjouter">Central ajouté  avec l'adresse IP :</Entry>
+    <Entry key="LabelErreurInitMainWindow">Erreur d'initialisation de VMMainWindow!!!</Entry>
+    <Entry key="LabelErreurInitReseau">Erreur d'initialisation de Réseau Ritege </Entry>
+    <Entry key="LabelInitReseau">Réseau Ritege Initialisé</Entry>
+    <Entry key="LabelErreurAlhares">Erreur Alhares : </Entry>
+    <Entry key="LabelErreurGenerale">Erreur Générale : </Entry>
+    <Entry key="LabelEcouteEvent">Ecouteur des évènements lancé </Entry>
+    <Entry key="LabelFininit">Fin d'initialisation </Entry>
+    <Entry key="LabelInitConnexionReseau">Création de la liste des contrôleurs </Entry>
+    <Entry key="LabelInitEventFromController">Début de chargement des événements des contrôleurs </Entry>
+    <Entry key="LabelFinInitConnexionReseau">Liste contrôleur créée </Entry>
+    <Entry key="LabelFinInitEventFromController">Evénements chargés </Entry>
+    <!-- Menu Administrator -->
+    <Entry key="LabelMenuEvent">Menu Evènement</Entry>
+    <Entry key="LabelMenuSite">Menu Site</Entry>
+    <Entry key="LabelMenuGroupDoor">Menu Groupe Portes</Entry>
+    <Entry key="LabelMenuProfil">Menu Profil</Entry>
+    <Entry key="LabelMenuUser">Menu Utilisateur du Système</Entry>
+    <Entry key="LabelMenuReport">Menu Rapport</Entry>
+    <Entry key="LabelMenuTimeZone">Menu Plage Horaires</Entry>
+    <Entry key="LabelDroitAcces">Accès RITEGE</Entry>
+    <Entry key="LabelInfoAuthorization">Paramètres d'authentification</Entry>
+    <Entry key="LabelDroitAccesPlugIn">Accès PLUGIN</Entry>
+    <Entry key="LabelACLModeAccesComplet">Mode d'accès applicatif</Entry>
+    
+    
+    
+    <!--Information de casier--> 
+    <Entry key="LabelInformationCasier">Information Casier</Entry>
+    <Entry key="LabelNbrMaxCasierUtilisateur">Nombre de Casiers</Entry>
+    <Entry key="LabelBtnCasier">Casiers </Entry>
+     <Entry key="btnValiderCasier">Valider</Entry>
+    <Entry key="LabelGestionCasier">Gestion Casiers </Entry>
+    <Entry key="NbrMaxCasier">Nombre Max Casiers </Entry>
+    <Entry key="NbrLignesCasier">Nombre de Lignes </Entry>
+    
+    
+    
+     <!--Information de Ascenseur--> 
+    <Entry key="LabelInformationAscenseur">Information Ascenseur</Entry>
+    <Entry key="LabelBtnAscenseur">Ascenseur</Entry>
+   <!-- Menu bar -->
+		<Entry key="LabelEvenement">Evénements</Entry>
+    <Entry key="LabelControleur">Contrôleurs</Entry>
+		<Entry key="LabelSites">Sites</Entry>
+    <Entry key="LabelAdministrateurs">Administrateurs</Entry>
+    <Entry key="LabelUtilisateur">Utilisateurs</Entry>
+    <Entry key="LabelGroupePorte">Groupe Portes</Entry>
+    <Entry key="LabelRapports">Rapports</Entry>
+    <Entry key="LabelPlageHoraire">Plage Horaire</Entry>
+    <Entry key="LabelGestionProfils">Profils</Entry>
+    <Entry key="LabelPlugins">Extra Modules</Entry>
+    
+  
+    <!--Footer-->
+    <Entry key="LabelIdentifiantCourant">Utilisateur:</Entry>
+    <Entry key="LabelMessage">Message:</Entry>
+    <Entry key="LabelSynchronisation">Synchronisation</Entry>
+    <Entry key="LabelTraitementEnCours">Traitement En Cours...</Entry>
+    <Entry key="LabelArrêtdutraitement">Arrêt du traitement...</Entry>
+    <Entry key="LabelEtatEnCours">Etat En Cours...</Entry>
+       <!-- Langue -->
+    <Entry key="LabelCommandValiderLanguage">Valider</Entry>
+    <Entry key="LabelCommandAnnulerLanguage">Annuler</Entry>
+    <Entry key="LabelLanguage">Langue</Entry>
+    <Entry key="LabelParamaitre">Paramètres</Entry>
+    <!--Vérification de Licence -->
+    <Entry key="LabelCommandVerifierLicence">Vérifier Licence </Entry>
+    <Entry key="LabelGestionLicence">Gestion de Licence </Entry>
+    <Entry key="LabelLicence">Clé de Licence : </Entry>
+    <Entry key="LabelRLP">Passcode </Entry> ;
+    <Entry key="GenerateRLP">Générer le code RLP </Entry>;
+    <Entry key="SaveRLP">Sauvegarder RLP </Entry>;
+    <Entry key="LoadLicence">Charger Licence </Entry>;
+    <Entry key="SaveLicence">Sauvegarder Licence </Entry>;
+    <Entry key="LabelMessageLicenceOK"> Licence Correcte </Entry>
+    <Entry key="LabelMessageLicenceNotOK"> Licence Incorrecte </Entry>
+    <Entry key="LabelLicenceNode">Nombre de Noeud autorisé </Entry>;
+    <Entry key="LabelLicenceCentral">Nombre de central autorisé </Entry>;
+    <Entry key="LabelLicenceSubCode">Sous code de licence </Entry>;
+    <Entry key="LicenceAdministratorlevel">Cette fonctionnalité requière le niveau administrateur</Entry>;
+    <Entry key="keyLicenceNonValide">Licence invalide, veuillez contacter </Entry>;
+
+    <Entry key="LabelExceptionChargement">Problème de chargement de licence. Veuillez contacter le revendeur! </Entry>;
+    <Entry key="LabelExceptionDecryptage">Problème de décryptage de licence. Veuillez contacter le revendeur!  </Entry>;
+    <Entry key="LabelExceptionVerification">La licence installée ne vous permet  que l'exploitation de seulement </Entry>;
+    <Entry key="LabelLecteur"> lecteur(s). </Entry>
+     <Entry key="LabelPlusInfo">Pour plus d'informations, veuillez contacter le revendeur! </Entry>
+   <Entry key="LabelExceptionLicenceInnattendue">Problème Inattendue de chargement de licence. Veuillez contacter le revendeur!  </Entry>;
+
+
+    <!-- MainWindow Outils-->
+    <Entry key="LabelImportWithData">Remplacer les données</Entry>;
+    <Entry key="LabelCommandImporterData">Importer données </Entry>;
+    <Entry key="LabelGestionImportData">Gestionnaire d'import</Entry>;
+    <Entry key="LabelCommandExporterData">Exprorter données </Entry>;
+    <Entry key="LabelGestionExportData">Gestionnaire d'export </Entry>;
+    <Entry key="LabelCommandSaveImport">Importer</Entry>;
+    <Entry key="LabelImportWithUser">Avec utilisateur</Entry>;
+    <Entry key="LabelImportWithGroupDoor">Avec groupe porte </Entry>;
+    <Entry key="LabelImportWithTimeZone">Avec tranche de temps</Entry>;
+    <Entry key="LabelExportWithUser">Avec utilisateur </Entry>;
+    <Entry key="LabelExportWithGroupDoor">Avec groupe porte</Entry>;
+    <Entry key="LabelExportWithTimeZone">Avec tranche de temps</Entry>;
+    <Entry key="LabelCommandSaveExport">Exporter</Entry>;
+    <Entry key="LabelCommandSynchroniserHorloge">Synchroniser</Entry>;
+    <Entry key="LabelSynchroniserHorloge">Synchronisation de l'horloge du central </Entry>;
+    <Entry key="LabelAutoSynchroniserHorloge">Synchronisation auto</Entry>;
+    <Entry key="LabelCommandManualSynchroniserHorloge">Synchroniser </Entry>;
+    <Entry key="LabelGestionEmpreintes">Gestion équipement d'engistrement d'empreinte</Entry>;
+
+    <Entry key="LabelIPAcquisitionEmpreinte">Adresse IP d'acquisition :</Entry>;
+    <Entry key="LabelListIPDiffusionEmpreinte">Liste d'adresse IP de diffusion d'empreinte :</Entry>;
+    <Entry key="LabelFormatIPAcquisitionEmpreinte">Foarmat : @IP:Node  255.255.255.255:255</Entry>;
+    <Entry key="LabelAjouterIP">Ajouter</Entry>;
+    <Entry key="LabelSupprimerIP">Supprimer</Entry>;
+    <Entry key="LabelSauvegarderIP">Sauvegarder</Entry>;
+    <Entry key="LabelChargerEmpreinte">Charger Empreintes</Entry>;
+    <Entry key="LabelDiffuserEmpreinte">Diffuser Empreintes</Entry>;
+    
+    <Entry key="TotalEmpreintes">Total d'empreintes chargées : </Entry>;
+    <Entry key="UtilisateurEnregistrer"> Utilisateur(s) enregistré(s)</Entry>;
+    <Entry key="TextToolTipIpAAjouter">Format : @IP:Noeud  255.255.255.255:255</Entry>;
+    
+    <Entry key="LabelActiverBepp">Son d'évènement</Entry>;
+    <Entry key="LabelAvecBeepEvent">Activer le Son : </Entry>;
+    <Entry key="LabelFileSon">Fichier Son : </Entry>;
+     <Entry key="LabelSyncFichierSon">Sauvegarder Config Son</Entry>;
+    
+    <Entry key="LabelSerialCardReaderConfig">Port série de la carte RFID </Entry>;
+    <Entry key="LabelSerialCardReader">Port du lecteur série : </Entry>;
+    <!--login-->
+    <Entry key="Identifiant">Identifiant</Entry>
+    <Entry key="AncienMP">Ancien MP</Entry>
+    <Entry key="NouveauMP">Nouveau MP</Entry>
+    <Entry key="CNouveauMP">Confirme MP</Entry>
+    <Entry key="BtnValidModificationLogin">Valider</Entry>
+    <Entry key="BtnValidCcancelLogin">Annuler</Entry>
+    
+    
+    <!--Commun UserControle-->  
+    <Entry key="BtnAjout">Ajouter</Entry>
+    <Entry key="BtnModif">Modifier</Entry>
+    <Entry key="BtnSupprime">Supprimer</Entry>
+    <Entry key="BtnRechercheAvancee">Avancée...</Entry>
+    <Entry key="BtnAnnuler">Annuler</Entry>
+    <Entry key="BtnValidat">Valider</Entry>
+    <!--Entry key="BtnValidAjout">Valider</Entry a -->
+    <Entry key="BtnSyncFinger">Synchroniser</Entry>
+    <Entry key="BtnSynchroniser">Synchroniser</Entry>
+    <Entry key="BtnOK">Affirmer</Entry>
+    <!--Gestion rapport-->
+    <Entry key="EmptyReport"> Pas de données à exporter répondant aux critères selectionnés</Entry>
+    <Entry key="KeyTransfertCorrect"> Les données sont exportées correctement</Entry>
+    <Entry key="KeyTransfertIncorrect"> Un problème est survenu lors du chargement du fichier EXCEL!</Entry>
+    <!-- Gestion des evenements-->
+    <!--DataGridEvenement-->
+    <!--Header-->
+    <Entry key="LabelEvenementIndex">Index</Entry>
+    <Entry key="LabelEvenementDate">Date</Entry>
+    <Entry key="LabelEvenementHeure">Heure</Entry>
+    <Entry key="LabelEvenementPorte">Porte</Entry>
+    <Entry key="LabelEvenementUtilisateur">Utilisateur</Entry>
+    <Entry key="LabelEvenementTagId">Tag ID</Entry>
+    <Entry key="LabelEvenementDescription">Description</Entry>
+    <Entry key="LabelEvenementCode">Code</Entry>
+    <Entry key="LabelEvenementFlux">Flux</Entry>
+
+    <!-- content DataGrid event + Rapport-->
+   
+    <Entry key="0">Sitecode error</Entry>
+    <Entry key="1">Invalid user address</Entry>
+    <Entry key="2">Invalid card</Entry>
+    <Entry key="3"> Time Zone error </Entry>
+    <Entry key="4">Door Group error </Entry>
+    <Entry key="5">Expiry Date </Entry>
+    <Entry key="6">Over access times </Entry>
+    <Entry key="7">PIN Code error</Entry>
+    <Entry key="8">Press duress PB </Entry>
+    <Entry key="9">Access by Card and PIN </Entry>
+    <Entry key="10">Normal Access</Entry>
+    <Entry key="11">Force Controller Relay ON </Entry>
+    <Entry key="12">Force Controller Relay Off </Entry>
+    <Entry key="13">Controller armed </Entry>
+    <Entry key="14">Controller disarmed</Entry>
+    <Entry key="15">Egress</Entry>
+    <Entry key="16">Alarm event</Entry>
+    <Entry key="17">Controller Power Off</Entry>
+    <Entry key="18">Duress</Entry>
+    <Entry key="19">Guards for help </Entry>
+    <Entry key="20">Cleaner access</Entry>
+    <Entry key="21">Controller Power On</Entry>
+    <Entry key="22">Force Controller Relay On/Off Error </Entry>
+    <Entry key="23">Reader Return to Normal(RTN)</Entry>
+    <Entry key="24">Help push button pressed </Entry>
+    <Entry key="25">Access by PIN </Entry>
+    <Entry key="26">Digital input actives</Entry>
+    <Entry key="27">RS485 slave reader off line (Disconnected) </Entry>
+    <Entry key="28">RS485 slave reader on line (Connected) </Entry>
+    <Entry key="29">User PIN code changed</Entry>
+    <Entry key="30">Change user PIN error</Entry>
+    <Entry key="31">Enter Auto Door Open Procedure</Entry>
+    <Entry key="32">Exit Auto Door Open Procedure </Entry>
+    <Entry key="33">Auto Disarmed</Entry>
+    <Entry key="34">Auto Armed</Entry>
+    <Entry key="35">Access by fingerprint or finger vein </Entry>
+    <Entry key="36">Fingerprint identify failed</Entry>
+    <Entry key="37">Reserved</Entry>
+    <Entry key="38">Remote control “Up Key” pressed  </Entry>
+    <Entry key="39">Disable Reader</Entry>
+    <Entry key="40">Enable Reader</Entry>
+    <Entry key="41">Remote control “Panic Key” pressed</Entry>
+    <Entry key="42">User entrance at parking system </Entry>
+    <Entry key="43">User exit at parking system</Entry>
+    <Entry key="44">Counter triggered at parking system</Entry>
+    <Entry key="45">Latch Relay </Entry>
+    <Entry key="46">Enter/Exit Edit Mode </Entry>
+    <Entry key="47">Free Access Mode Enable/Disable (SubFunc 0/1 is Dis/Enable)</Entry>
+    <Entry key="48">Access via Fingerprint Error </Entry>
+    <Entry key="49">Inhibit card while door open  </Entry>
+    <Entry key="50">Never open door after card accessed</Entry>
+    <Entry key="51">Can’t Read Date/Time from mifare card</Entry>
+    <Entry key="52">Can’t Read command from mifare card </Entry>
+    <Entry key="53">Can’t deduct from mifare card</Entry>
+    <Entry key="54">SOR global card accessed </Entry>
+    <Entry key="55">SOR disturber layer error </Entry>
+    <Entry key="56">Access rejected : before begin date</Entry>
+    <Entry key="57">Access rejected : expiry</Entry>
+    <Entry key="58">Access rejected : card value not enough </Entry>
+    <Entry key="59">Access ok and card value deducted </Entry>
+    <Entry key="60">Access ok and read lift data from media failed </Entry>
+    <Entry key="61">SOR global access ok and card value deducted</Entry>
+    <Entry key="62">SOR global access reject by value not enough </Entry>
+    <Entry key="63">SOR global access ok but card value deducted failed</Entry>
+    <Entry key="64">SOR global access ok without deducted </Entry>
+    <Entry key="65">Black table tag accessed </Entry>
+    <Entry key="66">Access ok : access via vein </Entry>
+    <Entry key="67">Access reject : access via vein</Entry>
+    <Entry key="68">Inhibited by internal lock locked for door Lock </Entry>
+    <Entry key="69">Fire alarm input trigged</Entry>
+
+
+
+    <!-- Gestion Controleur-->
+    <Entry key="LabelControllerRecherche">Recherche</Entry>
+    <Entry key="MigrerReseauVersBDCommand_PasDeCentral">Aucun contrôleur détecté!</Entry>
+    <Entry key="scruterfunct_@d>@f">L'adresse de début doit être inférieure à celle de fin!</Entry>
+    <Entry key="scruterfunct_VerifierPlage@">Veuillez svp verifier la plage d'adresse!</Entry>
+    <Entry key="setReaderParam_pbConnexion@">Problème de connexion!</Entry> 
+    <Entry key="Supprimer_ConfSuppA@">Voulez vous vraiment supprimer le central à l'adresse</Entry>NomPorteCentralExistant
+    <Entry key="NomPorteCentralExistant">Le nom de la porte que vous avez spécifié est déjà existant!</Entry>
+    <Entry key="NomPorteCentralVide">Le nom de la porte que vous avez spécifié ne peut pas être vide!</Entry>
+    <Entry key="ResterDansConfigurationReseau">Etes-vous sûr de vouloir quitter le mode édition du menu Configuration Réseau, sans valider vos données!</Entry>
+    
+    <Entry key="LabelModifierNomLecteur">Nom lecteur</Entry>
+    <Entry key="LabekModifierTypeLecteur">Type lecteur</Entry>
+    <Entry key="LabelModifierFonctionLecteur">Fonction lecteur</Entry>
+   
+
+    <Entry key="Label723H">723H</Entry>
+    <Entry key="Label331E">331E</Entry>
+    <Entry key="Label331H">331H</Entry>
+
+    <Entry key="Label725">725</Entry>
+    <Entry key="Label331EF">331EF</Entry>
+    <Entry key="Label837">837</Entry>
+
+    <Entry key="LabelPorte">Porte</Entry>
+    <Entry key="LabelPointeuse">Pointeuse</Entry>
+    <Entry key="LabelBarriere">Barrière</Entry>
+
+    <Entry key="ENTREE">Entrée</Entry>
+    <Entry key="SORTIE">Sortie</Entry>
+    <Entry key="CENTRAL16">Type Central16</Entry>
+    <Entry key="CASIER">Casier</Entry>
+    <Entry key="ASCENSEUR">Ascenseur</Entry>
+    <Entry key="CONFIGURATION">Settings</Entry>
+    <Entry key="IsslaveOK">Esclave</Entry>
+    <Entry key="IsslaveNotOK">Maître</Entry>
+    <Entry key="LabelSetEsclave">Esclave</Entry>
+    
+    <Entry key="LabelModele">Modèle : </Entry>
+    <Entry key="LabelCode">Code : </Entry>
+    <Entry key="LabelFlux">Flux : </Entry>
+    <Entry key="LabelMode">Mode : </Entry>
+    <Entry key="LabelFonction">Fonction : </Entry>
+    <!--Gestion Profil-->
+    
+    <Entry key="NomProfilVide">Le nom du profil que vous avez spécifié ne peut pas être vide!</Entry>
+    <Entry key="NomProfilExistant">Le nom du profil que vous avez spécifié est déjà existant!</Entry>
+    <Entry key="ProfilExistant">Il existe un profil avec la même configuration!</Entry>
+    <Entry key="Profil_TrachAffecte">Les tranches de temps doivent être affectées à un groupe de porte!</Entry>
+    <Entry key="SuppressionProfil">Voulez vous vraiment supprimer le profil </Entry>
+     <Entry key="ResterDansProfil">Etes-vous sûr de vouloir quitter le mode édition du menu Profil, sans valider vos données!</Entry>
+    <!--Automatique-->
+    <Entry key="CmbAuto">Automatique</Entry>
+    <Entry key="LabelControllerAdresseDebut">Adresse Debut : </Entry>
+    <Entry key="LabelControllerAdresseFin">Adresse Fin : </Entry>
+     <Entry key="LabelControllerPortDDNS">Port : </Entry>
+ 
+    <!--DDNS-->
+
+    <Entry key="LabelDDNS">Adresse DDNS : </Entry>
+    <!--manuel-->
+    <Entry key="CmbManuelle">Manuelle </Entry>
+    <Entry key="LabelControllerMac">Mac </Entry>
+    <Entry key="LabelControllerIP">IP </Entry>
+    <Entry key="LabelControllerPort">Port </Entry>
+    <Entry key="LabelControllerModele">Modele </Entry>
+   <Entry key="LabelControllerNoeud">Noeud </Entry>
+    <!--btn controller-->
+    <Entry key="BtnContrllerRechercher">Rechercher</Entry>
+    <Entry key="BtnContrllerValider">Valider</Entry>
+    
+    <!--DataGridController-->
+    <Entry key="LabelDGControllerMac">Mac</Entry>
+    <Entry key="LabelDGControllerIP">IP</Entry>
+    <Entry key="LabelDGControllerPort">Port</Entry>
+    <Entry key="LabelDGControllerModele">Modele</Entry>
+    <Entry key="BtnControllerSupprimer">Supprimer</Entry>
+    
+    <!--Gestion Groupe Porte -->
+    <Entry key="LabelNomGroupePorte">Nom Du Groupe de Porte</Entry>
+    <Entry key="GroupeExiste">Groupe de portes existant!</Entry>
+    <Entry key="NomGroupeExiste">Nom du Groupe de portes existant!</Entry>
+    <Entry key="SpecifierNomGroupe">Vous devez spécifier un nom de groupe de porte!</Entry>
+    <Entry key="SuppressionGroupe">Etes-vous sûr de vouloir supprimer le groupe </Entry>
+     <Entry key="ResterDansGroupePortes">Etes-vous sûr de vouloir quitter le mode édition du menu Groupe de Portes sans valider vos données!</Entry>
+    <!--Search Avancee-->
+    <Entry key="LabelSearchAvancee">Recherche Avancée</Entry>
+    <Entry key="LabelNomPorte">Porte</Entry>
+    <Entry key="BtnRehcercherPorte">Rechercher</Entry>
+    <Entry key="BtnAnnulerRechercherPorte">Annuler</Entry>
+    <Entry key="GestionGroupePorte">Module Gestion Groupe de Portes</Entry>
+    <Entry key="GestionRapport">Il faut spécifier un nom pour le nouveau groupe!</Entry>
+
+    <Entry key="GestionEvenement">Module Gestion des Evénements </Entry>
+    <Entry key="GestionSite">Module Gestion des Sites</Entry>
+    <Entry key="ConfigurationReseau">Module configuration du Réseau</Entry>
+    <Entry key="GestionAdministrateur">Module Gestion des Administrateurs</Entry>
+    <Entry key="GestionUtilisateur">Module Gestion des Utilisateurs</Entry>
+    <Entry key="GestionProfil">Module Gestion des Profils</Entry>
+    <Entry key="GestionTimeZone">Module Gestion des Plages Horaires</Entry>
+      <Entry key="GestionRapportUtilisateur">Module Gestion des Rapports des Utilisateurs</Entry>
+    
+    <Entry key="NoSiteSelected">Aucun site n'est encore sélectionné!</Entry>
+    <Entry key="GroupePortesExiste">Groupe de Portes Déjà existant</Entry>
+    <Entry key="NomGroupePortesExiste">Ce nom est déjà utilisé</Entry>
+    <Entry key="IlFautUnNom">Il faut attribuer un nom de groupe</Entry>
+    <Entry key="suppression">êtes vous sûr de vouloir supprimer le groupe</Entry>
+
+
+    <!--Btn Gestion Groupe Porte-->
+    
+    <!--Gestion Utilisateur-->
+    <Entry key="SupprimerUtilisateur">êtes-vous sûr de vouloir supprimer l'utilisateur </Entry>
+    <Entry key="SupprimerAutorisationUtilisateur">êtes-vous sûr de vouloir supprimer l'autorisation de l'utilisateur! </Entry>
+    <Entry key="SupprimerAutorisationUtilisateurs">êtes-vous sûr de vouloir supprimer les autorisations des utilisateurs séléctionnés! </Entry>
+    <Entry key="SupprimerUtilisateurs">êtes-vous sûr de vouloir supprimer les utilisateurs sélectionnées! </Entry>
+    <Entry key="CarteExistante">Carte ou Code PIN spécifiée est déjà affectée à un autre utilisateur actif  </Entry>
+     <Entry key="ICNExistant">La carte d'identité spécifiée est déjà affectée à un autre utilisateur actif  </Entry>
+    <Entry key="BtVisiteur">Visiteurs </Entry>
+    <Entry key="BtException">Autorisations</Entry>
+    <Entry key="ResterDansUtilisateur">Etes-vous sûr de vouloir quitter le mode édition du menu utilisateur sans valider vos données!</Entry>
+    <Entry key="KeyTagInvalid"> "Le numéro  de carte d'accès est incorrecte! </Entry>
+    <Entry key="KeyPinInvalid"> "Code PIN incorrecte! </Entry>
+    <Entry key="LabelCodePin">Code PIN </Entry>
+    <Entry key="ErreurLectureSerialReaderPort">Problème du lecture de la base de registres</Entry>
+    <Entry key="ErreurRFIDReader_MaterielDeconnecte">Matériel déconnecté !</Entry>
+    
+
+
+    <!--BtnGestionUtilisateur-->
+  
+    <!--TabItem-->
+    <Entry key="LabelTIPlageHoraire">Plage Horaire</Entry>
+    <Entry key="LabelTIGroupePorte">Groupe Porte</Entry>
+    
+    <!--Information Utilisateur-->
+    <Entry key="LabelTIInformationUtilisateur">Information de l'utilisateur</Entry>
+    <Entry key="LabelNomUtilisateur">Nom</Entry>
+    <Entry key="LabelPrenomUtilisateur">Prénom</Entry>
+    <Entry key="LabelAliasUtilisateur">Alias</Entry>
+    <Entry key="LabelCINUtilisateur">CIN</Entry>
+    <Entry key="LabelDepartementUtilisateur">Département</Entry>
+    <Entry key="LabelFonctionUtilisateur">Fonction</Entry>
+    <Entry key="BtnChargerPhotoUtilisateur">Charger</Entry>
+    <Entry key="AucunDepartment">Aucun Departement</Entry>
+    <Entry key="AucuneFonction">Aucune Fonction</Entry>
+    <Entry key="Visiteur">Visiteur</Entry> 
+    
+    <!--Information D'accee-->
+    <Entry key="LabelTIInformationAccee">Information d'accès</Entry>
+    <Entry key="LabelNumeroCarteUtilisateur">N° de la carte d'accès</Entry>
+    <Entry key="LabelModeAccee">Mode D'accès</Entry>
+    <Entry key="LabelIUGroupePorte">Groupe Porte</Entry>
+    <Entry key="LabelIUPlageHoraire">Plage Horaire</Entry>
+    <Entry key="LabelDateValidite">Date validité</Entry>
+    <Entry key="LabeldateStart">Debut</Entry>
+    <Entry key="LabeldateEnd">Fin</Entry>
+    <Entry key="LabelActive">Activer</Entry>
+    <Entry key="LabelAntiPasseBack">Anti-Pass Back</Entry>
+    <Entry key="LabelControleurCart">Carte Gardien</Entry>
+    <Entry key="LabelIsSynch">IsSynchrone</Entry>
+    <Entry key="LabelIsCheck">IsChecked</Entry>
+    <Entry key="BtnScanCart">Scanner</Entry>
+    <Entry key="LabelProfil">Profil</Entry>
+    
+    <!--Gestion Administrateur-->
+    <Entry key="BtnNouveau">Nouveau</Entry>
+     <!--Information d'administration-->
+    <Entry key="LabelIU">Information d'administration</Entry>
+    <Entry key="LabelIdentifiant">Identifiant</Entry>
+    <Entry key="LabelMDP">Mot De Passe</Entry>
+    <Entry key="LabelConfirme">Confirmer</Entry>
+   
+    <Entry key="LabelActif">Activer</Entry>
+    <Entry key="LabelDebutActif">Date Debut Active </Entry>
+    <Entry key="LabelFinActif">Date Fin Active</Entry>
+    <Entry key="LabelCreationUtilisateur">Creation Utilisateutrs</Entry>
+    <Entry key="LabelPointages">Pointage</Entry>
+    <Entry key="LabelZoneHoraire">Zone Horaire</Entry>
+   
+
+
+
+    <!-- gestion Plage Horaire-->
+    <Entry key="LabelDimache">Dimanche</Entry>
+    <Entry key="LabelLundi">Lundi</Entry>
+    <Entry key="LabelMardi">Mardi</Entry>
+    <Entry key="LabelMecredi">Mercredi</Entry>
+    <Entry key="LabelJeudi">Jeudi</Entry>
+    <Entry key="LabelVendredi">Vendredi</Entry>
+    <Entry key="LabelSamedi">Samedi</Entry>
+    <Entry key="SuppressionTZ">Voulez-vous vraiment supprimer la TimeZone </Entry>
+    <Entry key="Sauvegarder_specifierNomPlage">Il faut spécifier un nom pour la plage horiare à ajouter!</Entry>
+    <Entry key="Sauvegarder_NomPlageExistant">Le nom que vous avez spécifiez est déjà affecté à une autre plage horaire!</Entry>
+    <Entry key="Sauvegarder_specifierTrancheTps">Il faut spécifier au moins une tranche de temps!</Entry>
+    <Entry key="ResterDansTimeZone">Etes-vous sûr de vouloir quitter le mode édition du menu Time Zone, sans valider vos données!</Entry>
+
+    <!--Gestion Rapport-->
+    <!--Label-->
+    <Entry key="KeyCodeUtilisateur">Code Utilisateur</Entry>
+    <Entry key="KeyPrenom">Prénom Utilisateur</Entry>
+    <Entry key="KeyNom">Nom Utilisateur</Entry>
+    <Entry key="KeyPorteEntree">Porte d'Entrée</Entry>
+    
+    <Entry key="KeyPorteSortie">Porte de Sortie</Entry>
+    <Entry key="KeyHoraireEntree">Horaire d'Entrée</Entry>
+    <Entry key="KeyHoraireSortie">Horaire de Sortie</Entry>
+    
+    
+   <Entry key="LabelDebut">Date Début</Entry>
+    <Entry key="LabelFin">Date Fin</Entry>
+    <!--Btn-->
+    <Entry key="BtnRecherche">Rechercher</Entry>
+    <Entry key="BtnExporter">Exporter</Entry>
+    <Entry key="BtnImprimer">Imprimer</Entry>
+    <!--CMB-->
+    <Entry key="cmbTout">Tout</Entry>
+    <Entry key="cmbFlitrer">Filtrer</Entry>
+    <Entry key="cmbEvenement">Evénement</Entry>
+    <Entry key="cmbPointage">Pointage</Entry>
+<!--Gestion Sites-->
+    
+    <Entry key="BtnModificationEtatTV">Modifier</Entry>
+    <Entry key="BtnSauvgarder">Sauvgarder</Entry>
+    <Entry key="BtnCouper">Couper</Entry>
+    <Entry key="BtnColler">Coller</Entry>
+    <Entry key= "AjouterSite_SelectionnerSite">Il faut selectionner un site pour en ajouter un!</Entry>
+    <Entry key= "DeplacerElement_SelectionnerGroupe">Il faut selectionner un groupe de porte pour en ajouter un!</Entry>
+    <Entry key= "Supprimer_Suppression_SP_Imp">Impossible de supprimer le Site Principal!</Entry>
+    <Entry key= "Supprimer_Suppression_SiteAvecEnfant_Imp">Impossible de supprimer un site possédant des sous-sites ou des portes!</Entry>"
+    <Entry key= "Supprimer_Racine">Vous n'avez pas le droit de supprimer la racine!</Entry>
+    <Entry key= "NomSiteExistant">Le nom du site que vous avez spécifié est déjà existant!</Entry>
+    <Entry key= "NomSiteVide">Le nom du site ne doit pas être vide!</Entry>
+    <!-- Mode Carte-->
+    <Entry key= "CardOnly">Carte Seulement</Entry>
+    <Entry key= "CardPin">Carte et PIN</Entry>
+    <Entry key= "CardOrPin">Carte ou PIN</Entry>
+    <Entry key= "InvalidCard">Carte Invalide</Entry>
+
+    <!-- content DataGrid event + Rapport-->
+    <Entry key="CodeEvent0">Code Site Erronée</Entry> <!--Sitecode error-->
+    <Entry key="CodeEvent1">Adresse D'utlisateur Invalide</Entry>  <!--Invalid user address-->
+    <Entry key="CodeEvent3">Carte Invalide</Entry> <!--invalid card-->
+    <Entry key="CodeEvent4">Erreur Plage Horaire </Entry> <!--Time Zone error-->
+    <Entry key="CodeEvent5">Erreur </Entry> <!--Door Group error-->
+    <Entry key="CodeEvent6">Date Expirée </Entry> >   <!--Expiry Date-->
+    <Entry key="CodeEvent7"> Over Access Times </Entry> <!--not found-->
+    <Entry key="CodeEvent8">Erreur Code PIN</Entry> <!--PIN Code error-->
+    <Entry key="CodeEvent9">Presser fortement PB </Entry> <!--Press duress PB-->
+    <Entry key="CodeEvent10">Accès par Carte et Code PIN </Entry> <!--Access by Card and PIN-->
+    <Entry key="CodeEvent11">Accès Valide </Entry> <!--Normal Access by tag-->
+    <Entry key="CodeEvent12">Relais Activé </Entry> <!--Force Controller Relay ON-->
+    <Entry key="CodeEvent13">Relais Désactivé  </Entry> <!--Force Controller Relay Off-->
+    <Entry key="CodeEvent14">Contrôleur armé  </Entry> <!--Controller armed-->
+    <Entry key="CodeEvent15">Contrôleur désarmé </Entry> <!--Controller disarmed-->
+    <Entry key="CodeEvent16">Bouton de Sortie</Entry> <!--Egress-->
+    <Entry key="CodeEvent17">Alarme</Entry> <!--alarm event-->
+    <Entry key="CodeEvent20">Contrôleur éteint</Entry> <!--Controller Power Of-->
+    <Entry key="CodeEvent21">Accès forçé</Entry> <!--Duress-->
+    <Entry key="CodeEvent22"> Appel Gardient </Entry> <!--Guards for help-->
+    <Entry key="CodeEvent23">Accès de ménage</Entry> <!--Cleaner access--> <!--ou accés femme de ménage-->
+    <Entry key="CodeEvent24">Contrôleur Alimenté</Entry>  <!--Controller Power On-->
+    <Entry key="CodeEvent25">Erreur Relais Contrôleur </Entry> <!--Controller Relay On/Off Error-->
+    <Entry key="CodeEvent26">Lecteur retour à la normale   </Entry> <!--Reader Return to Normal (RTN)-->
+    <Entry key="CodeEvent27">Bouton d'aide pressé  </Entry> <!--Help push button pressed-->
+    <Entry key="CodeEvent28">Accès par PIN </Entry> <!--Access by PIN-->
+    <Entry key="CodeEvent29">Entrée numérique activé </Entry> <!--Digital input actives-->
+    <Entry key="CodeEvent31">Lecteur Esclave RS485 hors ligne (Déconnecté) </Entry> <!--RS485 slave reader off line (Disconnected)-->
+    <Entry key="CodeEvent32">Lecteur Esclave RS485 en ligne (connecté) </Entry> <!--RS485 slave reader on line (Connected)-->
+    <Entry key="CodeEvent33">Code Pin Utilisateur Modifié</Entry> <!--User PIN code changed-->
+    <Entry key="CodeEvent34">Erreur Modification Code Pin Utilisateur</Entry> <!--Change user PIN error-->
+    <Entry key="CodeEvent35">Entrer à la procédure d'accès automatique des portes</Entry> <!--Enter Auto Door Open Procedure-->
+    <Entry key="CodeEvent36">Quitter à la procédure d'accès automatique des portes</Entry> <!--Exit Auto Door Open Procedure-->
+    <Entry key="CodeEvent37">Désactivation Auto </Entry> <!--not found-->
+    <Entry key="CodeEvent38">Activation Auto</Entry> <!--not found-->
+    <Entry key="CodeEvent39">Accès valide </Entry> <!--Access by fingerprint or finger vein-->
+    <Entry key="CodeEvent40"> Identification d'empreinte digitale échoué </Entry> <!--Fingerprint identify failed-->
+    <Entry key="CodeEvent41">Réservé </Entry> <!--Reserved-->
+    <Entry key="CodeEvent42">“Touche Entrée” Télécommande pressé </Entry> <!--Remote control “Up Key” pressed-->
+    <Entry key="CodeEvent43">Lecteur Désactivé</Entry> <!--Disable Reader-->
+    <Entry key="CodeEvent44">Lecteur Activé</Entry> <!--Enable Reader-->
+    <Entry key="CodeEvent45">“Touche Panique” Télécommande pressé</Entry> <!--Remote control “Panic Key” pressed-->
+    <Entry key="CodeEvent46">Utilisateur entré au système de parking</Entry> <!--User entrance at parking system-->
+    <Entry key="CodeEvent47">Utilisateur sortie au système de parking</Entry> <!--User exit at parking system-->
+    <Entry key="CodeEvent48">Compteur déclenché au systéme de parking</Entry> <!--Counter triggered at parking system-->
+    <Entry key="CodeEvent49">Relais de verrouillage </Entry> <!--Latch relay-->
+    <Entry key="CodeEvent53">Entrer/Quitter le mode d'édition </Entry> <!--Enter/Exit Edit Mode-->
+    <Entry key="CodeEvent55">Accès libre mode Activation/désactivation( SubFunc 0/1 est ACT/Désac)</Entry> <!--Free Access Mode Enable/Disable (SubFunc 0/1 is Dis/Enable)-->
+    <Entry key="CodeEvent56">Accès par empreinte digitale erroné </Entry> <!--Access via Fingerprint Error-->
+    <Entry key="CodeEvent59">Inhiber la Carte pendant que la porte est ouverte </Entry> <!--Inhibit card while door open-->
+    <Entry key="CodeEvent60">Ne Jamais ouvrir la porte après l'accès par Carte</Entry> <!--Never open door after card accessed-->
+    <Entry key="CodeEvent62">Impossible de lire Date/heure depuis la Carte Mifare</Entry> <!--Can’t Read Date/Time from mifare card-->
+    <Entry key="CodeEvent63">Impossible de lire commande depuis la Carte Mifare </Entry> <!--Can’t Read command from mifare card-->
+    <Entry key="CodeEvent64">Impossible de déduire depuis la Carte Mifare</Entry> <!--Can’t deduct from mifare card-->
+    <Entry key="CodeEvent65">Accès par Carte globale SOR  </Entry> <!--SOR global card accessed-->
+    <Entry key="CodeEvent66">Erreur de SOR </Entry> <!--SOR disturber layer error-->
+    <Entry key="CodeEvent67">Accès rejeté: Avant la date de début </Entry> <!--Access rejected : before begin date-->
+    <Entry key="CodeEvent68">Accès rejeté: Expiration</Entry> <!--Access rejected : expiry-->
+    <Entry key="CodeEvent69">Accès rejeté: La valeur de la carte est insuffisante </Entry> <!--Access rejected : card value not enough-->
+    <Entry key="CodeEvent70">Accès réussi et valeur de carte déduite </Entry> <!--Access ok and card value deducted-->
+    <Entry key="CodeEvent71">Accès réussi et lecteur à gauche de données de media echoué  </Entry> <!--Access ok and read lift data from media failed-->
+    <Entry key="CodeEvent72">Accès Global SOR réussi et valeur de carte déduite  </Entry> <!--SOR global access ok and card value deducted-->
+    <Entry key="CodeEvent73">Accès Global SOR rejeté par la valeur de la carte est insuffisante </Entry> <!--SOR global access reject by value not enough-->
+    <Entry key="CodeEvent74">Accès Global SOR réussi mais la déduction de carte échouée </Entry> <!--SOR global access ok but card value deducted failed-->
+    <Entry key="CodeEvent75">Accès Global SOR réussi sans déduite </Entry> <!--SOR global access ok without deducted-->
+    <Entry key="CodeEvent86">Étiquette de table noire accédée</Entry> <!--Black table tag accessed-->
+    <Entry key="CodeEvent100">Accés réussi : accés par veine </Entry> <!--Access ok : access via vein-->
+    <Entry key="CodeEvent101">Accés rejeté : accés par veine</Entry> <!--Access reject : access via vein-->
+    <Entry key="CodeEvent102">Inhibé par verrouillage interne verrouillé pour la serrure de porte </Entry> <!--Inhibited by internal lock locked for door Lock-->
+    <Entry key="CodeEvent104">Entrée d'alarme incendie déclenchée</Entry> <!--Fire alarm input trigged-->
+    <Entry key="CodeEvent30">Erreur d'accès multiple</Entry> <!--antipassback error-->
+
+    <Entry key="ForceOpenAlarm">Alarme porte forcée</Entry> <!--Force open alarm-->
+    <Entry key="TimeOut">Alarme délai ouverture porte dépassé</Entry> <!--Time out Alarm-->
+    <Entry key="Barriere">Ticket entrée parking</Entry>
+    <!--Gestion PopUPSettings-->
+    <Entry key="Lift">LIFT</Entry> <!--Force open alarm-->
+    
+    
+    
+    <!--Gestion EnrollFinger-->
+
+
+    <Entry key="BtnDeleteFinger"> Supprimer</Entry>
+    <Entry key="BtnDeleteAllFinger"> Supprimer Tout</Entry>
+    <Entry key="LabelFinger">Empreinte N°:</Entry>
+    <Entry key="BtnEnroll">Scanner</Entry>
+    <Entry key="Salutation"> Bonne Journée :) </Entry>
+    <Entry key="Idle">Préparation de Scan</Entry>
+    <Entry key="Erreur"> Erreur de Scan !</Entry>
+    <Entry key="ErreurWait1">Equipement Déconnecté !</Entry>
+    <Entry key="ErreurPause1"> Temps limite dépassé !</Entry>
+    <Entry key="ErreurPause2"> Temps limite dépassé !</Entry>
+    <Entry key="ErreurPause3"> Temps limite dépassé !</Entry>
+    <Entry key="ErreurWait2">Equipement Déconnecté</Entry>
+    <Entry key="ErreurWait3">Equipement Déconnecté</Entry>
+    <Entry key="ErreurFingerRead"> Erreur D'enregistrement !</Entry>
+    <Entry key="DeleteAllFinger"> Les empreintes sont supprimées avec succés</Entry>
+    <Entry key="ErreurDeleteAllFinger"> Erreur De Suppression !</Entry>
+    <Entry key="FingerRead">Empreinte Enregistré</Entry>
+    <Entry key="Wait1">SVP mettez votre premier empreinte</Entry>
+    <Entry key="Wait2">SVP mettez votre deuxième empreinte</Entry>
+    <Entry key="Wait3">SVP mettez votre troisième empreinte</Entry>
+    <Entry key="Pause1">SVP Retirez votre empreinte</Entry>
+    <Entry key="Pause2">SVP Retirez votre empreinte</Entry>
+    <Entry key="Pause3">SVP Retirez votre empreinte</Entry>
+    <Entry key="ErreurConnection">Erreur de connexion au central de chargement!</Entry>
+    
+    <Entry key="Pass1-1">Passe1-1</Entry>
+    <Entry key="Pass1-2">Passe1-2</Entry>
+    <Entry key="Pass1-3">Passe1-3</Entry>
+    <Entry key="Pass2-1">Passe2-1</Entry>
+    <Entry key="Pass2-2">Passe2-2</Entry>
+    <Entry key="Pass2-3">Passe2-3</Entry>
+    <Entry key="Pass3-1">Passe3-1</Entry>
+    <Entry key="Pass3-2">Passe3-2</Entry>
+    <Entry key="Pass3-3">Passe3-3</Entry>
+    <Entry key="Finger1">Empreinte N°1</Entry>
+    <Entry key="Finger2">Empreinte N°2</Entry>
+    <Entry key="Finger3">Empreinte N°3</Entry>
+    <Entry key="BtnFingerPrint">ScannerEmpreinte</Entry>
+    
+  </UIText> 
+</LangSettings>

@@ -1,0 +1,413 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:extentions="clr-namespace:ritegeapp.Extentions"
+             x:Class="ritegeapp.Views.GestionDesSessionsCaissiers"
+             xmlns:viewmodels="clr-namespace:ritegeapp.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
+             Title="Gestion Sessions Caissiers"
+             Unfocused="ContentPage_Unfocused"
+             BackgroundColor="{StaticResource BackgroundColor}">
+ <ContentPage.ToolbarItems>
+  <ToolbarItem Text="{Binding StatisticsToolBarItemName}"
+               Command="{Binding OpenStatisticsWindowCommand}"
+               Order="Secondary"
+               Priority="0" />
+ </ContentPage.ToolbarItems>
+ <ContentPage.Content>
+  <Grid BackgroundColor="{StaticResource BackgroundColor}"
+        Margin="0,5,0,0">
+   <Grid.RowDefinitions>
+    <RowDefinition Height="140"></RowDefinition>
+   </Grid.RowDefinitions>
+   <extentions:FilterView             x:DataType="viewmodels:GestionDesSessionsCaissiersViewModel"
+                                      dateStart="{Binding DateStart}"
+                                      dateEnd="{Binding DateEnd}"
+                                      SearchSubjectText="Nom"
+                                      SearchTextBoxEntry="{Binding SearchTextBox}"
+                                      CanTapSearchTextBool="{Binding CanTapFilterImages}"
+                                      CanTapSearchTextCommand="{Binding SearchTextCommand}"
+                                      CanClearFilterBool="{Binding CanTapFilterImages}"
+                                      CanClearFilterCommand="{Binding ClearFilterCommand}"
+                                      CanSortBool="{Binding CanTapFilterImages}"
+                                      CanSortCommand="{Binding SortByCommand}"></extentions:FilterView>
+   <ActivityIndicator   Scale="0.5"
+                        Color="{StaticResource Primary}"
+                        Grid.Row="1"
+                        IsVisible="{Binding ShowLoadingIndicator}"
+                        IsRunning="true" />
+   <Label FontSize="Medium"
+          Grid.Row="1"
+          TextColor="{StaticResource Primary}"
+          IsVisible="{Binding ShowNoFilterResultLabel}"
+          LineBreakMode="WordWrap">
+    <Label.FormattedText>
+     <!--no result label-->
+     <FormattedString>
+      <Span Text="Pas de resultat, Cliquer "
+            TextColor="{StaticResource LabelColor}" />
+      <Span Text="Ici"
+            TextColor="{StaticResource Primary}">
+       <Span.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding ClearFilterCommand}" />
+       </Span.GestureRecognizers>
+      </Span>
+      <Span Text=" pour désactiver le filtre"
+            TextColor="{StaticResource LabelColor}" />
+     </FormattedString>
+    </Label.FormattedText>
+   </Label>
+   <Label FontSize="Medium"
+          Grid.Row="1"
+          TextColor="{StaticResource Primary}"
+          IsVisible="{Binding ShowNoDataReceived}"
+          LineBreakMode="WordWrap">
+    <Label.FormattedText>
+     <!--no result label-->
+     <FormattedString>
+      <Span Text="Pas de resultat, Cliquer "
+            TextColor="{StaticResource LabelColor}" />
+      <Span Text="ici"
+            TextColor="{StaticResource Primary}">
+       <Span.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+       </Span.GestureRecognizers>
+      </Span>
+      <Span Text=" pour réessayer"
+            TextColor="{StaticResource LabelColor}" />
+     </FormattedString>
+    </Label.FormattedText>
+   </Label>
+   <Label FontSize="Medium"
+          Grid.Row="1"
+          TextColor="{StaticResource Primary}"
+          IsVisible="{Binding ShowNoInternetLabel}"
+          LineBreakMode="WordWrap">
+    <Label.FormattedText>
+     <!--no result label-->
+     <FormattedString>
+      <Span Text="Pas de connexion, Activer Wifi ou Données Mobile puis cliquer "
+            TextColor="{StaticResource LabelColor}" />
+      <Span Text="ici"
+            TextColor="{StaticResource Primary}">
+       <Span.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+       </Span.GestureRecognizers>
+      </Span>
+      <Span Text=" pour réessayer"
+            TextColor="{StaticResource LabelColor}" />
+     </FormattedString>
+    </Label.FormattedText>
+   </Label>
+   <RefreshView Grid.Row="1"
+                IsRefreshing="{Binding ListIsRefreshing}"
+                IsEnabled="{Binding ShowData}"
+                Command="{Binding GetDataCommand}"
+                IsVisible="{Binding ShowData}">
+    <ScrollView Grid.Row="1"
+                IsVisible="{Binding ShowData}">
+     <StackLayout>
+      <Grid VerticalOptions="Fill"
+            IsVisible="{Binding CaissierSortMode}"
+            HorizontalOptions="Fill">
+       <ListView ItemsSource="{Binding ListCaissierToShow}"
+                 BackgroundColor="{StaticResource BackgroundColor}"
+                 SeparatorVisibility="None"
+                 SeparatorColor="Transparent"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill"
+                 HasUnevenRows="True">
+        <ListView.ItemTemplate>
+         <DataTemplate>
+          <ViewCell StyleId="no-selection">
+           <ViewCell.View>
+            <Grid VerticalOptions="FillAndExpand">
+           <Grid.RowDefinitions>
+           </Grid.RowDefinitions>
+             <Frame BorderColor="{StaticResource Primary}"
+                    Padding="10"
+                    Margin="0,0,0,1"
+                    BackgroundColor="{StaticResource BackgroundColor}">
+              <syncfusion:SfExpander IconColor="{StaticResource Primary}"
+                                     HeaderBackgroundColor="{StaticResource BackgroundColor}">
+               <syncfusion:SfExpander.Header>
+                <Grid>
+                 <Label FontSize="Medium"
+                        TextColor="{StaticResource Primary}"
+                        Grid.Row="0"
+                        FontAttributes="Bold">
+                  <Label.FormattedText>
+                   <FormattedString>
+                    <Span Text="{Binding NomCaissier}"></Span>
+                    <Span Text=" : "></Span>
+                    <Span Text="{Binding Total}"></Span>
+                    <Span Text=" DT"></Span>
+                   </FormattedString>
+                  </Label.FormattedText>
+                 </Label>
+                </Grid>
+               </syncfusion:SfExpander.Header>
+               <syncfusion:SfExpander.Content>
+                <Grid>
+               <StackLayout BindableLayout.ItemsSource="{Binding ListSessions}">
+                <BindableLayout.ItemTemplate>
+                 <DataTemplate>
+                  <Grid>
+                     <Frame BorderColor="{StaticResource Primary}"
+                            InputTransparent="True"
+                            BackgroundColor="{StaticResource BackgroundColor}">
+                      <!--<Frame.GestureRecognizers>
+                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </Frame.GestureRecognizers>-->
+                      <syncfusion:SfExpander Grid.Row="1"
+                                             IconColor="{StaticResource Primary}"
+                                             HeaderBackgroundColor="{StaticResource BackgroundColor}">
+                       <syncfusion:SfExpander.Header>
+                        <!--Session Grid-->
+                        <Label FontSize="Small"
+                               TextColor="{StaticResource Primary}">
+                         <Label.FormattedText>
+                          <FormattedString>
+                           <Span Text="{Binding DateStartSession, StringFormat='{0:dd/MM/yyyy}'}"></Span>
+                           <Span Text=" - "></Span>
+                           <Span Text="{Binding DateEndSession, StringFormat='{0:dd/MM/yyyy}'}"></Span>
+                           <Span Text=" | "></Span>
+                           <Span Text="{Binding Recette}"></Span>
+                           <Span Text=" DT"></Span>
+                          </FormattedString>
+                         </Label.FormattedText>
+                        </Label>
+                       </syncfusion:SfExpander.Header>
+                       <syncfusion:SfExpander.Content>
+                        <Grid>
+                      <Grid.RowDefinitions>
+                      </Grid.RowDefinitions>
+                      <Grid.ColumnDefinitions>
+                     
+                      </Grid.ColumnDefinitions>
+                      <Label Text="Index:"
+                             TextColor="{StaticResource LabelColor}"></Label>
+                      <Label Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding Index}"></Label>
+                      <Label Grid.Row="1"
+                             TextColor="{StaticResource LabelColor}"
+                             Text="Nombre Tickets:"></Label>
+                      <Label Grid.Row="1"
+                             Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding NbTickets}"></Label>
+                      <Label Grid.Row="2"
+                             TextColor="{StaticResource LabelColor}"
+                             Text="Nombre Autorités:"></Label>
+                      <Label Grid.Row="2"
+                             Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding NbAutorite}"></Label>
+                      <Label Grid.Row="3"
+                             TextColor="{StaticResource LabelColor}"
+                             Text="Nombre Administratifs:"></Label>
+                      <Label Grid.Row="3"
+                             Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding NbAdministratif}"></Label>
+                      <Label Grid.Row="4"
+                             TextColor="{StaticResource LabelColor}"
+                             Text="Nombre Abonnements:"></Label>
+                      <Label Grid.Row="4"
+                             Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding NbAbonne}"></Label>
+                     </Grid>
+                       </syncfusion:SfExpander.Content>
+                      </syncfusion:SfExpander>
+                     </Frame>
+                    </Grid>
+                   </DataTemplate>
+                  </BindableLayout.ItemTemplate>
+                 </StackLayout>
+                </Grid>
+               </syncfusion:SfExpander.Content>
+              </syncfusion:SfExpander>
+             </Frame>
+            </Grid>
+           </ViewCell.View>
+          </ViewCell>
+         </DataTemplate>
+        </ListView.ItemTemplate>
+       </ListView>
+      </Grid>
+      <!--Date Grid-->
+      <Grid VerticalOptions="Fill"
+            IsVisible="{Binding DateCaissierSortMode}"
+            HorizontalOptions="Fill">
+       <ListView ItemsSource="{Binding ListDateCaissierToShow}"
+                 SeparatorVisibility="None"
+                 SeparatorColor="Transparent"
+                 BackgroundColor="{StaticResource BackgroundColor}"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill"
+                 HasUnevenRows="True">
+        <ListView.ItemTemplate>
+         <DataTemplate>
+          <ViewCell StyleId="no-selection">
+           <ViewCell.View>
+          <Grid VerticalOptions="FillAndExpand">
+           <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+           </Grid.RowDefinitions>
+             <Frame BorderColor="{StaticResource Primary}"
+                    Padding="10"
+                    BackgroundColor="{StaticResource BackgroundColor}">
+              <syncfusion:SfExpander HeaderBackgroundColor="{StaticResource BackgroundColor}"
+                                     IconColor="{StaticResource Primary}">
+               <syncfusion:SfExpander.Header>
+                <Grid>
+                 <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="10*"></ColumnDefinition>
+                  <ColumnDefinition Width="90*"></ColumnDefinition>
+                 </Grid.ColumnDefinitions>
+                 <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
+                        WidthRequest="20"
+                        xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                 <Label FontSize="Medium"
+                      TextColor="{StaticResource Primary}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontAttributes="Bold">
+                <Label.FormattedText>
+                 <FormattedString>
+                  <Span Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"></Span>
+                  <Span Text=" : "></Span>
+                  <Span Text="{Binding Total}"></Span>
+                  <Span Text=" DT"></Span>
+                 </FormattedString>
+                </Label.FormattedText>
+               </Label>
+             
+              </Grid>
+               </syncfusion:SfExpander.Header >
+               <syncfusion:SfExpander.Content  Margin="0,10,0,0">
+                <Grid>
+               <StackLayout BindableLayout.ItemsSource="{Binding ListSessions}">
+                <BindableLayout.ItemTemplate>
+                 <DataTemplate>
+                  <Grid>
+                   <Frame BorderColor="{StaticResource Primary}"
+                            InputTransparent="True" 
+                            BackgroundColor="{StaticResource BackgroundColor}">
+                      <syncfusion:SfExpander IconColor="{StaticResource Primary}"
+                                             HeaderBackgroundColor="{StaticResource BackgroundColor}">
+                       <syncfusion:SfExpander.Header>
+                        <!--Session Grid-->
+                        <Grid>
+                       <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                       </Grid.RowDefinitions>
+                       <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                       </Grid.ColumnDefinitions>
+                         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.timestart.png}"
+                                WidthRequest="15"
+                                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                         <Label Grid.Column="1"
+                                FontSize="Small"
+                                TextColor="{StaticResource Primary}"
+                                Text="{Binding DateStartSession, StringFormat='{0:hh:mm}'}"></Label>
+                         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.timeend.png}"
+                                Grid.Column="2"
+                                WidthRequest="15"
+                                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                         <Label FontSize="Small"
+                                TextColor="{StaticResource Primary}"
+                                Grid.Column="3"
+                                Text="{Binding DateEndSessioiiiiii, StringFormat='{0:hh:mm}'}"></Label>
+                         <Label Grid.Column="4"
+                                TextColor="{StaticResource Primary}">
+                          <Label.FormattedText>
+                           <FormattedString>
+                            <Span Text="{Binding Recette}"></Span>
+                            <Span Text=" DT"></Span>
+                           </FormattedString>
+                          </Label.FormattedText>
+                         </Label>
+                        </Grid>
+                       </syncfusion:SfExpander.Header>
+                       <syncfusion:SfExpander.Content>
+                        <Grid>
+                      <Grid.RowDefinitions>
+                    
+                      </Grid.RowDefinitions>
+                      <Grid.ColumnDefinitions>
+                       <ColumnDefinition Width="Auto"></ColumnDefinition>
+                       <ColumnDefinition Width="Auto"></ColumnDefinition>
+                      </Grid.ColumnDefinitions>
+                      <Label Text="Index:"
+                             TextColor="{StaticResource LabelColor}"></Label>
+                      <Label Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding Index}"></Label>
+                      <Label Grid.Row="1"
+                             TextColor="{StaticResource LabelColor}"
+                             Text="Nombre Tickets:"></Label>
+                      <Label Grid.Row="1"
+                             Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding NbTickets}"></Label>
+                      <Label Grid.Row="2"
+                             TextColor="{StaticResource LabelColor}"
+                             Text="Nombre Autorités:"></Label>
+                      <Label Grid.Row="2"
+                             Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding NbAutorite}"></Label>
+                      <Label Grid.Row="3"
+                             TextColor="{StaticResource LabelColor}"
+                             Text="Nombre Administratifs:"></Label>
+                      <Label Grid.Row="3"
+                             Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding NbAdministratif}"></Label>
+                      <Label Grid.Row="4"
+                             TextColor="{StaticResource LabelColor}"
+                             Text="Nombre Abonnements:"></Label>
+                      <Label Grid.Row="4"
+                             Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding NbAbonne}"></Label>
+                      <Label Grid.Row="5"
+                             TextColor="{StaticResource LabelColor}"
+                             Text="Caissier:"></Label>
+                      <Label Grid.Row="5"
+                             Grid.Column="1"
+                             TextColor="{StaticResource Primary}"
+                             Text="{Binding Caissier}"></Label>
+                        </Grid>
+                       </syncfusion:SfExpander.Content>
+                      </syncfusion:SfExpander>
+                     </Frame>
+                    </Grid>
+                   </DataTemplate>
+                  </BindableLayout.ItemTemplate>
+                 </StackLayout>
+                </Grid>
+               </syncfusion:SfExpander.Content>
+              </syncfusion:SfExpander>
+             </Frame>
+            </Grid>
+           </ViewCell.View>
+          </ViewCell>
+         </DataTemplate>
+        </ListView.ItemTemplate>
+       </ListView>
+      </Grid>
+     </StackLayout>
+    </ScrollView>
+   </RefreshView>
+  </Grid>
+ </ContentPage.Content>
+</ContentPage>

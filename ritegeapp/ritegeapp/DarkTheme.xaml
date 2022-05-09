@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary x:Class="XFCovid19.ThemeResources.LightTheme"
+                    xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
+ <OnPlatform x:Key="FontAvenir"
+             x:TypeArguments="x:String">
+  <On Platform="Android"
+      Value="Avenir Book.ttf#Avenir Book" />
+  <On Platform="iOS"
+      Value="Avenir Book" />
+ </OnPlatform>
+ <OnPlatform x:Key="FontGilroyRegular"
+             x:TypeArguments="x:String">
+  <On Platform="Android"
+      Value="Gilroy-Regular.ttf#Gilroy-Regular" />
+  <On Platform="iOS"
+      Value="Gilroy-Regular" />
+ </OnPlatform>
+ <OnPlatform x:Key="FontGilroyMedium"
+             x:TypeArguments="x:String">
+  <On Platform="Android"
+      Value="Gilroy-Medium.ttf#Gilroy-Medium" />
+  <On Platform="iOS"
+      Value="Gilroy-Medium" />
+ </OnPlatform>
+ <OnPlatform x:Key="Fontello"
+             x:TypeArguments="x:String">
+  <On Platform="Android"
+      Value="fontello.ttf#Regular" />
+  <On Platform="iOS"
+      Value="fontello" />
+ </OnPlatform>
+ <Style x:Key="fontGilroyMedium12"
+        TargetType="Label">
+  <Setter Property="FontFamily"
+          Value="{StaticResource FontGilroyMedium}" />
+  <Setter Property="FontSize"
+          Value="13" />
+  <Setter Property="TextColor"
+          Value="#ffffff" />
+ </Style>
+ <Style x:Key="LabelHeader"
+        TargetType="Label">
+  <Setter Property="FontFamily"
+          Value="{StaticResource FontGilroyMedium}" />
+  <Setter Property="TextColor"
+          Value="{DynamicResource Primary}" />
+  <Setter Property="skeleton:Skeleton.BackgroundColor"
+          Value="{DynamicResource Primary}"></Setter>
+  <Setter Property="skeleton:Skeleton.Animation"
+          Value="{skeleton:DefaultAnimation Source=Fade}"></Setter>
+  <Setter Property="FontSize"
+          Value="25" />
+  <Setter Property="HorizontalOptions"
+          Value="Center" />
+ </Style>
+ <Style x:Key="FrameTotal"
+        TargetType="pancake:PancakeView">
+  <Setter Property="BackgroundColor"
+          Value="Transparent" />
+  <Setter Property="CornerRadius"
+          Value="10" />
+  <Setter Property="Border">
+   <pancake:Border Color="White"
+                   Thickness="5" />
+  </Setter>
+
+  <Setter Property="Padding"
+          Value="0" />
+ </Style>
+ <Style x:Key="ImageDoctor"
+        TargetType="Image">
+  <Setter Property="Aspect"
+          Value="AspectFill" />
+  <Setter Property="Source"
+          Value="doctor.png" />
+ </Style>
+ <Color x:Key="MainPageBackgroundColor">#EEE</Color>
+ <Color x:Key="SkeletonLabelBackground">#EEEEEE</Color>
+ <Color x:Key="SkeletonStackBackground">#F5F5F5</Color>
+ <Color x:Key="SearchPageBackgroundColor">#EEE</Color>
+ <Color x:Key="SearchPageLabelTextColor">#000000</Color>
+ <Color x:Key="SearchPageActivityIndColor">#201F4C</Color>
+</ResourceDictionary>

@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ritegeapp.Views.GestionRecettes"
+             xmlns:local="clr-namespace:ritegeapp.Views"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:converters1="clr-namespace:ritegeapp.Converters"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             Title="Gestion Recettes">
+ <ContentPage.Resources>
+  <ResourceDictionary>
+   <converters1:TypeTicketToStringConverter x:Key="TypeTicketToString" />
+  </ResourceDictionary>
+ </ContentPage.Resources>
+ <ContentPage.ToolbarItems>
+
+  <ToolbarItem Text="{Binding StatisticsToolBarItemName}"
+               Command="{Binding OpenStatisticsWindowCommand}"
+               Order="Secondary"
+               Priority="0" />
+
+ </ContentPage.ToolbarItems>
+ <ContentPage.Content>
+   <!--no result label-->
+  <Grid  HorizontalOptions="FillAndExpand"
+         VerticalOptions="FillAndExpand"
+         BackgroundColor="{StaticResource BackgroundColor}">
+   <ActivityIndicator Scale="0.5"
+                         Color="{StaticResource Primary}"
+                         Grid.Row="0"
+                         IsVisible="{Binding ShowLoadingIndicator}"
+                         IsRunning="true" />
+    <Label FontSize="Medium"
+           TextColor="{StaticResource Primary}"
+           IsVisible="{Binding ShowNoFilterResultLabel}"
+           LineBreakMode="WordWrap">
+     <Label.FormattedText>
+      <!--no result label-->
+      <FormattedString>
+       <Span Text="Pas de resultat, Cliquer "
+             TextColor="{StaticResource LabelColor}" />
+       <Span Text="Ici"
+             TextColor="{StaticResource Primary}">
+        <Span.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding ClearFilterCommand}" />
+        </Span.GestureRecognizers>
+       </Span>
+       <Span Text=" pour désactiver le filtre"
+             TextColor="{StaticResource LabelColor}" />
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+    <Label FontSize="Medium"
+           TextColor="{StaticResource Primary}"
+           IsVisible="{Binding ShowNoDataReceived}"
+           LineBreakMode="WordWrap">
+     <Label.FormattedText>
+      <!--no result label-->
+      <FormattedString>
+       <Span Text="Pas de resultat, Cliquer "
+             TextColor="{StaticResource LabelColor}" />
+       <Span Text="ici"
+             TextColor="{StaticResource Primary}">
+        <Span.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+        </Span.GestureRecognizers>
+       </Span>
+       <Span Text=" pour réessayer"
+             TextColor="{StaticResource LabelColor}" />
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+    <Label FontSize="Medium"
+           TextColor="{StaticResource Primary}"
+           IsVisible="{Binding ShowNoInternetLabel}"
+           LineBreakMode="WordWrap">
+     <Label.FormattedText>
+      <!--no result label-->
+      <FormattedString>
+       <Span Text="Pas de connexion, Activer Wifi ou Données Mobile puis cliquer "
+             TextColor="{StaticResource LabelColor}" />
+       <Span Text="ici"
+             TextColor="{StaticResource Primary}">
+        <Span.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+        </Span.GestureRecognizers>
+       </Span>
+       <Span Text=" pour réessayer"
+             TextColor="{StaticResource LabelColor}" />
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+    <RefreshView 
+                 IsRefreshing="{Binding ListIsRefreshing}"
+                 IsEnabled="{Binding ShowData}"
+                 Command="{Binding GetDataCommand}"
+                 IsVisible="{Binding ShowData}">
+     <ScrollView
+                 IsVisible="{Binding ShowData}">
+      <ListView
+                ItemsSource="{Binding ListRecetteToShow}"
+                SeparatorVisibility="None"
+                SeparatorColor="Transparent"
+                BackgroundColor="{StaticResource BackgroundColor}"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill"
+                HasUnevenRows="True">
+       <ListView.ItemTemplate>
+        <DataTemplate>
+         <ViewCell StyleId="no-selection">
+          <ViewCell.View>
+           <Grid VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+             <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Frame BorderColor="{StaticResource Primary}"
+                  BackgroundColor="{StaticResource BackgroundColor}">
+            <xct:Expander >
+              <xct:Expander.Header>
+               <Grid>
+                <Label FontSize="Medium"
+                       Grid.Row="0"
+                       TextColor="{StaticResource Primary}"
+                       FontAttributes="Bold">
+                 <Label.FormattedText>
+                  <FormattedString>
+                   <Span Text="{Binding TypeTicket,Converter={StaticResource TypeTicketToString}}"></Span>
+                   <Span Text=" : "></Span>
+                   <Span Text="{Binding MontantPaye}"></Span>
+                   <Span Text=" DT"></Span>
+                  </FormattedString>
+                 </Label.FormattedText>
+                </Label>
+                <Image Source="expand.png"
+                       xct:IconTintColorEffect.TintColor="White"
+                       HorizontalOptions="End"
+                       VerticalOptions="Start">
+                 <Image.Triggers>
+                  <DataTrigger TargetType="Image"
+                               Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                               Value="True">
+                   <Setter Property="Source"
+                           Value="collapse.png" />
+                  </DataTrigger>
+                 </Image.Triggers>
+                </Image>
+               </Grid>
+              </xct:Expander.Header>
+              <xct:Expander Padding="10">
+               <xct:Expander.Header>
+                <Grid>
+                 <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                 </Grid.RowDefinitions>
+                 <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"></ColumnDefinition>
+                  <ColumnDefinition Width="Auto"></ColumnDefinition>
+                  <ColumnDefinition Width="Auto"></ColumnDefinition>
+                 </Grid.ColumnDefinitions>
+                 <Label FontSize="Medium"
+                        TextColor="{StaticResource LabelColor}"
+                        Text="Date Heure Entree:"></Label>
+                 <Label FontSize="Medium"
+                        Grid.Column="1"
+                        TextColor="{StaticResource Primary}"
+                        Text="{Binding DateHeureEntree, StringFormat='{0:d}'}"></Label>
+                 <Label FontSize="Medium"
+                        Grid.Row="1"
+                        TextColor="{StaticResource LabelColor}"
+                        Text="Date Heure Sortie:"></Label>
+                 <Label FontSize="Medium"
+                        Grid.Row="1"
+                        TextColor="{StaticResource Primary}"
+                        Grid.Column="1"
+                        Text="{Binding DateHeureSortie, StringFormat='{0:d}'}"></Label>
+                 <Image Source="expand.png"
+                        xct:IconTintColorEffect.TintColor="White"
+                        HorizontalOptions="End"
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="3"
+                        VerticalOptions="Start">
+                  <Image.Triggers>
+                   <DataTrigger TargetType="Image"
+                                Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                Value="True">
+                    <Setter Property="Source"
+                            Value="collapse.png" />
+                   </DataTrigger>
+                  </Image.Triggers>
+                 </Image>
+                </Grid>
+               </xct:Expander.Header>
+               <xct:Expander.ContentTemplate>
+                <DataTemplate>
+                 <Grid>
+                  <Grid.RowDefinitions>
+                   <RowDefinition Height="Auto" />
+                   <RowDefinition Height="Auto" />
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                   <ColumnDefinition Width="Auto"></ColumnDefinition>
+                   <ColumnDefinition Width="Auto"></ColumnDefinition>
+                  </Grid.ColumnDefinitions>
+                  <Label Text="Code Ticket:"
+                         TextColor="{StaticResource LabelColor}"></Label>
+                  <Label  Grid.Column="1"
+                          TextColor="{StaticResource Primary}"
+                          Text="{Binding CodeTicket}"></Label>
+                  <Label Grid.Row="1"
+                         TextColor="{StaticResource LabelColor}"
+                         Text="Borne Entree"></Label>
+                  <Label Grid.Row="1"
+                         Grid.Column="1"
+                         TextColor="{StaticResource Primary}"
+                         Text="{Binding BorneEntree}"></Label>
+                 </Grid>
+                </DataTemplate>
+               </xct:Expander.ContentTemplate>
+              </xct:Expander>
+             </xct:Expander>
+            </Frame>
+           </Grid>
+          </ViewCell.View>
+         </ViewCell>
+        </DataTemplate>
+       </ListView.ItemTemplate>
+      </ListView>
+     </ScrollView>
+    </RefreshView>
+    <!--custom dots menu with image support-->
+    <!--<RelativeLayout>
+     <ListView x:Name="SecondaryToolbarListView" 
+               VerticalOptions="Start"
+               HorizontalOptions="Fill"
+               WidthRequest="150" Unfocused="SecondaryToolbarListView_Unfocused"
+               IsVisible="False"
+               ItemTapped="SecondaryToolbarListView_ItemTapped"
+               RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-160}">
+      <ListView.ItemTemplate>
+       <DataTemplate>
+        <ViewCell >
+         <StackLayout  Orientation="Horizontal"
+                       BackgroundColor="White"
+                       Spacing="10"
+                       Padding="5,5,5,5">
+          <Image HeightRequest="30"
+                 HorizontalOptions="Start"
+                 VerticalOptions="Center"
+                 Source="{Binding ImagePath}" />
+          <Label FontSize="15"
+                 VerticalOptions="Center"
+                 HorizontalOptions="Start"
+                 Text="{Binding MenuText}" />
+         </StackLayout>
+        </ViewCell>
+       </DataTemplate>
+      </ListView.ItemTemplate>
+     </ListView>
+    </RelativeLayout>-->
+   </Grid>
+ </ContentPage.Content>
+</ContentPage>

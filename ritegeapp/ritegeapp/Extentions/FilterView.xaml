@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:extentions="clr-namespace:ritegeapp.Extentions"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="ritegeapp.Extentions.FilterView"
+       HasShadow="False"
+       CornerRadius="6"
+       Grid.Row="0"
+       HorizontalOptions="Center"
+       VerticalOptions="Center"
+       BorderColor="{StaticResource Primary}"
+       BackgroundColor="{StaticResource BackgroundColor}">
+ <Frame.Content>
+   <Grid Margin="0,-10,0,0">
+    <Grid.RowDefinitions></Grid.RowDefinitions>
+    <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+    <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
+           Grid.Row="0"
+           xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+           Grid.Column="0"></Image>
+    <Frame BorderColor="{StaticResource Primary}"
+           Grid.Row="0"
+           Grid.Column="1"
+           Padding="0"
+           Grid.ColumnSpan="2"
+           BackgroundColor="{StaticResource BackgroundColor}"><DatePicker x:Name="dateStartLabel"
+                                      HorizontalOptions="Center"
+                                      VerticalOptions="Center"
+                                      
+                                      FontSize="Medium"
+                                      TextColor="{StaticResource Primary}"
+                                      Format="dd/MM/yyyy" />
+    </Frame>
+    <Label Text="—"
+           HorizontalOptions="CenterAndExpand"
+           TextColor="{StaticResource Primary}"
+           Grid.Row="0"
+           FontSize="40"
+           Grid.Column="3"></Label>
+    <Frame BorderColor="{StaticResource Primary}"
+           Grid.Column="4"
+           Grid.ColumnSpan="2"
+           Padding="0"
+           BackgroundColor="{StaticResource BackgroundColor}">
+     <DatePicker Format="dd/MM/yyyy"
+                           x:Name="DateDFinLabel"
+                 TextColor="{StaticResource Primary}" />
+    </Frame>
+    <Label Text="Recherche"
+           x:Name="SearchSubject"
+           FontSize="Small"
+           VerticalOptions="Center"
+           TextColor="{StaticResource LabelColor}"
+           Grid.Row="1"
+           Grid.Column="0" />
+    <Entry  Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            x:Name="SearchTextBoxField"
+            Placeholder="Recherche"
+            PlaceholderColor="{StaticResource Primary}"
+            TextColor="{StaticResource Primary}"></Entry>
+    <Grid  Grid.Row="1"
+           Grid.ColumnSpan="3"
+           Grid.Column="3">
+     <Image Source="search.png"
+            x:Name="CanTapSearchText"
+            xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+            xct:TouchEffect.PressedScale="0.8"
+            xct:TouchEffect.PressedOpacity="0.6">
+    </Image>
+     <Image Source="clearfilter.png"
+            x:Name="CanClearFilter"
+            xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+            Grid.Column="1"
+            xct:TouchEffect.PressedScale="0.8"
+            xct:TouchEffect.PressedOpacity="0.6"></Image>
+     <Image Source="sortby.png"
+            x:Name="CanSort"
+            xct:TouchEffect.PressedScale="0.8"
+            xct:TouchEffect.PressedOpacity="0.6"
+            xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+            Grid.Column="2"></Image>
+    </Grid>
+    
+   </Grid>
+ </Frame.Content>
+</Frame>

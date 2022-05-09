@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ritegeapp.Views.AlertView"
+             xmlns:local="clr-namespace:ritegeapp.Views"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:converters1="clr-namespace:ritegeapp.Converters"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             Title="Alertes">
+
+
+ <ContentPage.Content>
+   <!--no result label-->
+  <Grid HorizontalOptions="CenterAndExpand"
+        VerticalOptions="CenterAndExpand"
+         BackgroundColor="{StaticResource BackgroundColor}">
+   <ActivityIndicator 
+                         Color="{StaticResource Primary}"
+                         IsVisible="{Binding ShowLoadingIndicator}"
+                      IsRunning="{Binding ShowLoadingIndicator}" />
+
+    <Label FontSize="Medium"
+           TextColor="{StaticResource Primary}"
+           IsVisible="{Binding ShowNoDataReceived}"
+           LineBreakMode="WordWrap">
+     <Label.FormattedText>
+      <!--no result label-->
+      <FormattedString>
+       <Span Text="Pas de resultat, Cliquer "
+             TextColor="{StaticResource LabelColor}" />
+       <Span Text="ici"
+             TextColor="{StaticResource Primary}">
+        <Span.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+        </Span.GestureRecognizers>
+       </Span>
+       <Span Text=" pour réessayer"
+             TextColor="{StaticResource LabelColor}" />
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+    <Label FontSize="Medium"
+           TextColor="{StaticResource Primary}"
+           IsVisible="{Binding ShowNoInternetLabel}"
+           LineBreakMode="WordWrap">
+     <Label.FormattedText>
+      <!--no result label-->
+      <FormattedString>
+       <Span Text="Pas de connexion, Activer Wifi ou Données Mobile puis cliquer "
+             TextColor="{StaticResource LabelColor}" />
+       <Span Text="ici"
+             TextColor="{StaticResource Primary}">
+        <Span.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+        </Span.GestureRecognizers>
+       </Span>
+       <Span Text=" pour réessayer"
+             TextColor="{StaticResource LabelColor}" />
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+    <RefreshView 
+                 IsRefreshing="{Binding ListIsRefreshing}"
+                 IsEnabled="{Binding ShowData}"
+                 Command="{Binding GetDataCommand}"
+                 IsVisible="{Binding ShowData}">
+     <ScrollView
+                 IsVisible="{Binding ShowData}">
+      <ListView
+                ItemsSource="{Binding ListAlertToShow}"
+                SeparatorVisibility="None"
+                SeparatorColor="Transparent"
+       
+                BackgroundColor="{StaticResource BackgroundColor}"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill"
+                HasUnevenRows="True">
+       <ListView.ItemTemplate>
+        <DataTemplate>
+         <ViewCell StyleId="no-selection">
+          <ViewCell.View>
+          <Frame x:Name="frame"
+                 BackgroundColor="Transparent"
+                 BorderColor="{StaticResource Primary}"
+                 Padding="5">
+           <Frame.GestureRecognizers>
+            <TapGestureRecognizer Tapped="Frame_Tapped"></TapGestureRecognizer>
+           </Frame.GestureRecognizers>
+           <StackLayout>
+          <Label FontSize="Medium"
+                 Grid.Row="0"
+                 TextColor="{StaticResource Primary}"
+                 FontAttributes="Bold">
+           <Label.FormattedText>
+             <FormattedString>
+              <Span                 TextColor="{StaticResource LabelColor}"
+                                    Text="Type: "></Span>
+               <Span Text="{Binding TypeEvent}"></Span>
+              <Span     TextColor="{StaticResource LabelColor}" Text=" | Date: "></Span>
+               <Span Text="{Binding DateEvent, StringFormat='{0:dd/MM/yyyy HH:mm}'}"></Span>
+             </FormattedString>
+           </Label.FormattedText>
+           </Label>
+           <Label FontSize="Medium"
+                  Grid.Row="0"
+                  TextColor="{StaticResource Primary}"
+                  FontAttributes="Bold">
+            <Label.FormattedText>
+             <FormattedString>
+              <Span TextColor="{StaticResource LabelColor}" Text="Description: "></Span>
+               <Span Text="{Binding DescriptionEvent}"></Span>
+             </FormattedString>
+            </Label.FormattedText>
+           </Label>          </StackLayout>
+</Frame>
+         </ViewCell.View>
+         </ViewCell>
+        </DataTemplate>
+       </ListView.ItemTemplate>
+      </ListView>
+     </ScrollView>
+    </RefreshView>
+    <!--custom dots menu with image support-->
+    <!--<RelativeLayout>
+     <ListView x:Name="SecondaryToolbarListView" 
+               VerticalOptions="Start"
+               HorizontalOptions="Fill"
+               WidthRequest="150" Unfocused="SecondaryToolbarListView_Unfocused"
+               IsVisible="False"
+               ItemTapped="SecondaryToolbarListView_ItemTapped"
+               RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-160}">
+      <ListView.ItemTemplate>
+       <DataTemplate>
+        <ViewCell >
+         <StackLayout  Orientation="Horizontal"
+                       BackgroundColor="White"
+                       Spacing="10"
+                       Padding="5,5,5,5">
+          <Image HeightRequest="30"
+                 HorizontalOptions="Start"
+                 VerticalOptions="Center"
+                 Source="{Binding ImagePath}" />
+          <Label FontSize="15"
+                 VerticalOptions="Center"
+                 HorizontalOptions="Start"
+                 Text="{Binding MenuText}" />
+         </StackLayout>
+        </ViewCell>
+       </DataTemplate>
+      </ListView.ItemTemplate>
+     </ListView>
+    </RelativeLayout>-->
+   </Grid>
+ </ContentPage.Content>
+</ContentPage>

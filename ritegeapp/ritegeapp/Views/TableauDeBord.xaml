@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ritegeapp.ViewModels"
+             xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
+             xmlns:converters1="clr-namespace:ritegeapp.Converters"
+             xmlns:control="clr-namespace:ProgressRingControl.Forms.Plugin;assembly=ProgressRing.Forms.Plugin"
+             x:DataType="viewmodels:TableauDeBordViewModel"
+             x:Class="ritegeapp.Views.TableauDeBord"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             Title="Tableau De Bord">
+ <ContentPage.Resources>
+  <ResourceDictionary>
+   <converters1:DateToStringConverter x:Key="DateToString" />
+   <converters1:BoolToStringOnlineStatusConverter x:Key="BoolToStringOnlineStatus" />
+   <converters1:BoolToColorOnlineStatusConverter x:Key="BoolToColorOnlineStatus" />
+   <converters1:IntToGradientColorConverter x:Key="IntToGradientColor" />
+   <converters1:IntToProgressConverter x:Key="IntToProgress" />
+   <converters1:IntToBoolStatusConverter x:Key="IntToBoolStatus" />
+   <converters1:NullToDashConverter x:Key="NullToDash" />
+  </ResourceDictionary>
+ </ContentPage.Resources>
+ <ContentPage.Content>
+  <RefreshView IsRefreshing="{Binding IsRefreshing}"
+               IsEnabled="{Binding ShowData}"
+               Command="{Binding GetDataCommand}">
+   <ScrollView>
+    <StackLayout>
+     <Grid>
+      <Grid.RowDefinitions>
+       <RowDefinition Height="*"></RowDefinition>
+       <RowDefinition Height="*"></RowDefinition>
+       <RowDefinition Height="*"></RowDefinition>
+      </Grid.RowDefinitions>
+     <Grid >
+      <Grid.RowDefinitions>
+       <RowDefinition Height="*" />
+       <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+       <ColumnDefinition Width="*" />
+       <ColumnDefinition Width="*" />
+       <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <!--parking view-->
+      <pancake:PancakeView Grid.Row="0"
+                           Grid.Column="0"
+                           Margin="0,12,0,0"
+                           Style="{DynamicResource FrameTotal}">
+       <StackLayout HorizontalOptions="CenterAndExpand" 
+                    VerticalOptions="Center">
+        <Label Style="{DynamicResource fontGilroyMedium12}" 
+               Text="Parking" >
+         <Label.GestureRecognizers>
+          <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer> 
+         </Label.GestureRecognizers> 
+        </Label>
+        <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+               Style="{StaticResource LabelHeader}"
+               Text="{Binding Parking,Converter={StaticResource NullToDash}}">
+         <Label.GestureRecognizers>
+          <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
+         </Label.GestureRecognizers>
+        </Label>
+       </StackLayout>
+        <pancake:PancakeView.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
+        </pancake:PancakeView.GestureRecognizers>
+       </pancake:PancakeView>
+      <pancake:PancakeView Grid.Row="0"
+                           Grid.Column="1"
+                           Margin="0,12,0,0"
+                           Style="{DynamicResource FrameTotal}">
+       <StackLayout
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="Center">
+        <Label Style="{DynamicResource fontGilroyMedium12}"
+               FontSize="Caption"
+               Text="Recette Parking" />
+        <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+               Style="{StaticResource LabelHeader}">
+         <Label.FormattedText>
+          <FormattedString>
+           <Span Text="{Binding RecetteParking,Converter={StaticResource NullToDash}}"></Span>
+           <Span FontSize="Caption"
+                 Text=" DT"></Span>
+          </FormattedString>
+         </Label.FormattedText>
+        </Label>
+       </StackLayout>
+       
+      </pancake:PancakeView>
+      <pancake:PancakeView Grid.Row="0"
+                           Grid.Column="2"
+                           Margin="0,12,0,0"
+                           Style="{DynamicResource FrameTotal}">
+       <StackLayout 
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="Center">
+        <Label Style="{DynamicResource fontGilroyMedium12}"
+               Text="Total Journée" />
+        <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                                        Style="{StaticResource LabelHeader}">
+         <Label.FormattedText>
+          <FormattedString>
+           <Span Text="{Binding RecetteCaisse,Converter={StaticResource NullToDash}}"></Span>
+           <Span  FontSize="Caption"
+                  Text=" DT"></Span>
+          </FormattedString>
+         </Label.FormattedText>
+        </Label>
+       </StackLayout>
+      </pancake:PancakeView>
+      <pancake:PancakeView    Grid.Row="1"
+                              Grid.Column="1"
+                              Grid.ColumnSpan="2"
+                              Margin="0,0,0,0"
+                              Style="{DynamicResource FrameTotal}">
+       <StackLayout Padding="8,15"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+        <Label Style="{DynamicResource fontGilroyMedium12}"
+               Text="Caissier" />
+        <Label                         skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                                       Style="{StaticResource LabelHeader}"
+                                       Text="{Binding NomPrenomCaissier,Converter={StaticResource NullToDash}}" />
+       </StackLayout>
+      </pancake:PancakeView>
+      <pancake:PancakeView Grid.Row="1"
+                           Grid.Column="0"
+                           Style="{DynamicResource FrameTotal}">
+       <StackLayout Padding="8,15"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="Center">
+        <Label Style="{DynamicResource fontGilroyMedium12}"
+               Text="Recette En Cours"
+               FontSize="Micro" />
+        <Label                         skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                                       Style="{StaticResource LabelHeader}">
+         <Label.FormattedText>
+          <FormattedString>
+           <Span Text="{Binding RecetteCaissier,Converter={StaticResource NullToDash}}"></Span>
+           <Span  FontSize="Caption"
+                  Text=" DT"></Span>
+          </FormattedString>
+         </Label.FormattedText>
+        </Label>
+       </StackLayout>
+      </pancake:PancakeView>
+     </Grid>
+      <Grid x:Name="Progressringgrid" Grid.Row="1">
+       <Grid.RowDefinitions>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+       </Grid.RowDefinitions>
+     
+       <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="4.5*" />
+        <ColumnDefinition Width="5.5*" />
+       </Grid.ColumnDefinitions>
+       <StackLayout Grid.Column="1" Grid.RowSpan="2">
+        <Grid VerticalOptions="CenterAndExpand">
+         <control:ProgressRing   HeightRequest="80"
+                                 RingBaseColor="{Binding PlaceMax,Converter={StaticResource BoolToColorOnlineStatus}}"
+                                 Scale="2"
+                                 RingThickness="4">
+          <control:ProgressRing.Progress>
+           <MultiBinding Converter="{StaticResource IntToProgress}">
+            <Binding Path="PlaceOccupe" />
+            <Binding Path="PlaceMax" />
+           </MultiBinding>
+          </control:ProgressRing.Progress>
+          <control:ProgressRing.RingProgressColor>
+           <MultiBinding Converter="{StaticResource IntToGradientColor}">
+            <Binding Path="PlaceOccupe" />
+            <Binding Path="PlaceMax" />
+           </MultiBinding>
+          </control:ProgressRing.RingProgressColor>
+         </control:ProgressRing>
+         <StackLayout VerticalOptions="CenterAndExpand">
+          <Label FontAttributes="Bold"
+                 FontSize="20"
+                 Text="{Binding PlaceDisponible,Converter={StaticResource NullToDash}}"
+                 VerticalOptions="CenterAndExpand"
+                 HorizontalOptions="CenterAndExpand">
+           <Label.TextColor>
+            <MultiBinding Converter="{StaticResource IntToGradientColor}">
+             <Binding Path="PlaceOccupe" />
+             <Binding Path="PlaceMax" />
+            </MultiBinding>
+           </Label.TextColor>
+          </Label>
+          <Label Text="Places Disponible"
+                 TextColor="{StaticResource Primary}"
+                 HorizontalTextAlignment="Center" />
+         </StackLayout>
+        </Grid>
+       </StackLayout>
+       <pancake:PancakeView Grid.Row="0"
+                            Grid.Column="0"
+                            Style="{DynamicResource FrameTotal}">
+        <StackLayout 
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center">
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+                Text="Evenements">
+          <Label.GestureRecognizers>
+           <TapGestureRecognizer Command="{Binding OpenEventListViewCommand}"></TapGestureRecognizer>
+          </Label.GestureRecognizers>
+         </Label>
+         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                                         Style="{StaticResource LabelHeader}"
+                                         Text="{Binding NbEvents,Converter={StaticResource NullToDash}}">
+          <Label.GestureRecognizers>
+           <TapGestureRecognizer Command="{Binding OpenEventListViewCommand}"></TapGestureRecognizer>
+          </Label.GestureRecognizers>
+         </Label>
+        </StackLayout>
+        <pancake:PancakeView.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding OpenEventListViewCommand}"></TapGestureRecognizer>
+        </pancake:PancakeView.GestureRecognizers>
+       </pancake:PancakeView>
+       <pancake:PancakeView Grid.Row="1"
+                            Grid.Column="0"
+                            Style="{DynamicResource FrameTotal}">
+        <StackLayout HorizontalOptions="CenterAndExpand"
+                     VerticalOptions="Center">
+         <Label Style="{DynamicResource fontGilroyMedium12}">
+          <Label.FormattedText>
+           <FormattedString>
+            <Span Text="Flux Borne: "></Span>
+            <Span   Text="{Binding FluxBorne,Converter={StaticResource NullToDash}}"
+                    TextColor="{StaticResource Primary}"></Span>
+           </FormattedString>
+          </Label.FormattedText>
+         </Label>
+         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                                         Style="{StaticResource LabelHeader}">
+          <Label.FormattedText>
+           <FormattedString>
+            <Span   Text="{Binding FluxBorneTotal,Converter={StaticResource NullToDash}}"></Span>
+            <Span FontSize="Caption"
+                  Text=" DT"></Span>
+           </FormattedString>
+          </Label.FormattedText>
+         </Label>
+        </StackLayout>
+       </pancake:PancakeView>
+      </Grid>
+      <Grid 
+            Grid.Row="2"
+          >
+       <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+       </Grid.RowDefinitions>
+       <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+       </Grid.ColumnDefinitions>
+   
+       <pancake:PancakeView Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Style="{DynamicResource FrameTotal}">
+        <StackLayout
+                     HorizontalOptions="CenterAndExpand"
+                     VerticalOptions="Center">
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+              >
+          <Label.FormattedText>
+           <FormattedString>
+            <Span Text="Flux Caisse: "></Span>
+            <Span   Text="{Binding FluxCaisse,Converter={StaticResource NullToDash}}"
+                    TextColor="{StaticResource Primary}"></Span>
+           </FormattedString>
+          </Label.FormattedText>
+         </Label>
+         <Label                         skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                                        Style="{StaticResource LabelHeader}">
+          <Label.FormattedText>
+           <FormattedString>
+            <Span   Text="{Binding FluxCaisseTotal,Converter={StaticResource NullToDash}}" ></Span>
+            <Span FontSize="Caption"
+                  Text=" DT"></Span>
+           </FormattedString>
+          </Label.FormattedText>
+         </Label>
+        </StackLayout>
+       </pancake:PancakeView>
+       <pancake:PancakeView Grid.Row="0"
+                            Grid.Column="2"
+                            Style="{DynamicResource FrameTotal}">
+        <StackLayout
+                     HorizontalOptions="CenterAndExpand"
+                     VerticalOptions="Center">
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+                Text="Tickets" />
+         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                                         HorizontalOptions="Center"
+                                         Style="{StaticResource LabelHeader}">
+          <Label.FormattedText>
+           <FormattedString>
+            <Span Text="{Binding NbTickets,Converter={StaticResource NullToDash}}"></Span>
+           </FormattedString>
+          </Label.FormattedText>
+         </Label>
+        </StackLayout>
+       </pancake:PancakeView>
+       <pancake:PancakeView    Grid.Row="1"
+                               Grid.Column="1"
+                               Style="{DynamicResource FrameTotal}">
+        <StackLayout
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center">
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+                Text="Autorités" />
+         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                                         HorizontalOptions="Center"
+                                         Style="{StaticResource LabelHeader}"
+                                         Text="{Binding NbAutorite,Converter={StaticResource NullToDash}}" />
+        </StackLayout>
+       </pancake:PancakeView>
+       <pancake:PancakeView Grid.Row="1"
+                            Grid.Column="0"
+                            Style="{DynamicResource FrameTotal}">
+        <StackLayout Padding="8,15">
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+                Text="Abonnés"
+                HorizontalOptions="Center" />
+         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                                         Style="{StaticResource LabelHeader}">
+          <Label.FormattedText>
+           <FormattedString>
+            <Span Text="{Binding NbAbonne,Converter={StaticResource NullToDash}}"></Span>
+           </FormattedString>
+          </Label.FormattedText>
+         </Label>
+        </StackLayout>
+       </pancake:PancakeView>
+       <pancake:PancakeView Grid.Row="1"
+                            Grid.Column="2"
+                            Style="{DynamicResource FrameTotal}">
+        <StackLayout 
+                     HorizontalOptions="CenterAndExpand"
+                     VerticalOptions="Center">
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+                Text="Administratifs" />
+         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                                         Style="{StaticResource LabelHeader}">
+          <Label.FormattedText>
+           <FormattedString>
+            <Span Text="{Binding NbAdministrateur,Converter={StaticResource NullToDash}}"></Span>
+           </FormattedString>
+          </Label.FormattedText>
+         </Label>
+        </StackLayout>
+       </pancake:PancakeView>
+      </Grid>
+     </Grid>
+    </StackLayout>
+   </ScrollView>
+  </RefreshView>
+ </ContentPage.Content>
+</ContentPage>

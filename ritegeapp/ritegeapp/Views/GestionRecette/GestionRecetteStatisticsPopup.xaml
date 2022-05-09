@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:pages1="clr-namespace:ritegeapp.ViewModels"
+                 x:Class="ritegeapp.Views.GestionRecetteStatisticsPopup"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                 xmlns:dtos="clr-namespace:ritegeapp.DTOs"
+                 x:DataType="pages1:GestionRecetteStatisticsPopupViewModel"
+                 CloseWhenBackgroundIsClicked="True"
+                 BackgroundColor="Transparent"
+                 HasSystemPadding="True">
+ <pages:PopupPage.Content>
+  <Frame HasShadow="False"
+         CornerRadius="10"
+         Margin="10"
+         BorderColor="{StaticResource Primary}"
+         HorizontalOptions="Center"
+         VerticalOptions="Center"
+         BackgroundColor="{StaticResource BackgroundColor}">
+   <StackLayout>
+    <Grid RowSpacing="0">
+     <Grid.RowDefinitions></Grid.RowDefinitions>
+     <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
+     </Grid.ColumnDefinitions>
+     <Label Text="Total Tickets"
+            TextColor="{StaticResource LabelColor}"
+            Grid.Row="0"
+            Grid.Column="0" />
+     <Label Text="{Binding TicketTotal}"
+            HorizontalOptions="EndAndExpand"
+            Grid.Row="0"
+            Grid.Column="1"
+            TextColor="{StaticResource Primary}" />
+     <Label Text="Somme Tickets(DT)"
+            Grid.Row="3"
+            TextColor="{StaticResource LabelColor}"
+            Grid.Column="0" />
+     <Label Text="{Binding TicketSum}"
+            HorizontalOptions="EndAndExpand"
+            Grid.Row="3"
+            Grid.Column="1"
+            TextColor="{StaticResource Primary}" />
+     <Label Text="Total Tickets Stationnement"
+            TextColor="{StaticResource LabelColor}"
+            Grid.Row="2"
+            Grid.Column="0" />
+     <Label Text="{Binding TicketStationnementTotal}"
+            HorizontalOptions="EndAndExpand"
+            Grid.Row="2"
+            Grid.Column="1"
+            TextColor="{StaticResource Primary}" />
+     <Label Text="Somme Tickets Stationnements(DT)"
+            Grid.Row="1"
+            TextColor="{StaticResource LabelColor}"
+            Grid.Column="0" />
+     <Label Text="{Binding TicketStationnementSum}"
+            HorizontalOptions="EndAndExpand"
+            Grid.Row="1"
+            Grid.Column="1"
+            TextColor="{StaticResource Primary}" />
+     <Button TextColor="{StaticResource Primary}"
+             BackgroundColor="Transparent"
+             Grid.Row="4"
+             Grid.Column="0" Grid.ColumnSpan="2"
+             BorderColor="{StaticResource Primary}"
+             BorderWidth="3"
+             Text="Fermer"
+             Clicked="OnClose"></Button>
+    </Grid>
+   </StackLayout>
+  </Frame>
+ </pages:PopupPage.Content>
+</pages:PopupPage>

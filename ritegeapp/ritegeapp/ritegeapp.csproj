@@ -1,0 +1,131 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+	  <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="images\LabelIcons\calendar.png" />
+    <None Remove="images\LabelIcons\calendarcheckmar.png" />
+    <None Remove="images\LabelIcons\calendarcheckmark.png" />
+    <None Remove="images\LabelIcons\contract.png" />
+    <None Remove="images\LabelIcons\timeend.png" />
+    <None Remove="images\LabelIcons\timestart.png" />
+    <None Remove="images\MenuIcons\cashier.png" />
+    <None Remove="images\MenuIcons\dashboard.png" />
+    <None Remove="images\MenuIcons\receipt.jpg" />
+    <None Remove="images\MenuIcons\subscription.png" />
+    <None Remove="Resources\LangFrensh.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="images\LabelIcons\calendarcheckmark.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="images\LabelIcons\calendar.png" />
+    <EmbeddedResource Include="images\LabelIcons\contract.png" />
+    <EmbeddedResource Include="images\LabelIcons\timeend.png" />
+    <EmbeddedResource Include="images\LabelIcons\timestart.png" />
+    <EmbeddedResource Include="images\MenuIcons\dashboard.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="images\MenuIcons\cashier.png" />
+    <EmbeddedResource Include="images\MenuIcons\receipt.jpg" />
+    <EmbeddedResource Include="images\MenuIcons\subscription.png" />
+    <EmbeddedResource Include="Resources\LangFrensh.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-preview.3.22178.4" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.24">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.21" />
+    <PackageReference Include="Plugin.LocalNotification" Version="9.2.1-preview01" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.0-pre20220427180151" />
+    <PackageReference Include="Syncfusion.Xamarin.Expander" Version="20.1.0.51" />
+    <PackageReference Include="System.Net.Http.Json" Version="7.0.0-preview.3.22175.4" />
+    <PackageReference Include="Xam.Plugins.Forms.ProgressRing" Version="0.1.2" />
+    <PackageReference Include="Xamarin.Bin.CircularProgressbar" Version="1.0.1" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.1" />
+    <PackageReference Include="Xamarin.CommunityToolkit.Markup" Version="2.0.1" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2401" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.2" />  
+    <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.763-beta" />  
+    <PackageReference Include="Xamarin.Forms.Skeleton" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\RitegeDomain\RitegeDomain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\MonoAndroid\v12.0\Mono.Android.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="DarkTheme.xaml.cs">
+      <DependentUpon>DarkTheme.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Extentions\FilterView.xaml.cs">
+      <DependentUpon>FilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\EventListView.xaml.cs">
+      <DependentUpon>EventListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\AlertView\AlertView.xaml.cs">
+      <DependentUpon>AlertView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\EventView\EventView.xaml.cs">
+      <DependentUpon>EventView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ParkingListView.xaml.cs">
+      <DependentUpon>ParkingListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\GestionAbonnement\GestionAbonnementStatisticsPopup.xaml.cs">
+      <DependentUpon>GestionAbonnementStatisticsPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\GestionRecette\GestionRecetteStatisticsPopup.xaml.cs">
+      <DependentUpon>GestionRecetteStatisticsPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\GestionRecette\GestionRecettes.xaml.cs">
+      <DependentUpon>GestionRecettes.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\GestionCaissier\GestionCaissierStatisticsPopup.xaml.cs">
+      <DependentUpon>GestionCaissierStatisticsPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\GestionAbonnement\GestionAbonnement.xaml.cs">
+      <DependentUpon>GestionAbonnement.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="DarkTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Extentions\FilterView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Utils\CircleProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Utils\CollapsibleControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
