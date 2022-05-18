@@ -201,7 +201,7 @@ namespace ritegeapp.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 ShowLoading();
-                await FilteredDataReceivedAsync(await (Application.Current as App).dataService.GetFilteredCashierData(dateStart, dateEnd, SearchTextBox));
+                await FilteredDataReceivedAsync(await (Application.Current as App).dataService.GetCashierData(dateStart, dateEnd, SearchTextBox));
             }
             else
             if (ListDto.Count == 0)

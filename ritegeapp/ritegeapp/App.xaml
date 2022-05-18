@@ -16,7 +16,6 @@
    <converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
    <converters:BooleanNegationConverter x:Key="BooleanNegation" />
    <Color x:Key="Primary">#f08407</Color>
-   <Color x:Key="Complementary">#f08407</Color>
    <Color x:Key="secndary">#f08407</Color>
    <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White"></Setter>

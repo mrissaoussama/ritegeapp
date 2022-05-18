@@ -25,17 +25,17 @@
         public HubConnection hubConnection;
         public HttpClient httpClient;
         public TimeSpan TokenExpiresIn = TimeSpan.FromDays(9999);
-        public string Token { get; set; }
+        public string? Token { get; set; }
         public DataService()
         {
-            httpClient = GetHttpClient();
+          httpClient = GetHttpClient();
         }
         public async Task Initialize()
         {
             if (Initialized == false)
             {
                 Initialized = true;
-                await GetToken();
+            await    Task.Run(async () => { await Login(); });
                 hubConnection = new HubConnectionBuilder()
                     .WithUrl(App.hubConnectionURL, options =>
                     {
@@ -49,10 +49,7 @@
                         };
                         options.AccessTokenProvider = async () =>
                         {
-                            Token = await GetToken();
-
                             return Token;
-
                         };
                     }).WithAutomaticReconnect()
                     .Build();
@@ -79,31 +76,44 @@
                 MessagingCenter.Send(Xamarin.Forms.Application.Current, "Reconnecting");
                 return Task.CompletedTask;
             };
-                hubConnection.On<DashBoardDTO>("GetDashboardData", (data) =>
-                {
-                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetDashboardData", data);
-
-                });
-                hubConnection.On<DashBoardDTO>("GetTicketData", (data) =>
-                {
-                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetTicketData", data);
-
-                });
+                ListenForNewData();
                 hubConnection.On<DashBoardDTO>("ResetToken", async(data) =>
                 {
                   await  Login();
                 });
                 await Connect();
-                DependencyService.Get<IEventService>().StartService();
+               DependencyService.Get<IEventService>().StartService();
 
             }
         }
+        public void StopListeningForNotImportantData()
+        {
+            Debug.WriteLine("dashboardunsub");
+
+            hubConnection.Remove("GetDashboardData");
+            hubConnection.Remove("GetTicketData");
+        }
+        public void ListenForNewData()
+        {
+            hubConnection.On<DashBoardDTO>("GetDashboardData", (data) =>
+            {
+                Debug.WriteLine("dashboard data received");
+                MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetDashboardData", data);
+
+            });
+            hubConnection.On<DashBoardDTO>("GetTicketData", (data) =>
+            {
+                MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetTicketData", data);
+
+            });
+        }
+
         public async Task Connect()
         {
             if (hubConnection is null)
             {
-                await Initialize();
-
+                await Task.Run(async () => { await Initialize(); });
+                return;
             }
             if ((Application.Current as App).IsOnline)
             {
@@ -115,9 +125,7 @@
                     }
                     catch (Exception ex)
                     {
-                        await Login();
-                        System.Diagnostics.Debug.WriteLine("not connected " + ex);
-                    }
+                  }
                 }
                 if (hubConnection.State == HubConnectionState.Connected)
                 {
@@ -140,11 +148,6 @@
                 }
 
             }
-
-            using (var dbcontext = new ApplicationDbContext())
-            {
-                var all = dbcontext.Token.Where(x => x.ID > 0).ToList();
-            }
         }
         public async Task<string?> GetToken()
         {
@@ -156,8 +159,8 @@
             }
             if (t is not null)
             {
-                var tgf = t.Date.Add(TokenExpiresIn) > DateTime.UtcNow;
-                if (t.Date.Add(TokenExpiresIn) > DateTime.UtcNow.AddMinutes(10))
+                var tgf = t.Date.Add(TokenExpiresIn) > DateTime.Now;
+                if (t.Date.Add(TokenExpiresIn) > DateTime.Now.AddMinutes(10))
                 {
                     Token = t.Token;
                     return t.Token;
@@ -177,15 +180,21 @@
         }
         public async Task<string?> Login()
         {
-
+            Debug.WriteLine("Login Called //////////////////////");
             {
                 HttpResponseMessage response = new HttpResponseMessage();
                 JsonContent content;
                 try
                 {
-                    var login = new LoginQuery { Login = "oussama", MotDePasse = "mrissa" };
-                    content = JsonContent.Create(login);
-                    response = await httpClient.PostAsync(App.ServerURL + "/Utilisateur/login", content);
+                    string uri = (App.ServerURL + "/Parking/login");
+                    var parameters = new Dictionary<string, string>
+                    {
+                    { "login", "oussama" },
+                    { "motdepasse", "mrissa" }
+                    };
+                    uri = QueryHelpers.AddQueryString(uri, parameters);
+
+                    response = await httpClient.GetAsync(uri);
                     if (response.IsSuccessStatusCode)
                     {
                         var contentr = await response.Content.ReadAsStreamAsync();
@@ -199,6 +208,12 @@
                     }
                     else
                     {
+                        var contentr = await response.Content.ReadAsStreamAsync();
+                        if (contentr != null)
+                        {
+                            Debug.WriteLine(Encoding.UTF8.GetString((contentr as MemoryStream).ToArray()));
+                            return null;
+                        }
                         return null;
                     }
                 }
@@ -227,13 +242,17 @@
 			var handler = new HttpClientHandler(); 
             #endif
             var httpclient = new HttpClient(handler);
-            httpclient.Timeout = TimeSpan.FromSeconds(10);
+            httpclient.Timeout = TimeSpan.FromSeconds(30);
             return httpclient;
         }
         public async Task<T> GetData<T>(string DataURL, Dictionary<string, string> args)
         {
+            Debug.WriteLine("GetData Called //////////////////////");
+
             _ = Task.Run(async () => await Connect());
             {
+                var httpClient = GetHttpClient();
+
                 HttpResponseMessage response = new HttpResponseMessage();
 
                 string uri = (App.ServerURL + DataURL);
@@ -248,7 +267,7 @@
                     else
                     {
                         uri = QueryHelpers.AddQueryString(uri, args);
-                        response = await httpClient.PostAsync(uri, null);
+                        response = await httpClient.GetAsync(uri);
                     }
                     if (response.IsSuccessStatusCode)
                     {
@@ -280,8 +299,8 @@
                         Debug.WriteLine(response.StatusCode);
                         if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                         {
-                            await Login();
-                            return await GetData<T>(DataURL, args);
+                            Console.WriteLine("unauthorized" );
+
                         }
                         return default;
                     }
@@ -377,9 +396,9 @@
 
             }
         }
-        public async Task<List<InfoAbonnementDTO>> GetFilteredAbonnementData(DateTime dateStart,DateTime dateEnd, string? abonneName)
+        public async Task<List<InfoAbonnementDTO>> GetAbonnementData(DateTime dateStart,DateTime dateEnd, string? abonneName)
         {
-            //use utcnow.ticks for different timezones to work if this becomes popular worldwide
+            //use Now.ticks for different timezones to work if this becomes popular worldwide
 
             var parameters = new Dictionary<string, string>
                 {
@@ -388,10 +407,10 @@
                     { nameof(abonneName), abonneName},
                 };
 
-            var list = await GetData<List<InfoAbonnementDTO>>("/Parking/GetFilteredAbonnementData", parameters);
+            var list = await GetData<List<InfoAbonnementDTO>>("/Parking/GetAbonnementData", parameters);
             return list;
         }
-        public async Task<List<InfoSessionsDTO>> GetFilteredCashierData(DateTime dateStart, DateTime dateEnd, string? caissierName)
+        public async Task<List<InfoSessionsDTO>> GetCashierData(DateTime dateStart, DateTime dateEnd, string? caissierName)
         {
             var parameters = new Dictionary<string, string>
         {
@@ -400,18 +419,18 @@
             { nameof(caissierName), caissierName},
         };
 
-            var list = await GetData<List<InfoSessionsDTO>>("/Parking/GetFilteredCashierData", parameters);
+            var list = await GetData<List<InfoSessionsDTO>>("/Parking/GetCashierData", parameters);
             return list;
 
         }
-        public async Task<List<InfoTicketDTO>> GetFilteredTicketData(DateTime dateStart, DateTime dateEnd)
+        public async Task<List<InfoTicketDTO>> GetTicketData(DateTime dateStart, DateTime dateEnd)
         {
             var parameters = new Dictionary<string, string>
         {
             { nameof(dateStart), dateStart.ToString("O") },
             { nameof(dateEnd), dateEnd.ToString("O") },
         };
-            var list = await GetData<List<InfoTicketDTO>>("/Parking/GetFilteredTicketData", parameters);
+            var list = await GetData<List<InfoTicketDTO>>("/Parking/GetTicketData", parameters);
             return list;
         }
         public async Task<DashBoardDTO> GetDashboardData(int idparking)

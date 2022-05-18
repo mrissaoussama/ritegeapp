@@ -6,12 +6,12 @@ using RitegeDomain.Database;
 using RitegeDomain.Database.Queries.Parking.InfoAbonnementDTOQueries;
 using RitegeDomain.DTO;
 
-public class GetAllByNameAndDatesQueryHandler : IRequestHandler<InfoAbonnementDTOQuery, IEnumerable<InfoAbonnementDTO>>
+public class InfoAbonnementDTOQueryHandler : IRequestHandler<InfoAbonnementDTOQuery, IEnumerable<InfoAbonnementDTO>>
 {
     private readonly IInfoAbonnementDTORepository _repository;
     private readonly IMapper _mapper;
 
-    public GetAllByNameAndDatesQueryHandler(IInfoAbonnementDTORepository repository, IMapper mapper)
+    public InfoAbonnementDTOQueryHandler(IInfoAbonnementDTORepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

@@ -17,7 +17,7 @@ namespace RitegeServer.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("GetParkingList")]
@@ -40,26 +40,26 @@ namespace RitegeServer.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Route("GetLast10Events")]
-        public async Task<ActionResult<List<ParkingEvent>>> GetLast10Events()
-        {
-            var query = new RitegeDomain.Database.Queries.Parking.EvenementQueries.GetLast10Query { };
-            try
-            {
-                var response = await _mediator.Send(query);
+        //[HttpGet]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[Route("GetLast10Events")]
+        //public async Task<ActionResult<List<ParkingEvent>>> GetLast10Events()
+        //{
+        //    var query = new RitegeDomain.Database.Queries.Parking.EvenementQueries.GetLast10Query { };
+        //    try
+        //    {
+        //        var response = await _mediator.Send(query);
                 
-                return Ok(response);
+        //        return Ok(response);
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpPost]
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("GetEventData")]
@@ -76,7 +76,7 @@ namespace RitegeServer.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("GetAlertData")]
@@ -93,11 +93,11 @@ namespace RitegeServer.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Route("GetFilteredAbonnementData")]
-        public async Task<ActionResult<IEnumerable<InfoAbonnementDTO>>> GetFilteredAbonnementData(DateTime dateStart, DateTime dateEnd, string? abonneName)
+        [Route("GetAbonnementData")]
+        public async Task<ActionResult<IEnumerable<InfoAbonnementDTO>>> GetAbonnementData(DateTime dateStart, DateTime dateEnd, string? abonneName)
         {
             //IRequest<IEnumerable<Affectationabonnement>> Affectationabonnementquery;
 
@@ -118,17 +118,17 @@ namespace RitegeServer.Controllers
                         return BadRequest(ex.Message);
                     }
             }
-            [HttpPost]
+            [HttpGet]
             [ProducesResponseType(StatusCodes.Status200OK)]
             [ProducesResponseType(StatusCodes.Status400BadRequest)]
-            [Route("GetFilteredCashierData")]
-            public async Task<ActionResult<IEnumerable<InfoSessionsDTO>>> GetFilteredCashierData(DateTime dateStart, DateTime dateEnd, string? caissierName)
+            [Route("GetCashierData")]
+            public async Task<ActionResult<IEnumerable<InfoSessionsDTO>>> GetCashierData(DateTime dateStart, DateTime dateEnd, string? caissierName)
             {
                 try
                 {
                     var ListDto = new List<InfoSessionsDTO>();
                     #region session
-                    var data = new InfoSessionsDTO("oussama11", "caissier", DateTime.Today, DateTime.Today.AddHours(1));
+                    var data = new InfoSessionsDTO("Oussama Mrissa", "Caisse 1", DateTime.Today, DateTime.Today.AddHours(1));
                     var data5 = new InfoSessionsDTO("oussama41", "caissier", DateTime.Today, DateTime.Today.AddDays(1));
                     var data3 = new InfoSessionsDTO("oussama22", "caissier", DateTime.Today.AddDays(1), DateTime.Today.AddDays(1));
                     var data4 = new InfoSessionsDTO("oussama43", "caissier", DateTime.Today.AddDays(2), DateTime.Today.AddDays(2));
@@ -186,11 +186,11 @@ namespace RitegeServer.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-            [HttpPost]
+            [HttpGet]
             [ProducesResponseType(StatusCodes.Status200OK)]
             [ProducesResponseType(StatusCodes.Status400BadRequest)]
-            [Route("GetFilteredTicketData")]
-            public async Task<ActionResult<IEnumerable<InfoTicketDTO>>> GetFilteredTicketData(DateTime dateStart, DateTime dateEnd)
+            [Route("GetTicketData")]
+            public async Task<ActionResult<IEnumerable<InfoTicketDTO>>> GetTicketData(DateTime dateStart, DateTime dateEnd)
             {
                 try
                 {
@@ -211,7 +211,7 @@ namespace RitegeServer.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-            [HttpPost]
+            [HttpGet]
             [ProducesResponseType(StatusCodes.Status200OK)]
             [ProducesResponseType(StatusCodes.Status400BadRequest)]
             [Route("GetDashboardData")]
@@ -230,6 +230,45 @@ namespace RitegeServer.Controllers
                     return BadRequest(ex.Message);
                 }
             }
+        [AllowAnonymous]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("Login")]
+        public async Task<ActionResult<string?>> Login(string login, string motdepasse)
+        {
+            try
+            {
+                var loginRequest = new RitegeDomain.Database.Queries.Parking.UtilisateurQueries.LoginQuery { Login = login, MotDePasse = motdepasse };
 
+
+
+                var response = await _mediator.Send(loginRequest);
+                System.Diagnostics.Debug.WriteLine("User Logged in. token: " + response);
+                if (response is not null)
+                return Ok(response);
+                return BadRequest("Wrong Info");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("GetDoors")]
+        public async Task<ActionResult<string?>> GetDoors()
+        {
+            try
+            {
+                return Ok(null);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    }
     }

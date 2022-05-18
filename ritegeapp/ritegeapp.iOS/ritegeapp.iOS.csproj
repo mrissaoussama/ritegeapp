@@ -155,7 +155,7 @@
       <Version>3.1.21</Version>
     </PackageReference>
     <PackageReference Include="Plugin.LocalNotification">
-      <Version>9.2.1-preview01</Version>
+      <Version>9.2.1-preview02</Version>
     </PackageReference>
     <PackageReference Include="Rg.Plugins.Popup">
       <Version>2.1.0</Version>
@@ -164,13 +164,13 @@
       <Version>1.8.116</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.Expander">
-      <Version>20.1.0.50</Version>
+      <Version>20.1.0.55</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Forms.ProgressRing">
       <Version>0.1.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2401" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.2" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
     <PackageReference Include="Xamarin.Forms.PancakeView">
       <Version>2.3.0.763-beta</Version>
     </PackageReference>

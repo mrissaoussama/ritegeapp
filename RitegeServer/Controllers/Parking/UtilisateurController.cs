@@ -55,24 +55,7 @@ namespace RitegeServer.ServerControllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Route("Login")]
-        public async Task<ActionResult<string?>> Login(LoginQuery loginRequest)
-        {
-            try
-            {
-                var response = await _mediator.Send(loginRequest);
-                System.Diagnostics.Debug.WriteLine("User Logged in. token: " + response);
-                return Ok(response);
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

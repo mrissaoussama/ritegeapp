@@ -76,10 +76,10 @@ namespace RitegeServer.Hubs
             }
             return base.OnConnectedAsync();
         }
-        public async Task GetFilteredTicketData(DateTime dateStart, DateTime dateEnd)
+        public async Task GetTicketData(DateTime dateStart, DateTime dateEnd)
         {
             var filteredlist = dataFilter.FilterTicketDTO(ListDtoTicket, dateStart, dateEnd);
-            await Clients.Caller.SendAsync("GetFilteredTicketData", filteredlist);
+            await Clients.Caller.SendAsync("GetTicketData", filteredlist);
         }
        
         public async Task DangerousEventReceived(ParkingEvent parkingEvent)

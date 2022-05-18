@@ -4,6 +4,7 @@
                     xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
+ <Color x:Key="Complementary">#e8f007</Color>
  <OnPlatform x:Key="FontAvenir"
              x:TypeArguments="x:String">
   <On Platform="Android"
@@ -67,6 +68,19 @@
                    Thickness="5" />
   </Setter>
 
+  <Setter Property="Padding"
+          Value="0" />
+ </Style>
+ <Style x:Key="ClickableFrameTotal"
+        TargetType="pancake:PancakeView">
+  <Setter Property="BackgroundColor"
+          Value="Transparent" />
+  <Setter Property="CornerRadius"
+          Value="10" />
+  <Setter Property="Border">
+   <pancake:Border Color="{StaticResource Complementary}"
+                   Thickness="5" />
+  </Setter>
   <Setter Property="Padding"
           Value="0" />
  </Style>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace RitegeDomain.Database.Repositories
 {
     public class InfoSessionsDTORepository : GenericRepository<InfoSessionsDTO>, IInfoSessionsDTORepository
-    {
+    {//implement
         private string connectionString;
         public async Task<IEnumerable<InfoSessionsDTO?>> GetAllByNameAndDatesAsync(string? name, DateTime start, DateTime finish)
         {

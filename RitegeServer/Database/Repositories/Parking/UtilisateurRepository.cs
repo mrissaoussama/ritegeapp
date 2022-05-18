@@ -132,13 +132,13 @@ namespace RitegeDomain.Database.Repositories
         {
 
             Utilisateur Utilisateur = await GetOneByLoginAndMotDePasseAsync(login, motdepasse);
-            if (Utilisateur is not null)
+            if (Utilisateur is not null && Utilisateur.IdUtilisateur!=0)
             {
                 //create claims details based on the user information
                 var claims = new[] {
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
                         new Claim("IdUtilisateur", Utilisateur.IdUtilisateur.ToString()),
                         new Claim("Login", Utilisateur.Login),
                     };
@@ -148,7 +148,7 @@ namespace RitegeDomain.Database.Repositories
                     _configuration["Jwt:Issuer"],
                     _configuration["Jwt:Audience"],
                     claims,
-                    expires: DateTime.UtcNow.AddMinutes(10),
+                    expires: DateTime.Now.AddMinutes(int.Parse(_configuration["Jwt:Expires"])),
                     signingCredentials: signIn);
 
                 return new JwtSecurityTokenHandler().WriteToken(token);

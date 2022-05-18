@@ -161,9 +161,11 @@ namespace ritegeapp.ViewModels
                 await DataReceivedAsync(data);
                 if (data is null)
                 {
+
                     SetDataToNull();
                 }
-                await GetEventList();
+                //else 
+               // await GetEventList();
             }
             else
 

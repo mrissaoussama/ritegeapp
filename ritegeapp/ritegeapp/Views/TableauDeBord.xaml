@@ -47,7 +47,7 @@
       <pancake:PancakeView Grid.Row="0"
                            Grid.Column="0"
                            Margin="0,12,0,0"
-                           Style="{DynamicResource FrameTotal}">
+                           Style="{DynamicResource ClickableFrameTotal}">
        <StackLayout HorizontalOptions="CenterAndExpand" 
                     VerticalOptions="Center">
         <Label Style="{DynamicResource fontGilroyMedium12}" 
@@ -197,7 +197,7 @@
          </StackLayout>
         </Grid>
        </StackLayout>
-       <pancake:PancakeView Grid.Row="0"
+       <!--<pancake:PancakeView Grid.Row="0"
                             Grid.Column="0"
                             Style="{DynamicResource FrameTotal}">
         <StackLayout 
@@ -220,7 +220,7 @@
         <pancake:PancakeView.GestureRecognizers>
          <TapGestureRecognizer Command="{Binding OpenEventListViewCommand}"></TapGestureRecognizer>
         </pancake:PancakeView.GestureRecognizers>
-       </pancake:PancakeView>
+       </pancake:PancakeView>-->
        <pancake:PancakeView Grid.Row="1"
                             Grid.Column="0"
                             Style="{DynamicResource FrameTotal}">

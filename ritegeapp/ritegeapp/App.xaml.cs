@@ -35,8 +35,8 @@ namespace ritegeapp
         }
   
         private async void onStarting(object sender, EventArgs args) {
-            Starting -= onStarting;
-
+         Starting -= onStarting;  
+           if(Device.RuntimePlatform==Device.Android || Device.RuntimePlatform==Device.iOS)
             NotificationCenter.Current.NotificationTapped += OnLocalNotificationTapped;
             IsOnline = CheckIfConnectedToInternet();
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
@@ -92,7 +92,6 @@ namespace ritegeapp
         protected  override void OnStart()
         {
             base.OnStart(); //subscribe to event
-            Starting += onStarting;
             //raise event
             Starting(this, EventArgs.Empty);
             var hub = DependencyService.Get<IEventService>().GetHub();
@@ -109,6 +108,7 @@ namespace ritegeapp
             base.OnSleep(); if (dataService.hubConnection is not null)
             {
                DependencyService.Get<IEventService>().SetHub(dataService.hubConnection);
+                dataService.StopListeningForNotImportantData();
             }
         }
 
@@ -118,7 +118,9 @@ namespace ritegeapp
             var hub = DependencyService.Get<IEventService>().GetHub();
             if (hub is not null)
             {
+               
              dataService.hubConnection=DependencyService.Get<IEventService>().GetHub();
+                dataService.ListenForNewData();
             }
             if (CheckIfConnectedToInternet())
             { }

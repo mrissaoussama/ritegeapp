@@ -54,8 +54,7 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private decimal totalMoney;
         #endregion
-        public FilterData filterdata;
-        public DataService dataService;
+
         public GestionRecettesViewModel()
         {
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connected", async (sender) =>
@@ -63,7 +62,7 @@ namespace ritegeapp.ViewModels
                 await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connecté")
             );
             });
-            dataService.hubConnection.On<InfoTicketDTO[]>("GetFilteredTicketData", async (data) =>
+            (Application.Current as App).dataService.hubConnection.On<InfoTicketDTO[]>("GetTicketData", async (data) =>
             {
                await FilteredDataReceivedAsync(data.ToList());
             });
@@ -147,9 +146,9 @@ namespace ritegeapp.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
              ShowLoading();
-             var data = await (Application.Current as App).dataService.GetFilteredTicketData(dateStart, dateEnd);
+             var data = await (Application.Current as App).dataService.GetTicketData(dateStart, dateEnd);
                 await FilteredDataReceivedAsync(data);
-               _=Task.Run(async()=> await dataService.Connect());
+               _=Task.Run(async()=> await (Application.Current as App).dataService.Connect());
             }
             else
             if (ListDto.Count == 0)

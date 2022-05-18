@@ -76,8 +76,7 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private decimal totalMoney;
         #endregion
-        public FilterData filterdata;
-        public DataService dataService;
+  
         public GestionAbonnementViewModel()
         {
             AbonnementSortMode = true;
@@ -226,7 +225,7 @@ namespace ritegeapp.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 ShowLoading();
-                var list = await dataService.GetFilteredAbonnementData(dateStart, dateEnd, SearchTextBox);
+                var list = await (Application.Current as App).dataService.GetAbonnementData(dateStart, dateEnd, SearchTextBox);
                 await FilteredDataReceivedAsync(list);
             }
             else

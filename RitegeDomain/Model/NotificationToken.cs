@@ -12,7 +12,7 @@ namespace RitegeDomain.Model
         public NotificationToken(string t)
         {
             Token = t;
-            Date = DateTime.UtcNow;
+            Date = DateTime.Now;
 
         }
 
