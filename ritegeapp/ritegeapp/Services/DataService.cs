@@ -356,46 +356,6 @@
             return list;
 
         }
-        public async Task<List<InfoSessionsDTO>> GetCashierData()
-        {
-            using (HttpClient httpClient = new HttpClient())
-            {
-                HttpResponseMessage response = new HttpResponseMessage();
-
-                Uri uri = new Uri(App.ServerURL + "/Parking/GetCashierData");
-                try
-                {
-                    response = await httpClient.GetAsync(uri);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var content = await response.Content.ReadAsStreamAsync();
-
-                        if (content != null)
-                        {
-                            var serializer = new JsonSerializer();
-                            using (var sr = new System.IO.StreamReader(content))
-                            using (var jsonTextReader = new JsonTextReader(sr))
-                            {
-                                var list = serializer.Deserialize<List<InfoSessionsDTO>>(jsonTextReader);
-                                return list;
-                            }
-                        }
-                        return null;
-
-                    }
-                    else return null;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("error getting data " + ex.Message);
-                    return null;
-                }
-                finally
-                {
-                }
-
-            }
-        }
         public async Task<List<InfoAbonnementDTO>> GetAbonnementData(DateTime dateStart,DateTime dateEnd, string? abonneName)
         {
             //use Now.ticks for different timezones to work if this becomes popular worldwide

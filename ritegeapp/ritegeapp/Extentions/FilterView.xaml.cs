@@ -18,35 +18,35 @@ namespace ritegeapp.Extentions
         {
             InitializeComponent();
         }
-        public DateTime dateStart
+        public DateTime DateStart
         {
-            get => (DateTime)GetValue(dateStartProperty);
-            set => SetValue(dateStartProperty, value);
+            get => (DateTime)GetValue(DateStartProperty);
+            set => SetValue(DateStartProperty, value);
         }
 
-        public static readonly BindableProperty dateStartProperty = BindableProperty.Create
-             ("dateStart", typeof(DateTime), typeof(FilterView), DateTime.Now, BindingMode.OneWay, propertyChanged: dateStartPropertyChanged);
-        private static void dateStartPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var control = (FilterView)bindable;
-            control.dateStartLabel.Date = (DateTime)newValue;
-            control.DateDFinLabel.MinimumDate = (DateTime)newValue;
-
-        }
-        private static void dateEndPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        public static readonly BindableProperty DateStartProperty = BindableProperty.Create
+             ("DateStart", typeof(DateTime), typeof(FilterView), DateTime.Today, BindingMode.TwoWay, propertyChanged: DateStartPropertyChanged);
+        private static void DateStartPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var control = (FilterView)bindable;
-            control.DateDFinLabel.Date = (DateTime)newValue;
-        }
+            control.DateStartPicker.Date = (DateTime)newValue;
+            control.DateEndLabel.MinimumDate = (DateTime)newValue;
 
-        public DateTime dateEnd
+        }
+        private static void DateEndPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            get => (DateTime)GetValue(dateEndProperty);
-            set => SetValue(dateEndProperty, value);
+            var control = (FilterView)bindable;
+            control.DateEndLabel.Date = (DateTime)newValue;
         }
 
-        public static readonly BindableProperty dateEndProperty = BindableProperty.Create
-           ("dateEnd", typeof(DateTime), typeof(FilterView), DateTime.Now, BindingMode.OneWay, propertyChanged: dateEndPropertyChanged);
+        public DateTime DateEnd
+        {
+            get => (DateTime)GetValue(DateEndProperty);
+            set => SetValue(DateEndProperty, value);
+        }
+
+        public static readonly BindableProperty DateEndProperty = BindableProperty.Create
+           ("DateEnd", typeof(DateTime), typeof(FilterView), DateTime.Now, BindingMode.TwoWay, propertyChanged: DateEndPropertyChanged);
 
 
         public string SearchSubjectText
@@ -56,7 +56,7 @@ namespace ritegeapp.Extentions
         }
 
         public static readonly BindableProperty SearchSubjectTextProperty = BindableProperty.Create
-            ("SearchSubjectText", typeof(string), typeof(FilterView), "", BindingMode.OneWay, propertyChanged: SearchSubjectChanged);
+            ("SearchSubjectText", typeof(string), typeof(FilterView), "", BindingMode.TwoWay, propertyChanged: SearchSubjectChanged);
 
 
         public string SearchTextBoxEntry
@@ -66,7 +66,7 @@ namespace ritegeapp.Extentions
         }
 
         public static readonly BindableProperty SearchTextBoxEntryProperty = BindableProperty.Create
-            ("SearchTextBoxEntryText", typeof(string), typeof(FilterView), "", BindingMode.OneWay, propertyChanged: SearchTextBoxEntryPropertyChanged);
+            ("SearchTextBox", typeof(string), typeof(FilterView), "", BindingMode.TwoWay, propertyChanged: SearchTextBoxPropertyChanged);
 
         public bool CanTapSearchTextBool
         {
@@ -74,32 +74,32 @@ namespace ritegeapp.Extentions
             set => SetValue(CanTapSearchTextBoolProperty, value);
         }
         public static readonly BindableProperty CanTapSearchTextBoolProperty = BindableProperty.Create
-            ("CanTapSearchText", typeof(bool), typeof(FilterView), false, BindingMode.OneWay, propertyChanged: CanTapSearchTextChanged);
+            ("CanTapSearchText", typeof(bool), typeof(FilterView), false, BindingMode.TwoWay, propertyChanged: CanTapSearchTextChanged);
         public string CanClearFilterBool
         {
             get => (string)GetValue(CanClearFilterBoolProperty);
             set => SetValue(CanClearFilterBoolProperty, value);
         }
         public static readonly BindableProperty CanClearFilterBoolProperty = BindableProperty.Create
-            ("CanClearFilter", typeof(bool), typeof(FilterView), false, BindingMode.OneWay, propertyChanged: CanClearFilterChanged);
+            ("CanClearFilter", typeof(bool), typeof(FilterView), false, BindingMode.TwoWay, propertyChanged: CanClearFilterChanged);
         public string CanSortBool
         {
             get => (string)GetValue(CanSortBoolProperty);
             set => SetValue(CanSortBoolProperty, value);
         }
         public static readonly BindableProperty CanSortBoolProperty = BindableProperty.Create
-            ("CanSort", typeof(bool), typeof(FilterView), false, BindingMode.OneWay, propertyChanged: CanSortChanged);
+            ("CanSort", typeof(bool), typeof(FilterView), false, BindingMode.TwoWay, propertyChanged: CanSortChanged);
 
 
 
 
         public static readonly BindableProperty CanTapSearchTextCommandProperty =
-       BindableProperty.Create("CanTapSearchTextCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.OneWay, propertyChanged: CanTapSearchTextCommandChanged);
+       BindableProperty.Create("CanTapSearchTextCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: CanTapSearchTextCommandChanged);
 
         public static readonly BindableProperty CanClearFilterCommandProperty =
-       BindableProperty.Create("CanClearFilterCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.OneWay, propertyChanged: CanClearFilterCommandChanged);
+       BindableProperty.Create("CanClearFilterCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: CanClearFilterCommandChanged);
         public static readonly BindableProperty CanSortCommandProperty =
-    BindableProperty.Create("CanSortCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.OneWay, propertyChanged: CanSortCommandChanged);
+    BindableProperty.Create("CanSortCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: CanSortCommandChanged);
 
         public Command CanTapSearchTextCommand
         {
@@ -117,7 +117,7 @@ namespace ritegeapp.Extentions
             set { SetValue(CanSortCommandProperty, value); }
         }
    
-        private static void SearchTextBoxEntryPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void SearchTextBoxPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var control = (FilterView)bindable;
             control.SearchTextBoxField.Text = (string)newValue;

@@ -84,17 +84,16 @@
   <ShellContent Route="TableauDeBord"
                 ContentTemplate="{DataTemplate local:TableauDeBord}" />
  </FlyoutItem>
- <FlyoutItem Title="Gestion Abonnement"
-             Icon="icon_about.png">
-  <ShellContent Route="Gestion Abonnement"
-                ContentTemplate="{DataTemplate local:GestionAbonnement}" />
- </FlyoutItem>
 
- 
  <FlyoutItem Title="Gestion Recettes"
              Icon="icon_feed.png">
   <ShellContent Route="GestionRecette"
                 ContentTemplate="{DataTemplate local:GestionRecettes}" />
+ </FlyoutItem>
+ <FlyoutItem Title="Gestion Abonnement"
+             Icon="icon_about.png">
+  <ShellContent Route="Gestion Abonnement"
+                ContentTemplate="{DataTemplate local:GestionAbonnement}" />
  </FlyoutItem>
 
 

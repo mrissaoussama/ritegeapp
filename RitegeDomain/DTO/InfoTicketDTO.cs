@@ -6,7 +6,7 @@ namespace RitegeDomain.DTO
     [Serializable]
     public enum TypeTicket { [Description("Stationnement")] TicketStationnement };
     [Serializable]
-    public class InfoTicketDTO
+    public class InfoTicketDTO:IEntity
     {
         string codeTicket, borneEntree;
         TypeTicket typeTicket;

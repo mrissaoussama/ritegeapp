@@ -11,7 +11,7 @@ using RitegeDomain.Database.Entities.Parking;
 
 namespace ritegeapp.ViewModels
 {
-    public class GestionAbonnementStatisticsPopupViewModel : ExtendedBindableObject
+    public partial class GestionAbonnementStatisticsPopupViewModel : ObservableObject
     {
         public GestionAbonnementStatisticsPopupViewModel(ObservableObject viewmodel)
         {
@@ -30,58 +30,91 @@ namespace ritegeapp.ViewModels
         }
         public void CalculateStatistics()
         {
-
-            NbAbonnementTotal += ListeAbonnements.Count;
-            PrixAbonnementTotal += ListeAbonnements.Sum(x => x.AbonnementTotal);
+            
+            AbonnementCount += ListeAbonnements.Sum(x=>x.AbonnementCount);
+            AbonnementTotal += ListeAbonnements.Sum(x => x.AbonnementTotal);
             ListeAbonnements.ForEach(x =>
             {
 
-                AnnuelTotal += x.ListAbonnement.Count(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Annuel);
-                IntervalTotal += x.ListAbonnement.Count(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Interval);
-                SemestrielTotal += x.ListAbonnement.Count(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Semestriel);
+                AnnuelCount += x.ListAbonnement.Count(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Annuel);
+                HebdomadaireCount += x.ListAbonnement.Count(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Hebdomadaire);
+                JourCount += x.ListAbonnement.Count(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Jour);
+                IntervalleCount += x.ListAbonnement.Count(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Interval);
+                MensuelCount += x.ListAbonnement.Count(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Mensuel);
+                SemestrielCount += x.ListAbonnement.Count(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Semestriel);
+                TrimestrielCount += x.ListAbonnement.Count(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Trimestriel);
+
+
+                AnnuelTotal += x.ListAbonnement.Where(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Annuel).Sum(filtered=>filtered.PrixAbonnement);
+                HebdomadaireTotal += x.ListAbonnement.Where(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Hebdomadaire).Sum(filtered => filtered.PrixAbonnement);
+                JourTotal += x.ListAbonnement.Where(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Jour).Sum(filtered => filtered.PrixAbonnement);
+                IntervalleTotal += x.ListAbonnement.Where(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Interval).Sum(filtered => filtered.PrixAbonnement);
+                MensuelTotal += x.ListAbonnement.Where(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Mensuel).Sum(filtered => filtered.PrixAbonnement);
+                SemestrielTotal += x.ListAbonnement.Where(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Semestriel).Sum(filtered => filtered.PrixAbonnement);
+                TrimestrielTotal += x.ListAbonnement.Where(y => y.TypeAbonnement == RitegeDomain.DTO.TypeAbonnementEnum.Trimestriel).Sum(filtered => filtered.PrixAbonnement);
 
             });
         }
 
         #region variables
+        [ObservableProperty]
+        private decimal abonnementTotal;
+        [ObservableProperty]
 
-        private decimal _prixAbonnementTotal;
-        public decimal PrixAbonnementTotal
-        {
-            get { return _prixAbonnementTotal; }
-            set { _prixAbonnementTotal = value; RaisePropertyChanged(() => PrixAbonnementTotal); }
-        }
-        private int _nbAbonnementTotal;
-        public int NbAbonnementTotal
-        {
-            get { return _nbAbonnementTotal; }
-            set { _nbAbonnementTotal = value; RaisePropertyChanged(() => NbAbonnementTotal); }
-        }
-        private int _intervalTotal;
-        public int IntervalTotal
-        {
-            get { return _intervalTotal; }
-            set { _intervalTotal = value; RaisePropertyChanged(() => IntervalTotal); }
-        }
-        private int _abonnelTotal;
-        public int AnnuelTotal
-        {
-            get { return _abonnelTotal; }
-            set { _abonnelTotal = value; RaisePropertyChanged(() => AnnuelTotal); }
-        }
-        private int _semestrielTotal;
-        public int SemestrielTotal
-        {
-            get { return _semestrielTotal; }
-            set { _semestrielTotal = value; RaisePropertyChanged(() => SemestrielTotal); }
-        }
+        private int abonnementCount;
+ 
 
-        private ObservableCollection<GroupAbonnement> _listeAbonnements;
-        public ObservableCollection<GroupAbonnement> ListeAbonnements
-        {
-            get { return _listeAbonnements; }
-            set { _listeAbonnements = value; RaisePropertyChanged(() => ListeAbonnements); }
-        }
+        [ObservableProperty]
+
+        private decimal annuelTotal;
+        [ObservableProperty]
+
+        private int annuelCount;
+
+        [ObservableProperty]
+
+        private decimal hebdomadaireTotal;
+        [ObservableProperty]
+
+        private int hebdomadaireCount;
+        [ObservableProperty]
+
+        private decimal intervalleTotal;
+        [ObservableProperty]
+
+        private int intervalleCount;
+
+        [ObservableProperty]
+
+        private decimal jourTotal;
+        [ObservableProperty]
+
+        private int jourCount;
+        [ObservableProperty]
+
+        private decimal mensuelTotal;
+        [ObservableProperty]
+
+        private int mensuelCount;
+
+
+        [ObservableProperty]
+
+        private decimal semestrielTotal;
+        [ObservableProperty]
+
+        private int semestrielCount;
+
+        [ObservableProperty]
+
+        private decimal trimestrielTotal;
+        [ObservableProperty]
+
+        private int trimestrielCount;
+
+        [ObservableProperty]
+
+        private ObservableCollection<GroupAbonnement> listeAbonnements;
 
         #endregion
     }

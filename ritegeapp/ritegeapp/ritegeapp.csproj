@@ -10,7 +10,9 @@
     <None Remove="images\LabelIcons\calendar.png" />
     <None Remove="images\LabelIcons\calendarcheckmar.png" />
     <None Remove="images\LabelIcons\calendarcheckmark.png" />
+    <None Remove="images\LabelIcons\cashier.png" />
     <None Remove="images\LabelIcons\contract.png" />
+    <None Remove="images\LabelIcons\person.png" />
     <None Remove="images\LabelIcons\timeend.png" />
     <None Remove="images\LabelIcons\timestart.png" />
     <None Remove="images\MenuIcons\cashier.png" />
@@ -18,6 +20,11 @@
     <None Remove="images\MenuIcons\receipt.jpg" />
     <None Remove="images\MenuIcons\subscription.png" />
     <None Remove="Resources\LangFrensh.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="images\LabelIcons\cashier.png" />
+    <EmbeddedResource Include="images\LabelIcons\person.png" />
   </ItemGroup>
 
   <ItemGroup>

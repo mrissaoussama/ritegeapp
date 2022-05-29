@@ -19,6 +19,7 @@ namespace RitegeDomain.Database.Entities.Parking
         public bool ActiverAbonnement { get; set; } // activerAbonnement
         public bool? MultiEntree { get; set; } // multiEntree
 
+
         // Reverse navigation
 
         /// <summary>

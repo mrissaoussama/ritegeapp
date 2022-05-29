@@ -10,7 +10,7 @@
              Unfocused="ContentPage_Unfocused"
              BackgroundColor="{StaticResource BackgroundColor}">
  <ContentPage.ToolbarItems>
-  <ToolbarItem Text="{Binding StatisticsToolBarItemName}"
+  <ToolbarItem Text="Statistiques"
                Command="{Binding OpenStatisticsWindowCommand}"
                Order="Secondary"
                Priority="0" />
@@ -20,10 +20,11 @@
         Margin="0,5,0,0">
    <Grid.RowDefinitions>
     <RowDefinition Height="140"></RowDefinition>
+    <RowDefinition Height="40"></RowDefinition>
    </Grid.RowDefinitions>
    <extentions:FilterView             x:DataType="viewmodels:GestionDesSessionsCaissiersViewModel"
-                                      dateStart="{Binding DateStart}"
-                                      dateEnd="{Binding DateEnd}"
+                                      DateStart="{Binding DateStart}"
+                                      DateEnd="{Binding DateEnd}"
                                       SearchSubjectText="Nom"
                                       SearchTextBoxEntry="{Binding SearchTextBox}"
                                       CanTapSearchTextBool="{Binding CanTapFilterImages}"
@@ -34,11 +35,13 @@
                                       CanSortCommand="{Binding SortByCommand}"></extentions:FilterView>
    <ActivityIndicator   Scale="0.5"
                         Color="{StaticResource Primary}"
-                        Grid.Row="1"
+                        Grid.Row="2"
                         IsVisible="{Binding ShowLoadingIndicator}"
                         IsRunning="true" />
    <Label FontSize="Medium"
-          Grid.Row="1"
+          Grid.Row="1" Margin="15"
+          HorizontalOptions="CenterAndExpand"
+          VerticalOptions="CenterAndExpand"
           TextColor="{StaticResource Primary}"
           IsVisible="{Binding ShowNoFilterResultLabel}"
           LineBreakMode="WordWrap">
@@ -59,7 +62,7 @@
     </Label.FormattedText>
    </Label>
    <Label FontSize="Medium"
-          Grid.Row="1"
+          Grid.Row="2"
           TextColor="{StaticResource Primary}"
           IsVisible="{Binding ShowNoDataReceived}"
           LineBreakMode="WordWrap">
@@ -80,7 +83,7 @@
     </Label.FormattedText>
    </Label>
    <Label FontSize="Medium"
-          Grid.Row="1"
+          Grid.Row="2"
           TextColor="{StaticResource Primary}"
           IsVisible="{Binding ShowNoInternetLabel}"
           LineBreakMode="WordWrap">
@@ -100,7 +103,29 @@
      </FormattedString>
     </Label.FormattedText>
    </Label>
-   <RefreshView Grid.Row="1"
+   <Frame Padding="5"
+          BorderColor="{StaticResource Primary}"
+          BackgroundColor="Transparent"
+          Grid.Row="1"
+          IsVisible="{Binding ShowTotal}">
+    <Label FontSize="Small"
+           HorizontalOptions="Center"
+           VerticalOptions="Center"
+           Text="{Binding TotalMoney}"
+           FontAttributes="Bold">
+     <Label.FormattedText>
+      <FormattedString>
+       <Span Text="Total: "
+             TextColor="{StaticResource LabelColor}"></Span>
+       <Span Text="{Binding TotalMoney,StringFormat='{0:G29}' }"
+             TextColor="{StaticResource Primary}"></Span>
+       <Span Text=" DT"
+             TextColor="{StaticResource Primary}"></Span>
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+   </Frame>
+   <RefreshView Grid.Row="2"
                 IsRefreshing="{Binding ListIsRefreshing}"
                 IsEnabled="{Binding ShowData}"
                 Command="{Binding GetDataCommand}"
@@ -127,35 +152,43 @@
            </Grid.RowDefinitions>
              <Frame BorderColor="{StaticResource Primary}"
                     Padding="10"
-                    Margin="0,0,0,1"
+                    Margin="0,5,0,0"
                     BackgroundColor="{StaticResource BackgroundColor}">
               <syncfusion:SfExpander IconColor="{StaticResource Primary}"
                                      HeaderBackgroundColor="{StaticResource BackgroundColor}">
                <syncfusion:SfExpander.Header>
                 <Grid>
-                 <Label FontSize="Medium"
-                        TextColor="{StaticResource Primary}"
-                        Grid.Row="0"
-                        FontAttributes="Bold">
-                  <Label.FormattedText>
-                   <FormattedString>
-                    <Span Text="{Binding NomCaissier}"></Span>
-                    <Span Text=" : "></Span>
-                    <Span Text="{Binding Total}"></Span>
-                    <Span Text=" DT"></Span>
-                   </FormattedString>
-                  </Label.FormattedText>
-                 </Label>
+                 <StackLayout Orientation="Horizontal"
+                              Margin="10,0,10,0">
+                  <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.cashier.png}"
+                         WidthRequest="20"
+                         xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                  <Label FontSize="Medium"
+                         TextColor="{StaticResource Primary}"
+                         BackgroundColor="{StaticResource BackgroundColor}"
+                         FontAttributes="Bold">
+                   <Label.FormattedText>
+                    <FormattedString>
+                     <Span Text="{Binding NomCaissier}"></Span>
+                     <Span Text=" : "></Span>
+                     <Span Text="{Binding Total,StringFormat='{0:G29}' }"></Span>
+                     <Span Text=" DT"></Span>
+                    </FormattedString>
+                   </Label.FormattedText>
+                  </Label>
+                 </StackLayout>
                 </Grid>
                </syncfusion:SfExpander.Header>
-               <syncfusion:SfExpander.Content>
-                <Grid>
+               <syncfusion:SfExpander.Content Margin="0,5,0,0">
+                <Grid  Margin="5">
                <StackLayout BindableLayout.ItemsSource="{Binding ListSessions}">
                 <BindableLayout.ItemTemplate>
                  <DataTemplate>
                   <Grid>
                      <Frame BorderColor="{StaticResource Primary}"
                             InputTransparent="True"
+                            Margin="5,5,5,5"
+                            Padding="5"
                             BackgroundColor="{StaticResource BackgroundColor}">
                       <!--<Frame.GestureRecognizers>
                      <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
@@ -164,20 +197,48 @@
                                              IconColor="{StaticResource Primary}"
                                              HeaderBackgroundColor="{StaticResource BackgroundColor}">
                        <syncfusion:SfExpander.Header>
-                        <!--Session Grid-->
-                        <Label FontSize="Small"
-                               TextColor="{StaticResource Primary}">
-                         <Label.FormattedText>
-                          <FormattedString>
-                           <Span Text="{Binding DateStartSession, StringFormat='{0:dd/MM/yyyy}'}"></Span>
-                           <Span Text=" - "></Span>
-                           <Span Text="{Binding DateEndSession, StringFormat='{0:dd/MM/yyyy}'}"></Span>
-                           <Span Text=" | "></Span>
-                           <Span Text="{Binding Recette}"></Span>
-                           <Span Text=" DT"></Span>
-                          </FormattedString>
-                         </Label.FormattedText>
-                        </Label>
+                        <StackLayout>
+                         <!--Session Grid-->
+                         <Grid Margin="0,0,0,0">
+                          <Grid.RowDefinitions>
+                           <RowDefinition Height="Auto" />
+                           <RowDefinition Height="Auto" />
+                          </Grid.RowDefinitions>
+                          <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="Auto"></ColumnDefinition>
+                           <ColumnDefinition Width="Auto"></ColumnDefinition>
+                           <ColumnDefinition Width="Auto"></ColumnDefinition>
+                          </Grid.ColumnDefinitions>
+                          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
+                                 WidthRequest="20"
+                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                          <Label Grid.Column="1"
+                                 FontSize="Small"
+                                 TextColor="{StaticResource Primary}"
+                                 Text="{Binding DateStartSession , StringFormat='{0:dd/MM/yyyy hh:mm}'}"></Label>
+                          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendarcheckmark.png}"
+                                 Grid.Row="1"
+                                 WidthRequest="20"
+                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                          <Label FontSize="Small"
+                                 TextColor="{StaticResource Primary}"
+                                 Grid.Column="1"
+                                 Grid.Row="1" 
+                                 Text="{Binding DateEndSession, StringFormat='{0:dd/MM/yyyy hh:mm}'}"></Label>
+                          <Label Grid.Column="3"
+                                 Grid.RowSpan="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center"
+                                 TextColor="{StaticResource Primary}">
+                           <Label.FormattedText>
+                            <FormattedString>
+                             <Span Text="{Binding Recette,StringFormat='{0:G29}' }"></Span>
+                             <Span Text=" DT"></Span>
+                            </FormattedString>
+                           </Label.FormattedText>
+                          </Label>
+                         </Grid>
+                        </StackLayout>
+
                        </syncfusion:SfExpander.Header>
                        <syncfusion:SfExpander.Content>
                         <Grid>
@@ -325,7 +386,7 @@
                          <Label FontSize="Small"
                                 TextColor="{StaticResource Primary}"
                                 Grid.Column="3"
-                                Text="{Binding DateEndSessioiiiiii, StringFormat='{0:hh:mm}'}"></Label>
+                                Text="{Binding DateEndSession, StringFormat='{0:hh:mm}'}"></Label>
                          <Label Grid.Column="4"
                                 TextColor="{StaticResource Primary}">
                           <Label.FormattedText>

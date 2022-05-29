@@ -2,7 +2,7 @@
 
 namespace RitegeDomain.DTO
 {
-    public enum TypeAbonnementEnum { Interval, Annuel, Semestriel, Trimestriel, Hebdomadaire, Journalier };
+    public enum TypeAbonnementEnum { Interval, Annuel, Semestriel, Trimestriel, Hebdomadaire, Journalier,Jour,Mensuel };
     public enum Etat { Future, Archivé, Activé }
     public class InfoAbonnementDTO:IEntity
     {

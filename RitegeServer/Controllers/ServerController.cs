@@ -16,7 +16,61 @@ namespace RitegeServer.ServerControllers
         {    _hubContext = hubContext;
             _mediator = mediator;
         }
-        
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("AddEvent")]
+        public async Task<ActionResult<string>> AddEvent(RitegeDomain.Database.Commands.Parking.EvenementCommands.CreateEvenementCommand eventToAdd)
+        {
+            try
+            {
+                var response = await _mediator.Send(eventToAdd);
+
+
+                if (Enum.IsDefined(typeof(AlertCodes), eventToAdd.TypeEvent))
+                {
+                    var parkingEvent = new ParkingEvent { DateEvent = eventToAdd.DateEvent, DescriptionEvent = eventToAdd.DescriptionEvent, ParkingId = eventToAdd.ParkingId, TypeEvent = eventToAdd.TypeEvent };
+                    //var clientid = parkingEvent.ParkingId.ToString();
+                    var clientid = 1;
+                    await _hubContext.Clients.Group(clientid.ToString()).SendAsync("AlertReceived", parkingEvent);
+
+                }
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("AddTicket")]
+        public async Task<ActionResult<string>> AddTicket(RitegeDomain.Database.Commands.Parking.EvenementCommands.CreateEvenementCommand eventToAdd)
+        {
+            try
+            {
+                var response = await _mediator.Send(eventToAdd);
+
+
+                if (Enum.IsDefined(typeof(AlertCodes), eventToAdd.TypeEvent))
+                {
+                    var parkingEvent = new ParkingEvent { DateEvent = eventToAdd.DateEvent, DescriptionEvent = eventToAdd.DescriptionEvent, ParkingId = eventToAdd.ParkingId, TypeEvent = eventToAdd.TypeEvent };
+                    //var clientid = parkingEvent.ParkingId.ToString();
+                    var clientid = 1;
+                    await _hubContext.Clients.Group(clientid.ToString()).SendAsync("AlertReceived", parkingEvent);
+
+                }
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -68,33 +122,7 @@ namespace RitegeServer.ServerControllers
             }
         }
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Route("AddEvent")]
-        public async Task<ActionResult<string>> AddEvent(RitegeDomain.Database.Commands.Parking.EvenementCommands.CreateEvenementCommand eventToAdd)
-        {
-            try
-            {
-                var response = await _mediator.Send(eventToAdd);
-
-            
-                if (Enum.IsDefined(typeof(AlertCodes), eventToAdd.TypeEvent))
-                {
-                    var parkingEvent = new ParkingEvent { DateEvent = eventToAdd.DateEvent, DescriptionEvent = eventToAdd.DescriptionEvent, ParkingId = eventToAdd.ParkingId, TypeEvent = eventToAdd.TypeEvent };
-                    //var clientid = parkingEvent.ParkingId.ToString();
-                    var clientid = 1;
-                   await _hubContext.Clients.Group(clientid.ToString()).SendAsync("AlertReceived", parkingEvent);
-
-                }
-                return Ok(response);
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

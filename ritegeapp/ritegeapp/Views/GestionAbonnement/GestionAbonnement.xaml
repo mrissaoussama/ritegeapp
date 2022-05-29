@@ -19,10 +19,11 @@
         Margin="0,5,0,0">
    <Grid.RowDefinitions>
     <RowDefinition Height="140"></RowDefinition>
+    <RowDefinition Height="40"></RowDefinition>
    </Grid.RowDefinitions>
    <extentions:FilterView             x:DataType="viewmodels:GestionAbonnementViewModel"
-                                      dateStart="{Binding DateStart}"
-                                      dateEnd="{Binding DateEnd}"
+                                      DateStart="{Binding DateStart,Mode=TwoWay}"
+                                      DateEnd="{Binding DateEnd}"
                                       SearchSubjectText="Abonné"
                                       SearchTextBoxEntry="{Binding SearchTextBox}"
                                       CanTapSearchTextBool="{Binding CanTapFilterImages}"
@@ -33,7 +34,7 @@
                                       CanSortCommand="{Binding SortByCommand}"></extentions:FilterView>
    <ActivityIndicator   Scale="0.5"
                         Color="{StaticResource Primary}"
-                        Grid.Row="1"
+                        Grid.Row="2"
                         IsVisible="{Binding ShowLoadingIndicator}"
                         IsRunning="true" />
    <Label FontSize="Medium"
@@ -99,15 +100,38 @@
      </FormattedString>
     </Label.FormattedText>
    </Label>
-   <RefreshView Grid.Row="1"
+   <Frame Padding="5"
+          BorderColor="{StaticResource Primary}"
+          BackgroundColor="Transparent"
+          Grid.Row="1"
+          IsVisible="{Binding ShowTotal}">
+    <Label FontSize="Small"
+           HorizontalOptions="Center"
+           VerticalOptions="Center"
+           Text="{Binding TotalMoney}"
+           FontAttributes="Bold">
+     <Label.FormattedText>
+      <FormattedString>
+       <Span Text="Total: "
+             TextColor="{StaticResource LabelColor}"></Span>
+       <Span Text="{Binding TotalMoney,StringFormat='{0:G29}' }"
+             TextColor="{StaticResource Primary}"></Span>
+       <Span Text=" DT"
+             TextColor="{StaticResource Primary}"></Span>
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+   </Frame>
+   <RefreshView Grid.Row="2" 
                 IsRefreshing="{Binding ListIsRefreshing}"
                 IsEnabled="{Binding ShowData}"
                 Command="{Binding GetDataCommand}"
                 IsVisible="{Binding ShowData}">
     <ScrollView Grid.Row="1"
                 IsVisible="{Binding ShowNoFilterResultLabel,Converter={StaticResource BooleanNegation}}">
-     <StackLayout>
+     <StackLayout BackgroundColor="Transparent">
       <Grid VerticalOptions="Fill"
+            BackgroundColor="Transparent"
             IsVisible="{Binding AbonnementSortMode}"
             HorizontalOptions="Fill">
        <ListView x:Name="ItemsListView"
@@ -123,57 +147,92 @@
           <ViewCell StyleId="no-selection">
            <ViewCell.View>
             <Grid VerticalOptions="FillAndExpand">
-             <Grid.RowDefinitions></Grid.RowDefinitions>
+             <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+             </Grid.RowDefinitions>
              <Frame BorderColor="{StaticResource Primary}"
                     Padding="10"
-                    Margin="0,0,0,1"
+                    Margin="0,5,0,0"
                     BackgroundColor="{StaticResource BackgroundColor}">
               <syncfusion:SfExpander IconColor="{StaticResource Primary}"
                                      HeaderBackgroundColor="{StaticResource BackgroundColor}">
                <syncfusion:SfExpander.Header>
                 <Grid>
+                 <StackLayout Orientation="Horizontal"
+                              Margin="10,0,10,0">
+                  <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.person.png}"
+                         WidthRequest="20"
+                         xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+               
                  <Label FontSize="Medium"
-                        TextColor="{StaticResource Primary}"
-                        Grid.Row="0"
-                        FontAttributes="Bold">
+                         TextColor="{StaticResource Primary}"
+                         BackgroundColor="{StaticResource BackgroundColor}"
+                         FontAttributes="Bold">
                   <Label.FormattedText>
                    <FormattedString>
                     <Span Text="{Binding NomPrenomAbonne}"></Span>
                     <Span Text=" : "></Span>
-                    <Span Text="{Binding Total}"></Span>
+                     <Span Text="{Binding AbonnementTotal,StringFormat='{0:G29}' }"></Span>
                     <Span Text=" DT"></Span>
                    </FormattedString>
                   </Label.FormattedText>
                  </Label>
+                 </StackLayout>
                 </Grid>
                </syncfusion:SfExpander.Header>
-               <syncfusion:SfExpander.Content>
-                <Grid>
+               <syncfusion:SfExpander.Content   Margin="0,5,0,0">
+                <Grid Margin="5">
                  <StackLayout BindableLayout.ItemsSource="{Binding ListAbonnement}">
                   <BindableLayout.ItemTemplate>
                    <DataTemplate>
                     <Grid>
                      <Frame BorderColor="{StaticResource Primary}"
                             InputTransparent="True"
+                            Margin="5,5,5,5" Padding="5"
                             BackgroundColor="{StaticResource BackgroundColor}">
                       <syncfusion:SfExpander Grid.Row="1"
                                              IconColor="{StaticResource Primary}"
                                              HeaderBackgroundColor="{StaticResource BackgroundColor}">
                        <syncfusion:SfExpander.Header>
-                        <!--Session Grid-->
-                        <Label FontSize="Small"
-                               TextColor="{StaticResource Primary}">
-                         <Label.FormattedText>
-                          <FormattedString>
-                           <Span Text="{Binding DateActivation, StringFormat='{0:dd/MM/yyyy}'}"></Span>
-                           <Span Text=" - "></Span>
-                           <Span Text="{Binding DateFinActivation, StringFormat='{0:dd/MM/yyyy}'}"></Span>
-                           <Span Text=" | "></Span>
-                           <Span Text="{Binding PrixAbonnement}"></Span>
-                           <Span Text=" DT"></Span>
-                          </FormattedString>
-                         </Label.FormattedText>
-                        </Label>
+                        <StackLayout>
+                         <!--Session Grid-->
+                         <Grid Margin="0,0,0,-3">
+                          <Grid.RowDefinitions>
+                           <RowDefinition Height="Auto" />
+                           <RowDefinition Height="Auto" />
+                          </Grid.RowDefinitions>
+                          <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="Auto"></ColumnDefinition>
+                           <ColumnDefinition Width="Auto"></ColumnDefinition>
+                           <ColumnDefinition Width="Auto"></ColumnDefinition>
+                          </Grid.ColumnDefinitions>
+                          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
+                                 WidthRequest="20"
+                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                          <Label Grid.Column="1"
+                                 FontSize="Small"
+                                 TextColor="{StaticResource Primary}"
+                                 Text="{Binding DateActivation , StringFormat='{0:dd/MM/yyyy}'}"></Label>
+                          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendarcheckmark.png}"
+                                 Grid.Column="2"
+                                 WidthRequest="20"
+                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                          <Label FontSize="Small"
+                                 TextColor="{StaticResource Primary}"
+                                 Grid.Column="3"
+                                 Grid.ColumnSpan="2"
+                                 Text="{Binding DateFinActivation, StringFormat='{0:dd/MM/yyyy}'}"></Label>
+                          <Label Grid.Column="5"
+                                 TextColor="{StaticResource Primary}">
+                           <Label.FormattedText>
+                            <FormattedString>
+                             <Span Text="{Binding PrixAbonnement,StringFormat='{0:G29}' }"></Span>
+                             <Span Text=" DT"></Span>
+                            </FormattedString>
+                           </Label.FormattedText>
+                          </Label>
+                         </Grid>
+                        </StackLayout>
                        </syncfusion:SfExpander.Header>
                        <syncfusion:SfExpander.Content>
                         <Grid>
@@ -184,41 +243,22 @@
                          <Label  Grid.Column="1"
                                  TextColor="{StaticResource Primary}"
                                  Text="{Binding DateAffectation, StringFormat='{0:d}'}"></Label>
+                        
                          <Label Grid.Row="1"
-                                Text="Prix Abonnement:"
-                                TextColor="{StaticResource LabelColor}"></Label>
-                         <Label Grid.Row="1"
-                                Grid.Column="1"
-                                TextColor="{StaticResource Primary}"
-                                Text="{Binding PrixAbonnement}">
-                          <Label.FormattedText>
-                           <FormattedString>
-                            <Span Text="{Binding PrixAbonnement}"></Span>
-                            <Span Text=" DT"></Span>
-                           </FormattedString>
-                          </Label.FormattedText>
-                         </Label>
-                         <Label Grid.Row="2"
                                 Text="Type Abonnement:"
                                 TextColor="{StaticResource LabelColor}"></Label>
-                         <Label Grid.Row="2"
+                         <Label Grid.Row="1"
                                 Grid.Column="1"
                                 TextColor="{StaticResource Primary}"
                                 Text="{Binding TypeAbonnement}"></Label>
-                         <Label Grid.Row="3"
+                         <Label Grid.Row="2"
                                 Text="Libelle Abonnement:"
                                 TextColor="{StaticResource LabelColor}"></Label>
-                         <Label Grid.Row="3"
+                         <Label Grid.Row="2"
                                 Grid.Column="1"
                                 TextColor="{StaticResource Primary}"
                                 Text="{Binding LibelleAbonnement}"></Label>
-                         <Label Grid.Row="3"
-                                Text="Libelle Abonnement:"
-                                TextColor="{StaticResource LabelColor}"></Label>
-                         <Label Grid.Row="3"
-                                Grid.Column="1"
-                                TextColor="{StaticResource Primary}"
-                                Text="{Binding LibelleAbonnement}"></Label>
+                       
                         </Grid>
                        </syncfusion:SfExpander.Content>
                       </syncfusion:SfExpander>
@@ -258,37 +298,35 @@
               <RowDefinition Height="Auto" />
              </Grid.RowDefinitions>
              <Frame BorderColor="{StaticResource Primary}"
-                    Padding="10"
+                    Padding="10" Margin="0,5,0,0"
                     BackgroundColor="{StaticResource BackgroundColor}">
               <syncfusion:SfExpander HeaderBackgroundColor="{StaticResource BackgroundColor}"
                                      IconColor="{StaticResource Primary}">
                <syncfusion:SfExpander.Header>
                 <Grid>
-                 <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="10*"></ColumnDefinition>
-                  <ColumnDefinition Width="90*"></ColumnDefinition>
-                 </Grid.ColumnDefinitions>
-                 <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
-                        WidthRequest="20"
-                        xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
-                 <Label FontSize="Medium"
-                        Grid.Column="1"
-                        BackgroundColor="{StaticResource BackgroundColor}"
-                        TextColor="{StaticResource Primary}"
-                        Grid.Row="0"
-                        FontAttributes="Bold">
-                  <Label.FormattedText>
-                   <FormattedString>
-                    <Span Text="{Binding dateStart, StringFormat='{0:dd/MM/yyyy}'}"></Span>
-                    <Span Text=" : "></Span>
-                    <Span Text="{Binding Total}"></Span>
-                    <Span Text=" DT"></Span>
-                   </FormattedString>
-                  </Label.FormattedText>
-                 </Label>
+                 <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+                 <StackLayout Orientation="Horizontal"
+                              Margin="10,0,10,0">
+                  <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
+                         WidthRequest="20"
+                         xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                  <Label FontSize="Medium"
+                         BackgroundColor="{StaticResource BackgroundColor}"
+                         TextColor="{StaticResource Primary}"
+                         FontAttributes="Bold">
+                   <Label.FormattedText>
+                    <FormattedString>
+                     <Span Text="{Binding dateStart, StringFormat='{0:dd/MM/yyyy}'}"></Span>
+                     <Span Text=" : "></Span>
+                     <Span Text="{Binding Total,StringFormat='{0:G29}' }"></Span>
+                     <Span Text=" DT"></Span>
+                    </FormattedString>
+                   </Label.FormattedText>
+                  </Label>
+                 </StackLayout>
                 </Grid>
                </syncfusion:SfExpander.Header >
-               <syncfusion:SfExpander.Content  Margin="0,10,0,0">
+               <syncfusion:SfExpander.Content  Margin="0,5,0,0">
                 <Grid Margin="5">
                  <StackLayout BindableLayout.ItemsSource="{Binding ListAbonnement}">
                   <BindableLayout.ItemTemplate>
@@ -296,46 +334,52 @@
                     <Grid>
                      <Frame BorderColor="{StaticResource Primary}"
                             InputTransparent="True"
+                            Padding="5"
+                            Margin="5,5,5,5"
                             BackgroundColor="{StaticResource BackgroundColor}">
-                      <syncfusion:SfExpander IconColor="{StaticResource Primary}"
+                      <syncfusion:SfExpander Grid.Row="1"
+                                             IconColor="{StaticResource Primary}"
                                              HeaderBackgroundColor="{StaticResource BackgroundColor}">
                        <syncfusion:SfExpander.Header>
-                        <!--Session Grid-->
-                        <Grid  Margin="-10">
-                         <Grid.RowDefinitions>
-                          <RowDefinition Height="Auto" />
-                          <RowDefinition Height="Auto" />
-                         </Grid.RowDefinitions>
-                         <Grid.ColumnDefinitions>
-                          <ColumnDefinition Width="Auto"></ColumnDefinition>
-                          <ColumnDefinition Width="Auto"></ColumnDefinition>
-                          <ColumnDefinition Width="Auto"></ColumnDefinition>
-                         </Grid.ColumnDefinitions>
-                         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.contract.png}"
-                                WidthRequest="20"
-                                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
-                         <Label Grid.Column="1"
-                                FontSize="Small"
-                                TextColor="{StaticResource Primary}"
-                                Text="{Binding DateAffectation, StringFormat='{0:dd/MM/yyyy}'}"></Label>
-                         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendarcheckmark.png}"
-                                Grid.Column="2"
-                                WidthRequest="20"
-                                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
-                         <Label FontSize="Small"
-                                TextColor="{StaticResource Primary}"
-                                Grid.Column="3"
-                                Text="{Binding DateFinActivation, StringFormat='{0:dd/MM/yyyy}'}"></Label>
-                         <Label Grid.Column="4"
-                                TextColor="{StaticResource Primary}">
-                          <Label.FormattedText>
-                           <FormattedString>
-                            <Span Text="{Binding PrixAbonnement}"></Span>
-                            <Span Text=" DT"></Span>
-                           </FormattedString>
-                          </Label.FormattedText>
-                         </Label>
-                        </Grid>
+                        <StackLayout>
+                         <!--Session Grid-->
+                         <Grid Margin="0,0,0,-3">
+                          <Grid.RowDefinitions>
+                           <RowDefinition Height="Auto" />
+                           <RowDefinition Height="Auto" />
+                          </Grid.RowDefinitions>
+                          <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="Auto"></ColumnDefinition>
+                           <ColumnDefinition Width="Auto"></ColumnDefinition>
+                           <ColumnDefinition Width="Auto"></ColumnDefinition>
+                          </Grid.ColumnDefinitions>
+                          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.contract.png}"
+                                 WidthRequest="20"
+                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                          <Label Grid.Column="1"
+                                 FontSize="Small"
+                                 TextColor="{StaticResource Primary}"
+                                 Text="{Binding DateAffectation, StringFormat='{0:dd/MM/yyyy}'}"></Label>
+                          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendarcheckmark.png}"
+                                 Grid.Column="2"
+                                 WidthRequest="20"
+                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                          <Label FontSize="Small"
+                                 TextColor="{StaticResource Primary}"
+                                 Grid.Column="3"
+                                 Grid.ColumnSpan="2"
+                                 Text="{Binding DateFinActivation, StringFormat='{0:dd/MM/yyyy}'}"></Label>
+                          <Label Grid.Column="5"
+                                 TextColor="{StaticResource Primary}">
+                           <Label.FormattedText>
+                            <FormattedString>
+                             <Span Text="{Binding PrixAbonnement,StringFormat='{0:G29}' }"></Span>
+                             <Span Text=" DT"></Span>
+                            </FormattedString>
+                           </Label.FormattedText>
+                          </Label>
+                         </Grid>
+                        </StackLayout>
                        </syncfusion:SfExpander.Header>
                        <syncfusion:SfExpander.Content>
                         <Grid>
@@ -359,6 +403,13 @@
                                 Grid.Column="1"
                                 TextColor="{StaticResource Primary}"
                                 Text="{Binding LibelleAbonnement}"></Label>
+                         <Label Grid.Row="2"
+                                Text="Abonné:"
+                                TextColor="{StaticResource LabelColor}"></Label>
+                         <Label Grid.Row="2"
+                                Grid.Column="1"
+                                TextColor="{StaticResource Primary}"
+                                Text="{Binding NomPrenomAbonne}"></Label>
                         </Grid>
                        </syncfusion:SfExpander.Content>
                       </syncfusion:SfExpander>

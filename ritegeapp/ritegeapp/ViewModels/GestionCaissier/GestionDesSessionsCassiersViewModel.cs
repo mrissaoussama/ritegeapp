@@ -81,6 +81,7 @@ namespace ritegeapp.ViewModels
             else
             {
                 ListDto = (data); GroupByCaissier(); GroupByDateCaissier();
+                CalculateListTotal(data);
             }
         }
         private void GroupByCaissier()
@@ -141,7 +142,7 @@ namespace ritegeapp.ViewModels
         public void ShowDataView()
         {
             CanTapFilterImages = true;
-            ShowTotalIfCountIsMoreThanOne();
+            ShowTotal = true;
             ShowNoInternetLabel = false;
             ShowLoadingIndicator = false;
             ShowNoFilterResultLabel = false;
@@ -163,23 +164,9 @@ namespace ritegeapp.ViewModels
             ShowNoFilterResultLabel = false;
             ShowData = false; ShowNoDataReceived = true;
         }
-        private void ShowTotalIfCountIsMoreThanOne()
+        private void CalculateListTotal(List<InfoSessionsDTO> dto)
         {
-            if (CaissierSortMode)
-            {
-                if (ListCaissierToShow.Count > 1)
-                    ShowTotal = true;
-                TotalMoney = ListCaissierToShow.Sum(x => x.AbonneTotal);
-            }
-            else
-            if (DateCaissierSortMode)
-            {
-                if (ListDateCaissierToShow.Count > 1)
-                    ShowTotal = true;
-                TotalMoney = ListDateCaissierToShow.Sum(x => x.AbonneTotal);
-
-            }
-
+            TotalMoney = dto.Sum(x => x.Recette);
         }
         [ICommand]
         private async void ClearFilter(object obj)
@@ -212,7 +199,7 @@ namespace ritegeapp.ViewModels
         private void SortBy(object obj)
         {
             CaissierSortMode = !CaissierSortMode;
-            DateCaissierSortMode = !DateCaissierSortMode; ShowTotalIfCountIsMoreThanOne();
+            DateCaissierSortMode = !DateCaissierSortMode;  
         }
         [ICommand]
         private async void OpenStatisticsWindow(object obj)

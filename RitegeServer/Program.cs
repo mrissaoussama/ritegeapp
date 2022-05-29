@@ -40,6 +40,7 @@ builder.Services.AddTransient<IEventtypeRepository, EventtypeRepository>();
 builder.Services.AddTransient<IUsersystemRepository, UsersystemRepository>();
 builder.Services.AddTransient<IInfoAbonnementDTORepository, InfoAbonnementDTORepository>();
 builder.Services.AddTransient<IInfoSessionsDTORepository, InfoSessionsDTORepository>();
+builder.Services.AddTransient<IInfoTicketDTORepository, InfoTicketDTORepository>();
 builder.Services.AddControllers();
 builder.Services.AddHostedService<SendDataHostedService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
