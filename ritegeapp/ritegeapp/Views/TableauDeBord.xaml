@@ -8,6 +8,7 @@
              xmlns:control="clr-namespace:ProgressRingControl.Forms.Plugin;assembly=ProgressRing.Forms.Plugin"
              x:DataType="viewmodels:TableauDeBordViewModel"
              x:Class="ritegeapp.Views.TableauDeBord"
+             xmlns:util="clr-namespace:ritegeapp.Utils"
              BackgroundColor="{StaticResource BackgroundColor}"
              Title="Tableau De Bord">
  <ContentPage.Resources>
@@ -50,19 +51,22 @@
                            Style="{DynamicResource ClickableFrameTotal}">
        <StackLayout HorizontalOptions="CenterAndExpand" 
                     VerticalOptions="Center">
-        <Label Style="{DynamicResource fontGilroyMedium12}" 
-               Text="Parking" >
+        <Label Style="{DynamicResource fontGilroyMedium12}"
+                  
+                            Text="Parking" >
          <Label.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer> 
          </Label.GestureRecognizers> 
         </Label>
-        <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-               Style="{StaticResource LabelHeader}"
-               Text="{Binding Parking,Converter={StaticResource NullToDash}}">
+         <util:OutLineLabel skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                Style="{StaticResource LabelHeader}"
+                StrokeColor="White"
+                StrokeThickness="1"
+                Text="{Binding Parking,Converter={StaticResource NullToDash}}">
          <Label.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
          </Label.GestureRecognizers>
-        </Label>
+        </util:OutLineLabel>
        </StackLayout>
         <pancake:PancakeView.GestureRecognizers>
          <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>

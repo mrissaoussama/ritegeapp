@@ -6,6 +6,7 @@
              xmlns:viewmodels="clr-namespace:ritegeapp.ViewModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
+             xmlns:local="clr-namespace:ritegeapp.Utils"
              Title="Gestion Sessions Caissiers"
              Unfocused="ContentPage_Unfocused"
              BackgroundColor="{StaticResource BackgroundColor}">
@@ -38,8 +39,8 @@
                         Grid.Row="2"
                         IsVisible="{Binding ShowLoadingIndicator}"
                         IsRunning="true" />
-   <Label FontSize="Medium"
-          Grid.Row="1" Margin="15"
+   <local:OutLineLabel FontSize="Medium"
+          Grid.Row="1" Margin="15" 
           HorizontalOptions="CenterAndExpand"
           VerticalOptions="CenterAndExpand"
           TextColor="{StaticResource Primary}"
@@ -60,7 +61,7 @@
             TextColor="{StaticResource LabelColor}" />
      </FormattedString>
     </Label.FormattedText>
-   </Label>
+   </local:OutLineLabel>
    <Label FontSize="Medium"
           Grid.Row="2"
           TextColor="{StaticResource Primary}"

@@ -4,7 +4,7 @@
                     xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
- <Color x:Key="Complementary">#e8f007</Color>
+ <Color x:Key="Complementary">#F05454</Color>
  <OnPlatform x:Key="FontAvenir"
              x:TypeArguments="x:String">
   <On Platform="Android"
