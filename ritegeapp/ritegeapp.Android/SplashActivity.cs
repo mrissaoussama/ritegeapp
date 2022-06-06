@@ -32,12 +32,12 @@ namespace ritegeapp.Droid
         // Simulates background work that happens behind the splash screen
         async void SimulateStartup ()
         {
-            var data = Intent.GetStringExtra(NotificationCenter.ReturnRequest);
+            var data = Intent.GetStringExtra(LocalNotificationCenter.ReturnRequest);
             var mainintent = new Intent(Application.Context, typeof(MainActivity));
              mainintent.SetFlags(ActivityFlags.SingleTop);
             if (!string.IsNullOrWhiteSpace(data))
             {
-                mainintent.PutExtra(NotificationCenter.ReturnRequest, data);
+                mainintent.PutExtra(LocalNotificationCenter.ReturnRequest, data);
             }
             StartActivity(mainintent);
 

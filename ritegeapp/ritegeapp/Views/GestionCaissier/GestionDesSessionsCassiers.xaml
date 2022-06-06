@@ -63,7 +63,7 @@
     </Label.FormattedText>
    </local:OutLineLabel>
    <Label FontSize="Medium"
-          Grid.Row="2"
+          Grid.Row="1"
           TextColor="{StaticResource Primary}"
           IsVisible="{Binding ShowNoDataReceived}"
           LineBreakMode="WordWrap">

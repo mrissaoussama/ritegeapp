@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using Plugin.LocalNotification;
+
 using Plugin.LocalNotification.EventArgs;
 using ritegeapp.Services;
 using ritegeapp.Utils;
-using RitegeDomain.Database.Queries.Parking.UtilisateurQueries;
-using RitegeDomain.Model;
+using ritegeapp.ViewModels;
 using System;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Net.Http.Json;
+
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -20,14 +17,15 @@ namespace ritegeapp
        // public const string ServerURL = "https://192.168.1.14:45456";
       // public const string ServerURL = "http://192.168.1.14:45455";
         public const string ServerURL = "https://ritegeserver.conveyor.cloud";
-        public const string hubConnectionURL = ServerURL+"/Server";
-        public int NotificationID = 3;
-        public DataService dataService = new();
-        public bool IsOnline;
-        public bool IsShowingAlert = false;
+        public const string HubConnectionURL = ServerURL+"/Server";
+
+        public bool IsOnline; public bool IsShowingAlert = false;
+
+        public string? Token { get; set; }
         private event EventHandler Starting = delegate { };
         public App()
         {
+            RegisterDependencies();
             InitializeComponent();
             Starting += onStarting;
             Starting(this, EventArgs.Empty);
@@ -36,46 +34,29 @@ namespace ritegeapp
   
         private async void onStarting(object sender, EventArgs args) {
          Starting -= onStarting;  
-           if(Device.RuntimePlatform==Device.Android || Device.RuntimePlatform==Device.iOS)
-            NotificationCenter.Current.NotificationTapped += OnLocalNotificationTapped;
+        
             IsOnline = CheckIfConnectedToInternet();
-            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+            Connectivity.ConnectivityChanged += ConnectivityChanged;
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjIzNzIzQDMyMzAyZTMxMmUzMEJwbk0xNVlBUHdJM0I4emZ0K2xMNXViaExUN2Fac1RGaGRQWFFZZEtOZWc9");
-            DependencyService.Register<IMessage>();
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connection Lost", async (sender) =>
-            {
-                await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connexion Perdue"));
-
-            });
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connected", async (sender) =>
-            {
-                _ = Task.Run(async () => await dataService.Connect()); 
-                await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connecté")
-            );
-            });
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "No Connection", async (sender) =>
-            {
-                await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Pas De Connexion")
-                 );
-            });
-
-            await dataService.Initialize();
          
+            await DependencyService.Get<IDataService>().Initialize();
+            await DependencyService.Get<ISignalRService>().Initialize();
+
         }
-        private async void OnLocalNotificationTapped(NotificationEventArgs e)
+        void RegisterDependencies()
         {
-            if (e.Request is null)
-            {
-                return;
-            }
+            DependencyService.Register<IGestionAbonnementViewModel, GestionAbonnementViewModel>();
+            DependencyService.Register<INotificationService, NotificationService>();
+            DependencyService.Register<IDataService, DataService>();
+            DependencyService.Register<ISignalRService, SignalRService>();
 
         }
         private bool CheckIfConnectedToInternet()
         {
             return Connectivity.NetworkAccess == NetworkAccess.Internet;
         }
-
-        void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        
+        void ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
             var profiles = Connectivity.ConnectionProfiles;
             if (e.NetworkAccess == NetworkAccess.Internet)
@@ -97,7 +78,9 @@ namespace ritegeapp
             var hub = DependencyService.Get<IEventService>().GetHub();
             if (hub is not null)
             {
-                dataService.hubConnection = DependencyService.Get<IEventService>().GetHub();
+                var signalRService = DependencyService.Get<ISignalRService>();
+
+                signalRService.HubConnection = DependencyService.Get<IEventService>().GetHub();
             }
             if (CheckIfConnectedToInternet())
             { }
@@ -105,10 +88,12 @@ namespace ritegeapp
 
         protected override void OnSleep()
         {
-            base.OnSleep(); if (dataService.hubConnection is not null)
+            var signalRService = DependencyService.Get<ISignalRService>();
+            base.OnSleep();
+            if (signalRService.Initialized)
             {
-               DependencyService.Get<IEventService>().SetHub(dataService.hubConnection);
-                dataService.StopListeningForNotImportantData();
+               DependencyService.Get<IEventService>().SetHub(signalRService.HubConnection);
+                signalRService.StopListeningForNotImportantData();
             }
         }
 
@@ -118,9 +103,10 @@ namespace ritegeapp
             var hub = DependencyService.Get<IEventService>().GetHub();
             if (hub is not null)
             {
-               
-             dataService.hubConnection=DependencyService.Get<IEventService>().GetHub();
-                dataService.ListenForNewData();
+                var signalRService = DependencyService.Get<ISignalRService>();
+
+                signalRService.HubConnection = DependencyService.Get<IEventService>().GetHub();
+                signalRService.ListenForAlerts();
             }
             if (CheckIfConnectedToInternet())
             { }

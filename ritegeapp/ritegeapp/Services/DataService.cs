@@ -19,120 +19,26 @@
     using System.Threading.Tasks;
     using Xamarin.Essentials;
     using Xamarin.Forms;
-    public class DataService
+    public class DataService : IDataService
     {
         public bool Initialized;
-        public HubConnection hubConnection;
         public HttpClient httpClient;
         public TimeSpan TokenExpiresIn = TimeSpan.FromDays(9999);
-        public string? Token { get; set; }
         public DataService()
         {
-          httpClient = GetHttpClient();
+            httpClient = GetHttpClient();
         }
         public async Task Initialize()
         {
             if (Initialized == false)
             {
-                Initialized = true;
-            await    Task.Run(async () => { await Login(); });
-                hubConnection = new HubConnectionBuilder()
-                    .WithUrl(App.hubConnectionURL, options =>
-                    {
-                        options.HttpMessageHandlerFactory = (message) =>
-                        {
-                            if (message is HttpClientHandler clientHandler)
-                                // always verify the SSL certificate
-                                clientHandler.ServerCertificateCustomValidationCallback +=
-                                    (sender, certificate, chain, sslPolicyErrors) => { return true; };
-                            return message;
-                        };
-                        options.AccessTokenProvider = async () =>
-                        {
-                            return Token;
-                        };
-                    }).WithAutomaticReconnect()
-                    .Build();
-                hubConnection.On<ParkingEvent>("AlertReceived", async (data) =>
-                {
-                    var coderetriever = new XmlErrorCodeStringRetriever();
-                    var codestring = coderetriever.GetErrorCodeStringAndType(data);
-                    //var androidoptions = new Plugin.LocalNotification.AndroidOption.AndroidOptions();
-                    //androidoptions.Ongoing = true;
-                    var notification = new NotificationRequest
-                    {
-                        //Android= androidoptions,
-                        NotificationId = (Application.Current as App).NotificationID,
-                        Title = "Parking Alert",
-                        Description = codestring.DescriptionEvent,
-                        ReturningData = "Dummy data", // Returning data when tapped on notification.
-
-                    };
-                    (Application.Current as App).NotificationID++;
-                    _ = NotificationCenter.Current.Show(notification);
-                });
-                hubConnection.Reconnecting += error =>
-            {
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "Reconnecting");
-                return Task.CompletedTask;
-            };
-                ListenForNewData();
-                hubConnection.On<DashBoardDTO>("ResetToken", async(data) =>
-                {
-                  await  Login();
-                });
-                await Connect();
-               DependencyService.Get<IEventService>().StartService();
+                await GetToken();
 
             }
         }
-        public void StopListeningForNotImportantData()
-        {
-            Debug.WriteLine("dashboardunsub");
 
-            hubConnection.Remove("GetDashboardData");
-            hubConnection.Remove("GetTicketData");
-        }
-        public void ListenForNewData()
-        {
-            hubConnection.On<DashBoardDTO>("GetDashboardData", (data) =>
-            {
-                Debug.WriteLine("dashboard data received");
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetDashboardData", data);
 
-            });
-            hubConnection.On<DashBoardDTO>("GetTicketData", (data) =>
-            {
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetTicketData", data);
 
-            });
-        }
-
-        public async Task Connect()
-        {
-            if (hubConnection is null)
-            {
-                await Task.Run(async () => { await Initialize(); });
-                return;
-            }
-            if ((Application.Current as App).IsOnline)
-            {
-                if (hubConnection.State == HubConnectionState.Disconnected)
-                {
-                    try
-                    {
-                        await hubConnection.StartAsync();
-                    }
-                    catch (Exception ex)
-                    {
-                  }
-                }
-                if (hubConnection.State == HubConnectionState.Connected)
-                {
-                }
-
-            }
-        }
         public async Task NewTokenReceived(string token)
         {
             var tokentoinsert = new NotificationToken(token);
@@ -143,7 +49,7 @@
                     await dbcontext.Database.ExecuteSqlRawAsync("delete from Token");
 
                     await dbcontext.Token.AddAsync(tokentoinsert);
-                    Token = token;
+                    (Application.Current as App).Token = token;
                     await dbcontext.SaveChangesAsync();
                 }
 
@@ -162,20 +68,20 @@
                 var tgf = t.Date.Add(TokenExpiresIn) > DateTime.Now;
                 if (t.Date.Add(TokenExpiresIn) > DateTime.Now.AddMinutes(10))
                 {
-                    Token = t.Token;
+                    (Application.Current as App).Token = t.Token;
                     return t.Token;
                 }
                 else
                 {
-                    Token = await Login();   
+                    (Application.Current as App).Token = await Login();
                     await NewTokenReceived(t.Token);
-                    return Token;
+                    return (Application.Current as App).Token;
                 }
             }
             else
             {
-                Token = await Login();
-                return Token;
+                (Application.Current as App).Token = await Login();
+                return (Application.Current as App).Token;
             }
         }
         public async Task<string?> Login()
@@ -200,9 +106,9 @@
                         var contentr = await response.Content.ReadAsStreamAsync();
                         if (contentr != null)
                         {
-                            Token = Encoding.UTF8.GetString((contentr as MemoryStream).ToArray());
-                            await NewTokenReceived(Token);
-                            return Token;
+                            (Application.Current as App).Token = Encoding.UTF8.GetString((contentr as MemoryStream).ToArray());
+                            await NewTokenReceived((Application.Current as App).Token);
+                            return (Application.Current as App).Token;
                         }
                         return null;
                     }
@@ -230,7 +136,7 @@
         public HttpClient GetHttpClient()
         {
 
-            #if DEBUG
+#if DEBUG
             var handler = new HttpClientHandler();
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback =
@@ -238,9 +144,9 @@
                 {
                     return true;
                 };
-            #else
+#else
 			var handler = new HttpClientHandler(); 
-            #endif
+#endif
             var httpclient = new HttpClient(handler);
             httpclient.Timeout = TimeSpan.FromSeconds(30);
             return httpclient;
@@ -249,7 +155,6 @@
         {
             Debug.WriteLine("GetData Called //////////////////////");
 
-            _ = Task.Run(async () => await Connect());
             {
                 var httpClient = GetHttpClient();
 
@@ -257,7 +162,7 @@
 
                 string uri = (App.ServerURL + DataURL);
                 System.Diagnostics.Debug.WriteLine(App.ServerURL + DataURL);
-                System.Diagnostics.Debug.WriteLine("Token:"+Token);
+                System.Diagnostics.Debug.WriteLine("Token:" + (Application.Current as App).Token);
 
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + await GetToken());
                 try
@@ -299,7 +204,7 @@
                         Debug.WriteLine(response.StatusCode);
                         if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                         {
-                            Console.WriteLine("unauthorized" );
+                            Console.WriteLine("unauthorized");
 
                         }
                         return default;
@@ -307,7 +212,7 @@
                 }
                 catch (Exception ex)
                 {
-                  //  SendErrorMessage(ex);
+                    //  SendErrorMessage(ex);
                     Console.WriteLine("error getting data " + ex.Message);
                     return default;
                 }
@@ -356,7 +261,7 @@
             return list;
 
         }
-        public async Task<List<InfoAbonnementDTO>> GetAbonnementData(DateTime dateStart,DateTime dateEnd, string? abonneName)
+        public async Task<List<InfoAbonnementDTO>> GetAbonnementData(DateTime dateStart, DateTime dateEnd, string? abonneName)
         {
             //use Now.ticks for different timezones to work if this becomes popular worldwide
 
@@ -402,15 +307,7 @@
             var data = await GetData<DashBoardDTO>("/Parking/GetDashboardData", parameters);
             return data;
         }
-        public async Task Disconnect()
-        {
-          
-                if (hubConnection.State == HubConnectionState.Connected)
-                {
-                    await hubConnection.StopAsync();
-                }
-            
-        }
+
         private void SendErrorMessage(Exception ex)
         {
             if ((Application.Current as App).IsShowingAlert == false)

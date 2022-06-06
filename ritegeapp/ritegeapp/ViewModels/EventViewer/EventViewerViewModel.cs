@@ -38,10 +38,16 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private bool listIsRefreshing = false;
         public XmlErrorCodeStringRetriever codeRetriever = new XmlErrorCodeStringRetriever();
-        #endregion
+        #endregion        
+        ISignalRService signalRService;
+        IDataService dataService;
+
         public EventViewerViewModel()
         {
-            (Application.Current as App).dataService.hubConnection.On<ParkingEvent[]>("EventReceived", async (data) =>
+            signalRService = DependencyService.Get<ISignalRService>();
+            dataService = DependencyService.Get<IDataService>();
+
+            signalRService.HubConnection.On<ParkingEvent[]>("EventReceived", async (data) =>
                 {
                     await EventDataReceivedAsync(data.ToList());
                 });
@@ -122,7 +128,7 @@ namespace ritegeapp.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 ShowLoading();
-                await EventDataReceivedAsync(await (Application.Current as App).dataService.GetEventData(Date.ToUniversalTime().Date));
+                await EventDataReceivedAsync(await dataService.GetEventData(Date.ToUniversalTime().Date));
             }
             else
             if (ListDto.Count == 0)

@@ -3,15 +3,16 @@ using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using ritegeapp.ViewModels;
 using System;
+using Xamarin.Forms;
 
 namespace ritegeapp.Views
 {
     public partial class GestionAbonnementStatisticsPopup : PopupPage
     {
-        public GestionAbonnementStatisticsPopup(ObservableObject viewmodel)
+        public GestionAbonnementStatisticsPopup(IGestionAbonnementViewModel viewmodel)
         {
             InitializeComponent();
-            BindingContext = new GestionAbonnementStatisticsPopupViewModel(viewmodel);
+            BindingContext = DependencyService.Get<IGestionAbonnementViewModel>();
         }
 
         private void OnClose(object sender, EventArgs e)

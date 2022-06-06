@@ -19,7 +19,7 @@
         Margin="0,5,0,0">
    <Grid.RowDefinitions>
     <RowDefinition Height="140"></RowDefinition>
-    <RowDefinition Height="40"></RowDefinition>
+    <RowDefinition Height="60"></RowDefinition>
    </Grid.RowDefinitions>
    <extentions:FilterView             x:DataType="viewmodels:GestionAbonnementViewModel"
                                       DateStart="{Binding DateStart,Mode=TwoWay}"
@@ -31,7 +31,7 @@
                                       CanClearFilterBool="{Binding CanTapFilterImages}"
                                       CanClearFilterCommand="{Binding ClearFilterCommand}"
                                       CanSortBool="{Binding CanTapFilterImages}"
-                                      CanSortCommand="{Binding SortByCommand}"></extentions:FilterView>
+                                      CanSortCommand="{Binding ChangeGroupByViewCommand}"></extentions:FilterView>
    <ActivityIndicator   Scale="0.5"
                         Color="{StaticResource Primary}"
                         Grid.Row="2"

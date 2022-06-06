@@ -150,59 +150,7 @@ namespace RitegeServer.Controllers
             {
                 try
                 {
-                //var ListDto = new List<InfoSessionsDTO>();
-                //#region session
-                //var data = new InfoSessionsDTO("Oussama Mrissa", "Caisse 1", DateTime.Today, DateTime.Today.AddHours(1));
-                //var data5 = new InfoSessionsDTO("oussama41", "caissier", DateTime.Today, DateTime.Today.AddDays(1));
-                //var data3 = new InfoSessionsDTO("oussama22", "caissier", DateTime.Today.AddDays(1), DateTime.Today.AddDays(1));
-                //var data4 = new InfoSessionsDTO("oussama43", "caissier", DateTime.Today.AddDays(2), DateTime.Today.AddDays(2));
-                //var data1 = new InfoSessionsDTO("oussama41", "caissieré", DateTime.Today, DateTime.Today);
-                //var data2 = new InfoSessionsDTO("oussama52", "caissieré", DateTime.Today.AddMonths(-3), DateTime.Today.AddMonths(-2));
-                //data.NbAbonne = 1111;
-                //data.NbAdministratif = 411;
-                //data.NbAutorite = 415;
-                //data.NbTickets = 17;
-                //data.Recette = 154;
-
-                //data5.NbAbonne = 111;
-                //data5.NbAdministratif = 411;
-                //data5.NbAutorite = 415;
-                //data5.NbTickets = 17;
-                //data5.Recette = 5133;
-
-                //data3.NbAbonne = 111;
-                //data3.NbAdministratif = 411;
-                //data3.NbAutorite = 415;
-                //data3.NbTickets = 71;
-                //data3.Recette = 5214;
-
-                //data4.NbAbonne = 111;
-                //data4.NbAdministratif = 141;
-                //data4.NbAutorite = 4151;
-                //data4.NbTickets = 71;
-                //data4.Recette = 5114;
-
-                //data2.NbAbonne = 111;
-                //data2.NbAdministratif = 411;
-                //data2.NbAutorite = 415;
-                //data2.NbTickets = 71;
-                //data2.Recette = 5104;
-
-                //data1.NbAbonne = 111;
-                //data1.NbAdministratif = 141;
-                //data1.NbAutorite = 451;
-                //data1.NbTickets = 71;
-                //data1.Recette = 155;
-                //ListDto.Add(data);
-                //ListDto.Add(data4);
-                //ListDto.Add(data3);
-                //ListDto.Add(data2);
-                //ListDto.Add(data5);
-                //ListDto.Add(data1);
-                //#endregion
-                //var dataFilter = new DataFilter();
-                //var list = dataFilter.FilterSessionDTO(ListDto, dateStart, dateEnd, caissierName);
-                //return Ok(list);
+              
                 var query = new RitegeDomain.Database.Queries.Parking.InfoSessionsDTOQueries.InfoSessionsDTOQuery { Name = caissierName, FinishDate = dateEnd, StartDate = dateStart };
                 var response = await _mediator.Send(query);
                 int caisser = 1;

@@ -13,14 +13,14 @@ namespace ritegeapp.ViewModels
 {
     public partial class GestionAbonnementStatisticsPopupViewModel : ObservableObject
     {
-        public GestionAbonnementStatisticsPopupViewModel(ObservableObject viewmodel)
+        public GestionAbonnementStatisticsPopupViewModel(IGestionAbonnementViewModel viewmodel)
         {
             parentvm = viewmodel;
-            ListeAbonnements = new ObservableCollection<GroupAbonnement>(((GestionAbonnementViewModel)parentvm).ListAbonnementToShow);
+            ListeAbonnements = new ObservableCollection<GroupAbonnement> (parentvm.ListAbonnementToShow);
             // SelectedCaissier = ListeAbonnements.First().ToString();
             CalculateStatistics();
         }
-        public ObservableObject parentvm;
+        public IGestionAbonnementViewModel parentvm;
         public ICommand BackgroundClickedCommand => new Command(BackgroundClickedCommandExecute);
 
         private async void BackgroundClickedCommandExecute(object parameter)

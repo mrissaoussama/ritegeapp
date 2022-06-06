@@ -26,6 +26,9 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddRouting();
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>));
+builder.Services.AddTransient<IInfoAbonnementDTORepository, InfoAbonnementDTORepository>();
+builder.Services.AddTransient<IInfoSessionsDTORepository, InfoSessionsDTORepository>();
+builder.Services.AddTransient<IInfoTicketDTORepository, InfoTicketDTORepository>();
 builder.Services.AddTransient<IAbonneRepository, AbonneRepository>();
 builder.Services.AddTransient<IAbonnementRepository, AbonnementRepository>();
 builder.Services.AddTransient<IAffectationabonnementRepository, AffectationabonnementRepository>();
@@ -38,9 +41,7 @@ builder.Services.AddTransient<IDoorRepository, DoorRepository>();
 builder.Services.AddTransient<IEventRepository, EventRepository>();
 builder.Services.AddTransient<IEventtypeRepository, EventtypeRepository>();
 builder.Services.AddTransient<IUsersystemRepository, UsersystemRepository>();
-builder.Services.AddTransient<IInfoAbonnementDTORepository, InfoAbonnementDTORepository>();
-builder.Services.AddTransient<IInfoSessionsDTORepository, InfoSessionsDTORepository>();
-builder.Services.AddTransient<IInfoTicketDTORepository, InfoTicketDTORepository>();
+
 builder.Services.AddControllers();
 builder.Services.AddHostedService<SendDataHostedService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

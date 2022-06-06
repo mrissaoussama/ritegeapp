@@ -29,7 +29,7 @@ namespace ritegeapp.Droid.Services
         {
             Android.App.Notification notif = DependencyService.Get<INotification>().ReturnNotif();
             StartForeground(ServiceRunningNotifID, notif);
-            hubConnection=(App.Current as App).dataService.hubConnection;
+            hubConnection =DependencyService.Get<ISignalRService>().GetHub();
             return Android.App.StartCommandResult.Sticky;
         }
         public override void OnDestroy()
