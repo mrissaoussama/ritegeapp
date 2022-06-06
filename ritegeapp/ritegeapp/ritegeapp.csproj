@@ -81,7 +81,7 @@
 
   <ItemGroup>
     <Reference Include="Mono.Android">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\MonoAndroid\v12.0\Mono.Android.dll</HintPath>
+      <HintPath>d:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\MonoAndroid\v12.0\Mono.Android.dll</HintPath>
     </Reference>
   </ItemGroup>
 
@@ -100,6 +100,10 @@
     </Compile>
     <Compile Update="Views\EventView\EventView.xaml.cs">
       <DependentUpon>EventView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\CaissierListView.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>CaissierListView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\ParkingListView.xaml.cs">
       <DependentUpon>ParkingListView.xaml</DependentUpon>
@@ -133,6 +137,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Utils\CollapsibleControl.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\CaissierListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

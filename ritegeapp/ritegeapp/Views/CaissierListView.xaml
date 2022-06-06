@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 x:Class="ritegeapp.Views.ParkingListView"
+                 x:Name="ParkingListPopup"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                 xmlns:viewmodels="clr-namespace:ritegeapp.ViewModels"
+                 CloseWhenBackgroundIsClicked="True"
+                 BackgroundColor="Transparent"
+                 HasSystemPadding="True">
+ <pages:PopupPage.Content>
+  <Frame HasShadow="False"
+         CornerRadius="10"
+         Margin="10"
+         BorderColor="{StaticResource Primary}"
+         HorizontalOptions="Center"
+         VerticalOptions="Center" 
+         BackgroundColor="{StaticResource BackgroundColor}">
+   <StackLayout>
+    <ActivityIndicator   Scale="0.5"
+                         Color="{StaticResource Primary}"
+                         IsVisible="{Binding IsLoading}"
+                         IsRunning="true" />
+    <StackLayout BindableLayout.ItemsSource="{Binding ParkingList}"
+               x:Name="ParkingList"
+                 BackgroundColor="{StaticResource BackgroundColor}">
+     <BindableLayout.ItemTemplate >
+      <DataTemplate>
+       
+       <Button TextColor="{StaticResource Primary}" FontSize="Large"
+             Command="{Binding  BindingContext.ParkingClickedCommand, Source={x:Reference ParkingListPopup}}"
+               CommandParameter="{Binding .}"
+              BackgroundColor="{StaticResource BackgroundColor}"
+              Text="{Binding ParkingName}"
+            ></Button>
+        
+      </DataTemplate>
+     </BindableLayout.ItemTemplate>
+    </StackLayout>
+   </StackLayout>
+  </Frame>
+ </pages:PopupPage.Content>
+</pages:PopupPage>
