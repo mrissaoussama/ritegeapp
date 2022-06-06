@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.SignalR.Client;
     using Microsoft.AspNetCore.WebUtilities;
-    using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json;
     using Plugin.LocalNotification;
     using RitegeDomain.Database.Queries.Parking.UtilisateurQueries;
@@ -12,6 +11,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using Xamarin.Essentials;
     using System.Linq;
     using System.Net.Http;
     using System.Net.Http.Json;
@@ -42,28 +42,37 @@
         public async Task NewTokenReceived(string token)
         {
             var tokentoinsert = new NotificationToken(token);
-
-            using (var dbcontext = new ApplicationDbContext())
+            try
             {
-                {
-                    await dbcontext.Database.ExecuteSqlRawAsync("delete from Token");
+                await SecureStorage.SetAsync("token", tokentoinsert.Token);
+                await SecureStorage.SetAsync("tokenDate", tokentoinsert.Date.ToString());
 
-                    await dbcontext.Token.AddAsync(tokentoinsert);
-                    (Application.Current as App).Token = token;
-                    await dbcontext.SaveChangesAsync();
-                }
+                (Application.Current as App).Token = token;
 
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error Setting Token");
+
+            }
+           
         }
         public async Task<string?> GetToken()
         {
-            NotificationToken? t;
-            using (var dbcontext = new ApplicationDbContext())
+            NotificationToken? t=new();
             {
                 //await dbcontext.Database.ExecuteSqlRawAsync("delete from Token");
-                t = await dbcontext.Token.FirstOrDefaultAsync();
+                try
+                {
+                    t.Token = await SecureStorage.GetAsync("token");
+                    t.Date =DateTime.Parse(await SecureStorage.GetAsync("tokenDate"));
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error Getting Token");
+                }
             }
-            if (t is not null)
+            if (!string.IsNullOrEmpty(t.Token))
             {
                 var tgf = t.Date.Add(TokenExpiresIn) > DateTime.Now;
                 if (t.Date.Add(TokenExpiresIn) > DateTime.Now.AddMinutes(10))
@@ -258,6 +267,31 @@
 
             };
             var list = await GetData<List<string>>("/Parking/GetParkingList", parameters);
+            return list;
+
+        }
+
+        public async Task<List<string>> GetCashierList(string parkingname)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { nameof(parkingname), parkingname},
+                //	{ nameof(dateEnd), dateEnd.ToString("O") },
+
+            };
+            var list = await GetData<List<string>>("/Parking/GetCashierList", parameters);
+            return list;
+
+        }
+        public async Task<List<string>> GetCashRegisterList(string parkingname)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { nameof(parkingname), parkingname},
+                //	{ nameof(dateEnd), dateEnd.ToString("O") },
+
+            };
+            var list = await GetData<List<string>>("/Parking/GetCashRegisterList", parameters);
             return list;
 
         }

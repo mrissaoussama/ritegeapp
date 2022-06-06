@@ -56,6 +56,10 @@ namespace ritegeapp.ViewModels
             {
                 await Device.InvokeOnMainThreadAsync(() => ParkingChanged((string)arg));
             });
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(Xamarin.Forms.Application.Current, "CashRegisterClicked", async (sender, arg) =>
+            {
+                await Device.InvokeOnMainThreadAsync(() => CashRegisterClicked((string)arg));
+            });
             MessagingCenter.Subscribe<Xamarin.Forms.Application, DashBoardDTO>(Xamarin.Forms.Application.Current, "GetDashboardData", async (sender, arg) =>
             {
                 await OnDataReceivedAsync(arg);
@@ -120,11 +124,10 @@ namespace ritegeapp.ViewModels
         }
         private void SetData(DashBoardDTO data)
         {
-            if (FluxBorneTotal is null)
-            {
+          
                 FluxBorneTotal = 10;
                 FluxCaisseTotal = 15;
-            }
+            
             Parking = data.Parking;
             FluxBorneTotal += 10;
             FluxCaisseTotal += 15;
@@ -187,6 +190,11 @@ namespace ritegeapp.ViewModels
             await PopupNavigation.Instance.PushAsync(new ParkingListView(this));
         }
         [ICommand]
+        private async void OpenCashRegisterListView(object obj)
+        {
+            await PopupNavigation.Instance.PushAsync(new CashRegisterListView(this));
+        }
+        [ICommand]
         private async void OpenEventListView(object obj)
         {if(eventList!=null || eventList.Count!=0)
             await PopupNavigation.Instance.PushAsync(new EventListView(this));
@@ -199,6 +207,16 @@ namespace ritegeapp.ViewModels
             {
                 Parking = parking;
                 Debug.WriteLine("different parking");
+            }
+        }
+        public void CashRegisterClicked(string caisse)
+        {
+            if (Caisse == caisse)
+                Debug.WriteLine("same caisse");
+            else
+            {
+                Caisse = caisse;
+                Debug.WriteLine("different caisse");
             }
         }
         public async Task GetEventList()

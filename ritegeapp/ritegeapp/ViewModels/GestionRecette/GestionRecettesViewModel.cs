@@ -151,7 +151,8 @@ namespace ritegeapp.ViewModels
              ShowLoading();
              var data = await dataService.GetTicketData(dateStart, dateEnd);
                 await FilteredDataReceivedAsync(data);
-               _=Task.Run(async()=> await signalRService.Connect());
+                await Task.Run(async () => { await signalRService.Connect(); });
+
             }
             else
             if (ListDto.Count == 0)

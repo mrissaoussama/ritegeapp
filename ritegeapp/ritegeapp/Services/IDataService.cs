@@ -18,6 +18,8 @@ namespace ritegeapp.Services
         HttpClient GetHttpClient();
         Task<List<ParkingEvent>> GetLast10Events();
         Task<List<string>> GetParkingList();
+        Task<List<string>> GetCashierList(string parkingName);
+        Task<List<string>> GetCashRegisterList(string parkingName);
         Task<List<InfoTicketDTO>> GetTicketData(DateTime dateStart, DateTime dateEnd);
         Task<string> GetToken();
         Task Initialize();

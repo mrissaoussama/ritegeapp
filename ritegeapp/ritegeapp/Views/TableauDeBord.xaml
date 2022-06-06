@@ -6,6 +6,8 @@
              xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
              xmlns:converters1="clr-namespace:ritegeapp.Converters"
              xmlns:control="clr-namespace:ProgressRingControl.Forms.Plugin;assembly=ProgressRing.Forms.Plugin"
+             xmlns:extentions="clr-namespace:ritegeapp.Extentions"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="viewmodels:TableauDeBordViewModel"
              x:Class="ritegeapp.Views.TableauDeBord"
              xmlns:util="clr-namespace:ritegeapp.Utils"
@@ -30,10 +32,11 @@
     <StackLayout>
      <Grid>
       <Grid.RowDefinitions>
-       <RowDefinition Height="*"></RowDefinition>
-       <RowDefinition Height="*"></RowDefinition>
-       <RowDefinition Height="*"></RowDefinition>
+       <RowDefinition Height="1.5*"></RowDefinition>
+       <RowDefinition Height="2.5*"></RowDefinition>
+       <RowDefinition Height="2*"></RowDefinition>
       </Grid.RowDefinitions>
+      <StackLayout>
      <Grid >
       <Grid.RowDefinitions>
        <RowDefinition Height="*" />
@@ -47,20 +50,22 @@
       <!--parking view-->
       <pancake:PancakeView Grid.Row="0"
                            Grid.Column="0"
-                           Margin="0,12,0,0"
+                           Margin="0,5,0,0"
                            Style="{DynamicResource ClickableFrameTotal}">
        <StackLayout HorizontalOptions="CenterAndExpand" 
                     VerticalOptions="Center">
-        <Label Style="{DynamicResource fontGilroyMedium12}"
-                  
-                            Text="Parking" >
-         <Label.GestureRecognizers>
-          <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer> 
-         </Label.GestureRecognizers> 
-        </Label>
-         <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                Style="{StaticResource LabelHeader}"
-             
+   
+           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.parking.png}" Margin="0,5,0,-5"
+                  WidthRequest="20"
+                  xct:IconTintColorEffect.TintColor="{StaticResource Primary}">
+            <Image.GestureRecognizers>
+             <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
+            </Image.GestureRecognizers>
+           </Image>
+          <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 Style="{DynamicResource fontGilroyMedium12}"
+                 Margin="0,0,0,5"
+                 FontSize="Large"
                 Text="{Binding Parking,Converter={StaticResource NullToDash}}">
          <Label.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
@@ -71,87 +76,109 @@
          <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
         </pancake:PancakeView.GestureRecognizers>
        </pancake:PancakeView>
-      <pancake:PancakeView Grid.Row="0"
-                           Grid.Column="1"
-                           Margin="0,12,0,0"
-                           Style="{DynamicResource FrameTotal}">
-       <StackLayout
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="Center">
-        <Label Style="{DynamicResource fontGilroyMedium12}"
-               FontSize="Caption"
-               Text="Recette Parking" />
-        <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-               Style="{StaticResource LabelHeader}">
-         <Label.FormattedText>
-          <FormattedString>
-           <Span Text="{Binding RecetteParking,Converter={StaticResource NullToDash}}"></Span>
-           <Span FontSize="Caption"
-                 Text=" DT"></Span>
-          </FormattedString>
-         </Label.FormattedText>
-        </Label>
-       </StackLayout>
-       
-      </pancake:PancakeView>
-      <pancake:PancakeView Grid.Row="0"
-                           Grid.Column="2"
-                           Margin="0,12,0,0"
-                           Style="{DynamicResource FrameTotal}">
-       <StackLayout 
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="Center">
-        <Label Style="{DynamicResource fontGilroyMedium12}"
-               Text="Total Journée" />
-        <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                                        Style="{StaticResource LabelHeader}">
-         <Label.FormattedText>
-          <FormattedString>
-           <Span Text="{Binding RecetteCaisse,Converter={StaticResource NullToDash}}"></Span>
-           <Span  FontSize="Caption"
-                  Text=" DT"></Span>
-          </FormattedString>
-         </Label.FormattedText>
-        </Label>
-       </StackLayout>
-      </pancake:PancakeView>
-      <pancake:PancakeView    Grid.Row="1"
-                              Grid.Column="1"
-                              Grid.ColumnSpan="2"
-                              Margin="0,0,0,0"
-                              Style="{DynamicResource FrameTotal}">
-       <StackLayout Padding="8,15"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center">
-        <Label Style="{DynamicResource fontGilroyMedium12}"
-               Text="Caissier" />
-        <Label                         skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                                       Style="{StaticResource LabelHeader}"
-                                       Text="{Binding NomPrenomCaissier,Converter={StaticResource NullToDash}}" />
-       </StackLayout>
-      </pancake:PancakeView>
-      <pancake:PancakeView Grid.Row="1"
-                           Grid.Column="0"
-                           Style="{DynamicResource FrameTotal}">
-       <StackLayout Padding="8,15"
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="Center">
-        <Label Style="{DynamicResource fontGilroyMedium12}"
-               Text="Recette En Cours"
-               FontSize="Micro" />
-        <Label                         skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                                       Style="{StaticResource LabelHeader}">
-         <Label.FormattedText>
-          <FormattedString>
-           <Span Text="{Binding RecetteCaissier,Converter={StaticResource NullToDash}}"></Span>
-           <Span  FontSize="Caption"
-                  Text=" DT"></Span>
-          </FormattedString>
-         </Label.FormattedText>
-        </Label>
-       </StackLayout>
-      </pancake:PancakeView>
-     </Grid>
+       <!--Caisse view-->
+        <pancake:PancakeView Grid.Row="1"
+                             Grid.Column="0"
+                             Margin="0,5,0,0"
+                             Style="{DynamicResource ClickableFrameTotal}">
+         <StackLayout HorizontalOptions="CenterAndExpand"
+                      VerticalOptions="Center">
+          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.cashregister.png}"
+                 Margin="0,5,0,-5"
+                 WidthRequest="20"
+                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}">
+           <Image.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding OpenCashRegisterListViewCommand}"></TapGestureRecognizer>
+           </Image.GestureRecognizers>
+          </Image>
+          <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 Style="{DynamicResource fontGilroyMedium12}"
+                 Margin="0,0,0,5"
+                 FontSize="Large"
+                 Text="{Binding Caisse,Converter={StaticResource NullToDash}}">
+           <Label.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding OpenCashRegisterListViewCommand}"></TapGestureRecognizer>
+           </Label.GestureRecognizers>
+          </Label>
+         </StackLayout>
+         <pancake:PancakeView.GestureRecognizers>
+          <TapGestureRecognizer Command="{Binding OpenCashRegisterListViewCommand}"></TapGestureRecognizer>
+         </pancake:PancakeView.GestureRecognizers>
+        </pancake:PancakeView>
+        <pancake:PancakeView Grid.Row="0"
+                            Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2"
+                            Margin="0,5,0,0"
+                            Style="{DynamicResource FrameTotal}">
+        <Grid Margin="5">
+         <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="1*"></ColumnDefinition>
+          <ColumnDefinition Width="3*"></ColumnDefinition>
+          <ColumnDefinition Width="1*"></ColumnDefinition>
+          <ColumnDefinition Width="3*"></ColumnDefinition>
+         </Grid.ColumnDefinitions>
+          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.moneybag.png}"
+Scale="0.75"
+                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+                Grid.Column="1"
+                VerticalOptions="Center"
+                FontSize="Medium"
+                HorizontalOptions="Start">
+          <Label.FormattedText>
+           <FormattedString>
+            <Span Text="{Binding RecetteCaisse,StringFormat='{0:G29}' }"></Span>
+            <Span Text=" DT"></Span>
+           </FormattedString>
+          </Label.FormattedText>
+         </Label>
+         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.parkingearnings.png}"
+                Scale="0.75"
+                Grid.Column="2"
+                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+                Grid.Column="3" FontSize="Medium"
+                VerticalOptions="Center">
+          <Label.FormattedText>
+           <FormattedString>
+            <Span Text="{Binding RecetteParking,StringFormat='{0:G29}' }"></Span>
+            <Span Text=" DT"></Span>
+           </FormattedString>
+          </Label.FormattedText>
+         </Label>
+         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.cashier.png}"
+                Scale="0.75"
+                Grid.Row="1"
+                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+                Grid.Column="1"
+                FontSize="Medium"
+                Grid.Row="1"
+                VerticalOptions="Center"
+                Text="{Binding NomPrenomCaissier}"
+                HorizontalOptions="Start"></Label>
+         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.cashregisterearning.png}"
+                Scale="0.75"
+                Grid.Row="1"
+                Grid.Column="2"
+                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+                Grid.Column="3"
+                FontSize="Medium"
+                Grid.Row="1"
+                VerticalOptions="Center">
+          <Label.FormattedText>
+           <FormattedString>
+            <Span Text="{Binding RecetteCaissier,StringFormat='{0:G29}' }"></Span>
+            <Span Text=" DT"></Span>
+           </FormattedString>
+          </Label.FormattedText>
+         </Label>
+        </Grid>
+
+       </pancake:PancakeView>
+       </Grid>
+      </StackLayout>
+     
       <Grid x:Name="Progressringgrid" Grid.Row="1">
        <Grid.RowDefinitions>
         <RowDefinition Height="*"></RowDefinition>
@@ -162,7 +189,7 @@
         <ColumnDefinition Width="4.5*" />
         <ColumnDefinition Width="5.5*" />
        </Grid.ColumnDefinitions>
-       <StackLayout Grid.Column="1" Grid.RowSpan="2">
+       <StackLayout Grid.Column="0" Grid.RowSpan="2">
         <Grid VerticalOptions="CenterAndExpand">
          <control:ProgressRing   HeightRequest="80"
                                  RingBaseColor="{Binding PlaceMax,Converter={StaticResource BoolToColorOnlineStatus}}"
@@ -195,170 +222,112 @@
            </Label.TextColor>
           </Label>
           <Label Text="Places Disponible"
-                 TextColor="{StaticResource Primary}"
+                 TextColor="{StaticResource LabelColor}"
                  HorizontalTextAlignment="Center" />
          </StackLayout>
         </Grid>
        </StackLayout>
-       <!--<pancake:PancakeView Grid.Row="0"
-                            Grid.Column="0"
+      
+       <pancake:PancakeView Grid.Row="0" Grid.RowSpan="2"
+                            Grid.Column="1"
                             Style="{DynamicResource FrameTotal}">
-        <StackLayout 
-                     HorizontalOptions="Center"
-                     VerticalOptions="Center">
+        <Grid Margin="5">
+         <Grid.ColumnDefinitions>
+        
+         </Grid.ColumnDefinitions>
+         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.carentry.png}"
+                Scale="0.75"
+                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
          <Label Style="{DynamicResource fontGilroyMedium12}"
-                Text="Evenements">
-          <Label.GestureRecognizers>
-           <TapGestureRecognizer Command="{Binding OpenEventListViewCommand}"></TapGestureRecognizer>
-          </Label.GestureRecognizers>
-         </Label>
-         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                                         Style="{StaticResource LabelHeader}"
-                                         Text="{Binding NbEvents,Converter={StaticResource NullToDash}}">
-          <Label.GestureRecognizers>
-           <TapGestureRecognizer Command="{Binding OpenEventListViewCommand}"></TapGestureRecognizer>
-          </Label.GestureRecognizers>
-         </Label>
-        </StackLayout>
-        <pancake:PancakeView.GestureRecognizers>
-         <TapGestureRecognizer Command="{Binding OpenEventListViewCommand}"></TapGestureRecognizer>
-        </pancake:PancakeView.GestureRecognizers>
-       </pancake:PancakeView>-->
-       <pancake:PancakeView Grid.Row="1"
-                            Grid.Column="0"
-                            Style="{DynamicResource FrameTotal}">
-        <StackLayout HorizontalOptions="CenterAndExpand"
-                     VerticalOptions="Center">
-         <Label Style="{DynamicResource fontGilroyMedium12}">
+                Grid.Column="1"
+                VerticalOptions="Center"
+                FontSize="Medium"
+                HorizontalOptions="Start">
           <Label.FormattedText>
            <FormattedString>
-            <Span Text="Flux Borne: "></Span>
-            <Span   Text="{Binding FluxBorne,Converter={StaticResource NullToDash}}"
-                    TextColor="{StaticResource Primary}"></Span>
+            <Span Text="{Binding FluxCaisseTotal,StringFormat='{0:G29}' }"></Span>
            </FormattedString>
           </Label.FormattedText>
          </Label>
-         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                                         Style="{StaticResource LabelHeader}">
-          <Label.FormattedText>
-           <FormattedString>
-            <Span   Text="{Binding FluxBorneTotal,Converter={StaticResource NullToDash}}"></Span>
-            <Span FontSize="Caption"
-                  Text=" DT"></Span>
-           </FormattedString>
-          </Label.FormattedText>
-         </Label>
-        </StackLayout>
+        
+         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.carexit.png}"
+                Scale="0.75"
+                Grid.Row="1"
+                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+         <Label Style="{DynamicResource fontGilroyMedium12}"
+                Grid.Column="1"
+                FontSize="Medium"
+                Grid.Row="1"
+                VerticalOptions="Center"
+                Text="{Binding FluxBorneTotal}"
+                HorizontalOptions="Start"></Label>
+        
+        </Grid>
        </pancake:PancakeView>
       </Grid>
       <Grid 
             Grid.Row="2"
           >
-       <Grid.RowDefinitions>
-        <RowDefinition Height="*" />
-       </Grid.RowDefinitions>
-       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="*" />
-       </Grid.ColumnDefinitions>
-   
-       <pancake:PancakeView Grid.Row="0"
+    
+       <pancake:PancakeView
+                            Grid.RowSpan="2"
                             Grid.Column="0"
-                            Grid.ColumnSpan="2"
+                           
+                            Grid.ColumnSpan="3"
                             Style="{DynamicResource FrameTotal}">
-        <StackLayout
-                     HorizontalOptions="CenterAndExpand"
-                     VerticalOptions="Center">
+        <Grid
+      >
+         <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="2*" />
+          <ColumnDefinition Width="*" />
+         </Grid.ColumnDefinitions>
+         <StackLayout Orientation="Horizontal">
+         <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.ticket.png}"
+                Scale="0.75"
+                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
          <Label Style="{DynamicResource fontGilroyMedium12}"
-              >
-          <Label.FormattedText>
-           <FormattedString>
-            <Span Text="Flux Caisse: "></Span>
-            <Span   Text="{Binding FluxCaisse,Converter={StaticResource NullToDash}}"
-                    TextColor="{StaticResource Primary}"></Span>
-           </FormattedString>
-          </Label.FormattedText>
+                
+                VerticalOptions="Center"
+                FontSize="Medium"
+                Text="{Binding NbTickets,StringFormat='{0:G29}' }"
+                HorizontalOptions="Start">
+          
          </Label>
-         <Label                         skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                                        Style="{StaticResource LabelHeader}">
-          <Label.FormattedText>
-           <FormattedString>
-            <Span   Text="{Binding FluxCaisseTotal,Converter={StaticResource NullToDash}}" ></Span>
-            <Span FontSize="Caption"
-                  Text=" DT"></Span>
-           </FormattedString>
-          </Label.FormattedText>
-         </Label>
-        </StackLayout>
-       </pancake:PancakeView>
-       <pancake:PancakeView Grid.Row="0"
-                            Grid.Column="2"
-                            Style="{DynamicResource FrameTotal}">
-        <StackLayout
-                     HorizontalOptions="CenterAndExpand"
-                     VerticalOptions="Center">
-         <Label Style="{DynamicResource fontGilroyMedium12}"
-                Text="Tickets" />
-         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                                         HorizontalOptions="Center"
-                                         Style="{StaticResource LabelHeader}">
-          <Label.FormattedText>
-           <FormattedString>
-            <Span Text="{Binding NbTickets,Converter={StaticResource NullToDash}}"></Span>
-           </FormattedString>
-          </Label.FormattedText>
-         </Label>
-        </StackLayout>
-       </pancake:PancakeView>
-       <pancake:PancakeView    Grid.Row="1"
-                               Grid.Column="1"
-                               Style="{DynamicResource FrameTotal}">
-        <StackLayout
-                     HorizontalOptions="Center"
-                     VerticalOptions="Center">
-         <Label Style="{DynamicResource fontGilroyMedium12}"
-                Text="Autorités" />
-         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                                         HorizontalOptions="Center"
-                                         Style="{StaticResource LabelHeader}"
-                                         Text="{Binding NbAutorite,Converter={StaticResource NullToDash}}" />
-        </StackLayout>
-       </pancake:PancakeView>
-       <pancake:PancakeView Grid.Row="1"
-                            Grid.Column="0"
-                            Style="{DynamicResource FrameTotal}">
-        <StackLayout Padding="8,15">
-         <Label Style="{DynamicResource fontGilroyMedium12}"
-                Text="Abonnés"
-                HorizontalOptions="Center" />
-         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                                         Style="{StaticResource LabelHeader}">
-          <Label.FormattedText>
-           <FormattedString>
-            <Span Text="{Binding NbAbonne,Converter={StaticResource NullToDash}}"></Span>
-           </FormattedString>
-          </Label.FormattedText>
-         </Label>
-        </StackLayout>
-       </pancake:PancakeView>
-       <pancake:PancakeView Grid.Row="1"
-                            Grid.Column="2"
-                            Style="{DynamicResource FrameTotal}">
-        <StackLayout 
-                     HorizontalOptions="CenterAndExpand"
-                     VerticalOptions="Center">
-         <Label Style="{DynamicResource fontGilroyMedium12}"
-                Text="Administratifs" />
-         <Label                          skeleton:Skeleton.IsBusy="{Binding IsLoading}"
-                                         Style="{StaticResource LabelHeader}">
-          <Label.FormattedText>
-           <FormattedString>
-            <Span Text="{Binding NbAdministrateur,Converter={StaticResource NullToDash}}"></Span>
-           </FormattedString>
-          </Label.FormattedText>
-         </Label>
-        </StackLayout>
+         </StackLayout>
+         <StackLayout Orientation="Horizontal" Grid.Row="1">
+          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.staff.png}"
+                 Scale="0.75"
+                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+          <Label Style="{DynamicResource fontGilroyMedium12}"
+                 VerticalOptions="Center"
+                 FontSize="Medium"
+                 Text="{Binding NbAdministrateur,StringFormat='{0:G29}' }"
+                 HorizontalOptions="Start"></Label>
+         </StackLayout>
+         <StackLayout Orientation="Horizontal"
+                      Grid.Column="1">
+          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.police.png}"
+                 Scale="0.75"
+                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+          <Label Style="{DynamicResource fontGilroyMedium12}"
+                 VerticalOptions="Center"
+                 FontSize="Medium"
+                 Text="{Binding NbAutorite,StringFormat='{0:G29}' }"
+                 HorizontalOptions="Start"></Label>
+         </StackLayout>
+         <StackLayout Orientation="Horizontal"
+                      Grid.Row="1"
+                      Grid.Column="1">
+          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.subscribercard.png}"
+                 Scale="0.75"
+                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+          <Label Style="{DynamicResource fontGilroyMedium12}"
+                 VerticalOptions="Center"
+                 FontSize="Medium"
+                 Text="{Binding NbAutorite,StringFormat='{0:G29}' }"
+                 HorizontalOptions="Start"></Label>
+         </StackLayout>
+        </Grid>
        </pancake:PancakeView>
       </Grid>
      </Grid>

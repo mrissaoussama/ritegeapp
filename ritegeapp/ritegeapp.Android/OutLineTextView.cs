@@ -38,7 +38,13 @@ namespace ritegeapp.Droid
                 var label = ((OutLineLabel)e.NewElement);
 
                 StrokeTextView strokeTextView = new StrokeTextView(context,label);
+                if(!string.IsNullOrEmpty(e.NewElement.Text))
                 strokeTextView.Text = e.NewElement.Text;
+
+                else
+                                    if (!string.IsNullOrEmpty(e.NewElement.FormattedText.ToString()))
+                    strokeTextView.Text = e.NewElement.FormattedText.ToString();
+
                 SetNativeControl(strokeTextView);
             }
         }
@@ -52,7 +58,12 @@ namespace ritegeapp.Droid
                 StrokeTextView strokeTextView = new StrokeTextView(context,label);
                 strokeTextView.TextSize = (float)label.FontSize;
                 strokeTextView.borderText.TextSize = (float)label.FontSize;
-                strokeTextView.Text = label.Text;
+                if (!string.IsNullOrEmpty(label.Text))
+                    strokeTextView.Text = label.Text;
+                else
+                                    if (!string.IsNullOrEmpty(label.FormattedText.ToString()))
+
+                    strokeTextView.Text = label.FormattedText.ToString();
                 SetNativeControl(strokeTextView);
             }
         }

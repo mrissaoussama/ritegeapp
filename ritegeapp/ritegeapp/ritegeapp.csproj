@@ -10,9 +10,20 @@
     <None Remove="images\LabelIcons\calendar.png" />
     <None Remove="images\LabelIcons\calendarcheckmar.png" />
     <None Remove="images\LabelIcons\calendarcheckmark.png" />
+    <None Remove="images\LabelIcons\carentry.png" />
+    <None Remove="images\LabelIcons\carexit.png" />
     <None Remove="images\LabelIcons\cashier.png" />
+    <None Remove="images\LabelIcons\cashregister.png" />
+    <None Remove="images\LabelIcons\cashregisterearning.png" />
     <None Remove="images\LabelIcons\contract.png" />
+    <None Remove="images\LabelIcons\moneybag.png" />
+    <None Remove="images\LabelIcons\parking.png" />
+    <None Remove="images\LabelIcons\parkingearnings.png" />
     <None Remove="images\LabelIcons\person.png" />
+    <None Remove="images\LabelIcons\police.png" />
+    <None Remove="images\LabelIcons\staff.png" />
+    <None Remove="images\LabelIcons\subscribercard.png" />
+    <None Remove="images\LabelIcons\ticket.png" />
     <None Remove="images\LabelIcons\timeend.png" />
     <None Remove="images\LabelIcons\timestart.png" />
     <None Remove="images\MenuIcons\cashier.png" />
@@ -23,7 +34,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ApplicationDefinition Include="images\LabelIcons\parking.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="images\LabelIcons\cashregisterearning.png" />
+    <EmbeddedResource Include="images\LabelIcons\staff.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="images\LabelIcons\carentry.png" />
+    <EmbeddedResource Include="images\LabelIcons\carexit.png" />
     <EmbeddedResource Include="images\LabelIcons\cashier.png" />
+    <EmbeddedResource Include="images\LabelIcons\cashregister.png" />
+    <EmbeddedResource Include="images\LabelIcons\moneybag.png" />
+    <EmbeddedResource Include="images\LabelIcons\parkingearnings.png" />
+    <EmbeddedResource Include="images\LabelIcons\parking.png" />
     <EmbeddedResource Include="images\LabelIcons\person.png" />
   </ItemGroup>
 
@@ -34,6 +60,9 @@
   <ItemGroup>
     <EmbeddedResource Include="images\LabelIcons\calendar.png" />
     <EmbeddedResource Include="images\LabelIcons\contract.png" />
+    <EmbeddedResource Include="images\LabelIcons\police.png" />
+    <EmbeddedResource Include="images\LabelIcons\subscribercard.png" />
+    <EmbeddedResource Include="images\LabelIcons\ticket.png" />
     <EmbeddedResource Include="images\LabelIcons\timeend.png" />
     <EmbeddedResource Include="images\LabelIcons\timestart.png" />
     <EmbeddedResource Include="images\MenuIcons\dashboard.png" />
@@ -48,21 +77,17 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-preview.4.22251.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.24">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.21" />
     <PackageReference Include="Plugin.LocalNotification" Version="9.2.1-preview04" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.0" />
     <PackageReference Include="Syncfusion.Xamarin.Expander" Version="20.1.0.58" />
     <PackageReference Include="System.Net.Http.Json" Version="7.0.0-preview.4.22229.4" />
     <PackageReference Include="TinyIoC" Version="1.4.0-rc1">
@@ -105,9 +130,9 @@
     <Compile Update="Views\EventView\EventView.xaml.cs">
       <DependentUpon>EventView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\CaissierListView.xaml.cs">
+    <Compile Update="Views\CashRegisterListView.xaml.cs">
       <SubType>Code</SubType>
-      <DependentUpon>CaissierListView.xaml</DependentUpon>
+      <DependentUpon>CashRegisterListView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\ParkingListView.xaml.cs">
       <DependentUpon>ParkingListView.xaml</DependentUpon>
@@ -142,7 +167,7 @@
     <EmbeddedResource Update="Utils\CollapsibleControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\CaissierListView.xaml">
+    <EmbeddedResource Update="Views\CashRegisterListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

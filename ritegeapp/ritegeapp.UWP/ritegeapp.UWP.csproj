@@ -156,16 +156,10 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client">
       <Version>7.0.0-preview.4.22251.1</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.Data.Sqlite">
-      <Version>3.1.24</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <Version>3.1.24</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite">
-      <Version>3.1.21</Version>
     </PackageReference>
     <PackageReference Include="Plugin.LocalNotification">
       <Version>9.2.1-preview04</Version>

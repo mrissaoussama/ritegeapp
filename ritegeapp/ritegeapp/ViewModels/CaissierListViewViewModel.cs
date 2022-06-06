@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Rg.Plugins.Popup.Services;
+using ritegeapp.Services;
 using RitegeDomain.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -9,16 +10,16 @@ using Xamarin.Forms;
 
 namespace ritegeapp.ViewModels
 {
-    public partial class CaissierListViewViewModel : ObservableObject
+    public partial class CashRegisterListViewViewModel : ObservableObject
     {
-        public CaissierListViewViewModel(ObservableObject viewmodel)
+        public CashRegisterListViewViewModel(ObservableObject viewmodel)
         {
-            caisserList = new();
+            CashRegisterList = new();
             parentvm = viewmodel;
         }
         public ObservableObject parentvm;
         [ObservableProperty]
-        private ObservableCollection<CaissierData> caisserList=new();
+        private ObservableCollection<CashRegisterData> cashRegisterList=new();
         [ObservableProperty]
         private bool isLoading = true;
         [ObservableProperty]
@@ -29,22 +30,22 @@ namespace ritegeapp.ViewModels
             await PopupNavigation.Instance.PopAllAsync();
         }
         [ICommand]
-        private async void ParkingClicked(object parameter)
+        private async void CashRegisterClicked(object parameter)
         {
-            Debug.WriteLine(((CaissierData)parameter).CaissierName);
+            Debug.WriteLine(((CashRegisterData)parameter).CashRegisterName);
             {
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "CaissierClicked", ((ParkingData)parameter).ParkingName);
+                MessagingCenter.Send(Xamarin.Forms.Application.Current, "CashRegisterClicked", ((CashRegisterData)parameter).CashRegisterName);
             }
             await PopupNavigation.Instance.PopAllAsync();
         }
         public async void LoadList()
         {
             IsLoading = true; showData = false;
-            var list = (await (Application.Current as App).dataService.GetParkingList());
+            var list = (await DependencyService.Get<IDataService>().GetCashRegisterList(((TableauDeBordViewModel)parentvm).Parking));
             if(list is not null && list.Count>0)
-            foreach (var caissier in list)
+            foreach (var CashRegister in list)
             {
-                await Device.InvokeOnMainThreadAsync(() => caisserList.Add(new CaissierData(caissier)));
+                await Device.InvokeOnMainThreadAsync(() => CashRegisterList.Add(new CashRegisterData(CashRegister)));
             }
             IsLoading = false; showData = true;
         }

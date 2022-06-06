@@ -1,7 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Plugin.LocalNotification;
 using RitegeDomain.Database.Queries.Parking.UtilisateurQueries;
@@ -46,9 +45,9 @@ namespace ritegeapp.Services
                                     (sender, certificate, chain, sslPolicyErrors) => { return true; };
                             return message;
                         };
-                        options.AccessTokenProvider = async () =>
+                        options.AccessTokenProvider = () =>
                         {
-                            return (Application.Current as App).Token;
+                            return Task.FromResult((Application.Current as App).Token);
                         };
                     }).WithAutomaticReconnect()
                     .Build();
@@ -58,8 +57,9 @@ namespace ritegeapp.Services
                     MessagingCenter.Send(Xamarin.Forms.Application.Current, "Reconnecting");
                     return Task.CompletedTask;
                 };
+                await Task.Run(async () => { await Connect(); });
+
                 ListenForAlerts();
-                await Connect();
                 StartAlertService();
             }
         }
