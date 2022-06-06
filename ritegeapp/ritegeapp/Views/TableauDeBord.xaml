@@ -58,15 +58,14 @@
           <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer> 
          </Label.GestureRecognizers> 
         </Label>
-         <util:OutLineLabel skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+         <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
                 Style="{StaticResource LabelHeader}"
-                StrokeColor="White"
-                StrokeThickness="1"
+             
                 Text="{Binding Parking,Converter={StaticResource NullToDash}}">
          <Label.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
          </Label.GestureRecognizers>
-        </util:OutLineLabel>
+        </Label>
        </StackLayout>
         <pancake:PancakeView.GestureRecognizers>
          <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>

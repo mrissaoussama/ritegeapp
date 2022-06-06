@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Rg.Plugins.Popup.Services;
+using ritegeapp.Services;
 using RitegeDomain.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -11,8 +12,12 @@ namespace ritegeapp.ViewModels
 {
     public partial class ParkingListViewViewModel : ObservableObject
     {
+        IDataService dataService;
+
         public ParkingListViewViewModel(ObservableObject viewmodel)
         {
+            dataService = DependencyService.Get<IDataService>();
+
             parkingList = new();
             parentvm = viewmodel;
         }
@@ -40,7 +45,7 @@ namespace ritegeapp.ViewModels
         public async void LoadList()
         {
             IsLoading = true; showData = false;
-            var list = (await (Application.Current as App).dataService.GetParkingList());
+            var list = (await dataService.GetParkingList());
             if(list is not null && list.Count>0)
             foreach (var parking in list)
             {

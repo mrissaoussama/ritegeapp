@@ -34,10 +34,10 @@ namespace ritegeapp.Droid
             Creating += onCreating;
             Creating(this, EventArgs.Empty);
 
-            NotificationCenter.CreateNotificationChannel();
+            LocalNotificationCenter.CreateNotificationChannel();
             LoadApplication(new App());
-           
-            NotificationCenter.NotifyNotificationTapped(Intent);
+
+            LocalNotificationCenter.NotifyNotificationTapped(Intent);
         }
         private async void onCreating(object sender, EventArgs args)
         {
@@ -59,7 +59,7 @@ namespace ritegeapp.Droid
       
         protected override void OnNewIntent(Intent intent)
         {
-            NotificationCenter.NotifyNotificationTapped(intent);
+            LocalNotificationCenter.NotifyNotificationTapped(intent);
             base.OnNewIntent(intent);
         }
 

@@ -51,20 +51,24 @@
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-preview.3.22178.4" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-preview.4.22251.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.24">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.21" />
-    <PackageReference Include="Plugin.LocalNotification" Version="9.2.1-preview02" />
+    <PackageReference Include="Plugin.LocalNotification" Version="9.2.1-preview04" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.0-pre20220427180151" />
-    <PackageReference Include="Syncfusion.Xamarin.Expander" Version="20.1.0.55" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.0" />
+    <PackageReference Include="Syncfusion.Xamarin.Expander" Version="20.1.0.58" />
     <PackageReference Include="System.Net.Http.Json" Version="7.0.0-preview.4.22229.4" />
+    <PackageReference Include="TinyIoC" Version="1.4.0-rc1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Xam.Plugins.Forms.ProgressRing" Version="0.1.2" />
     <PackageReference Include="Xamarin.Bin.CircularProgressbar" Version="1.0.1" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.2" />

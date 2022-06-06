@@ -41,14 +41,24 @@ namespace ritegeapp.ViewModels
         private bool listIsRefreshing = false;
         private XmlErrorCodeStringRetriever codeRetriever=new XmlErrorCodeStringRetriever();
         #endregion
+        ISignalRService signalRService;
+        IDataService dataService;
         public AlertViewerViewModel()
         {
-        (Application.Current as App).dataService.hubConnection.On<ParkingEvent[]>("DangerousAlertReceived", async (data) =>
+            signalRService = DependencyService.Get<ISignalRService>();
+            dataService=DependencyService.Get<IDataService>();
+            ListenForAlerts();
+        }
+
+        public void ListenForAlerts()
+        {
+            signalRService.HubConnection.On<ParkingEvent[]>("DangerousAlertReceived", async (data) =>
             {
-                await AlertDataReceivedAsync(data.ToList());
+                await OnAlertDataReceivedAsync(data.ToList());
             });
         }
-        private async Task AlertDataReceivedAsync(List<ParkingEvent> data)
+
+        private async Task OnAlertDataReceivedAsync(List<ParkingEvent> data)
         {
             if (data == null || data.Count == 0)
             {
@@ -124,7 +134,7 @@ namespace ritegeapp.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 ShowLoading();
-                await AlertDataReceivedAsync(await (Application.Current as App).dataService.GetAlertData(dateStart));
+                await OnAlertDataReceivedAsync(await dataService.GetAlertData(dateStart));
             }
             else
             if (ListDto.Count == 0)

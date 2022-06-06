@@ -32,8 +32,16 @@ namespace ritegeapp.ViewModels
         public List<ParkingEvent> eventList = new();
         #endregion
 
+        IDataService dataService;
 
         public TableauDeBordViewModel()
+        {
+            dataService = DependencyService.Get<IDataService>();
+
+            SubscribeToEvents();
+            InitData();
+        }
+        public void SubscribeToEvents()
         {
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Internet Reestablished", async (sender) =>
             {
@@ -45,35 +53,34 @@ namespace ritegeapp.ViewModels
                 SetDataToNull();
             });
             MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(Xamarin.Forms.Application.Current, "ParkingClicked", async (sender, arg) =>
-              {
-                  await Device.InvokeOnMainThreadAsync(() => ParkingChanged((string)arg));
-              });
+            {
+                await Device.InvokeOnMainThreadAsync(() => ParkingChanged((string)arg));
+            });
             MessagingCenter.Subscribe<Xamarin.Forms.Application, DashBoardDTO>(Xamarin.Forms.Application.Current, "GetDashboardData", async (sender, arg) =>
             {
-                await DataReceivedAsync(arg);
+                await OnDataReceivedAsync(arg);
             });
-            InitData();
         }
         private void SetDataToNull()
         {
             EtatCaisse = null;
             FluxBorne = null;
             FluxCaisse = null;
-            this.RecetteCaisse = null;
-            this.RecetteCaissier = null;
-            this.RecetteParking = null;
-            this.NomPrenomCaissier = null;
-            this.Parking = null;
-            this.Caisse = null;
-            this.EtatCaisse = null;
-            this.NbAdministrateur = null;
-            this.NbAutorite = null;
-            this.NbEgress = null;
-            this.NbTickets = null;
-            this.NbAbonne = null;
+            RecetteCaisse = null;
+            RecetteCaissier = null;
+            RecetteParking = null;
+            NomPrenomCaissier = null;
+            Parking = null;
+            Caisse = null;
+            EtatCaisse = null;
+            NbAdministrateur = null;
+            NbAutorite = null;
+            NbEgress = null;
+            NbTickets = null;
+            NbAbonne = null;
             PlaceMax = null;
-            this.PlaceDisponible = null;
-            this.PlaceOccupe = null;
+            PlaceDisponible = null;
+            PlaceOccupe = null;
             FluxBorneTotal = null;
             FluxCaisseTotal = null;
         }
@@ -82,25 +89,25 @@ namespace ritegeapp.ViewModels
             EtatCaisse = true;
             FluxBorne = Flux.Entree;
             FluxCaisse = Flux.Entree;
-            this.RecetteCaisse = 99999;
-            this.RecetteCaissier = 99999;
-            this.RecetteParking = 99999;
-            this.NomPrenomCaissier = "-------";
-            this.Parking = "-------";
-            this.Caisse = "-------";
-            this.EtatCaisse = true;
-            this.NbAdministrateur = 99999;
-            this.NbAutorite = 99999;
-            this.NbEgress = 99999;
-            this.NbTickets = 99999;
-            this.NbAbonne = 99999;
+            RecetteCaisse = 99999;
+            RecetteCaissier = 99999;
+            RecetteParking = 99999;
+            NomPrenomCaissier = "-------";
+            Parking = "-------";
+            Caisse = "-------";
+            EtatCaisse = true;
+            NbAdministrateur = 99999;
+            NbAutorite = 99999;
+            NbEgress = 99999;
+            NbTickets = 99999;
+            NbAbonne = 99999;
             PlaceMax = null;
             this.PlaceDisponible = null;
             this.PlaceOccupe = null;
             FluxBorneTotal = 99999;
             FluxCaisseTotal = 99999;
         }
-        private async Task DataReceivedAsync(DashBoardDTO data)
+        private async Task OnDataReceivedAsync(DashBoardDTO data)
         {
             if (data == null)
             {
@@ -157,8 +164,8 @@ namespace ritegeapp.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 ShowLoading();
-                var data = await (Application.Current as App).dataService.GetDashboardData(1);
-                await DataReceivedAsync(data);
+                var data = await dataService.GetDashboardData(1);
+                await OnDataReceivedAsync(data);
                 if (data is null)
                 {
 
@@ -196,7 +203,7 @@ namespace ritegeapp.ViewModels
         }
         public async Task GetEventList()
         {
-            var list = (await (Application.Current as App).dataService.GetLast10Events());
+            var list = (await dataService.GetLast10Events());
             if (list !=null && (list.Count > 0))
             {
                 eventList = list;

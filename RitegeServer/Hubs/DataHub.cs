@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace RitegeServer.Hubs
 {
-    public static class UserAndGroupHandler
+    public static class UserAndParkingHandler
     {
         public static Dictionary<string, List<string>> ConnectedIds = new Dictionary<string, List<string>>();
     }
@@ -54,7 +54,7 @@ namespace RitegeServer.Hubs
         public override System.Threading.Tasks.Task OnDisconnectedAsync(Exception?stopCalled)
         {
             var groupid = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdUtilisateur").Value;
-            UserAndGroupHandler.ConnectedIds[groupid].Remove(Context.ConnectionId);
+            UserAndParkingHandler.ConnectedIds[groupid].Remove(Context.ConnectionId);
                 if (stopCalled is not null)
             Console.WriteLine(String.Format("Client {0} disconnected. exception {1}", Context.ConnectionId,stopCalled.Message));
 
@@ -66,13 +66,13 @@ namespace RitegeServer.Hubs
             Debug.WriteLine("new user");
             var groupid= ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdUtilisateur").Value;
             Groups.AddToGroupAsync(Context.ConnectionId, groupid);
-            if (UserAndGroupHandler.ConnectedIds.Keys.Contains(groupid))
+            if (UserAndParkingHandler.ConnectedIds.Keys.Contains(groupid))
             { 
-                UserAndGroupHandler.ConnectedIds[groupid].Add(Context.ConnectionId);
+                UserAndParkingHandler.ConnectedIds[groupid].Add(Context.ConnectionId);
             }
             else
             {
-                UserAndGroupHandler.ConnectedIds.Add(groupid, new List<string> { Context.ConnectionId });
+                UserAndParkingHandler.ConnectedIds.Add(groupid, new List<string> { Context.ConnectionId });
             }
             return base.OnConnectedAsync();
         }

@@ -20,41 +20,26 @@ using MvvmHelpers;
 
 namespace ritegeapp.ViewModels
 {
-    public partial class GestionAbonnementViewModel : ObservableObject
+    [INotifyPropertyChanged]
+    public partial class GestionAbonnementViewModel : IGestionAbonnementViewModel
     {
         #region variables   
         public List<InfoAbonnementDTO> ListDto = new();
-
-        
         [ObservableProperty]
         public ObservableRangeCollection<GroupAbonnement> listAbonnementToShow = new();
-
         [ObservableProperty]
         public ObservableRangeCollection<DateAbonnement> listDateAbonnementToShow = new();
         [ObservableProperty]
         private string searchTextBox = "";
-        [ObservableProperty]
-        private string libelleAbonnement;
-        [ObservableProperty]
-        private string nomPrenomAbonne;
-        [ObservableProperty]
-        private Decimal prixAbonnement;
-        [ObservableProperty]
-        private TypeAbonnementEnum typeAbonnement;
 
         [ObservableProperty]
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
         private DateTime dateEnd = DateTime.Today.AddMonths(3);
-
         [ObservableProperty]
         private bool showNoFilterResultLabel = false;
-
         [ObservableProperty]
         private bool resetFilterButton = false;
-        [ObservableProperty]
-        private bool expandersAreExpanded;
-
         [ObservableProperty]
         private bool showLoadingIndicator;
         [ObservableProperty]
@@ -76,15 +61,14 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private decimal totalMoney;
         #endregion
-  
+        IDataService dataService;
         public GestionAbonnementViewModel()
         {
+            dataService = DependencyService.Get<IDataService>();
             AbonnementSortMode = true;
             DateAbonnementSortMode = false;
-           
-
         }
-        private async Task FilteredDataReceivedAsync(List<InfoAbonnementDTO> data)
+        public async Task OnDataReceivedAsync(List<InfoAbonnementDTO> data)
         {
             if (data == null || data.Count == 0)
             {
@@ -95,11 +79,11 @@ namespace ritegeapp.ViewModels
                 ListDto = (data);
                 ListAbonnementToShow.Clear();
                 ListDateAbonnementToShow.Clear();
-                UpdateCollections(await GroupByAbonnement(), await GroupByDateAbonnement());
+                UpdateLists(await GroupByAbonnement(), await GroupByDateAbonnement());
             }
         }
 
-        private void UpdateCollections(List<GroupAbonnement> groupAbonnements, List<DateAbonnement> dateAbonnements)
+        public void UpdateLists(List<GroupAbonnement> groupAbonnements, List<DateAbonnement> dateAbonnements)
         {
             ListAbonnementToShow.AddRange(groupAbonnements);
             ListDateAbonnementToShow.AddRange(dateAbonnements);
@@ -107,7 +91,7 @@ namespace ritegeapp.ViewModels
             ShowDataView();
         }
 
-        private async Task<List<GroupAbonnement>> GroupByAbonnement()
+        public async Task<List<GroupAbonnement>> GroupByAbonnement()
         {
             var result = ListDto;
             var Dto = new List<GroupAbonnement>(listAbonnementToShow);
@@ -127,12 +111,12 @@ namespace ritegeapp.ViewModels
             return Dto;
         }
 
-        private void CalculateListTotal(List<GroupAbonnement> dto)
+        public void CalculateListTotal(List<GroupAbonnement> dto)
         {
             TotalMoney = dto.Sum(x => x.AbonnementTotal);
         }
 
-        private async Task<List<DateAbonnement>> GroupByDateAbonnement()
+        public async Task<List<DateAbonnement>> GroupByDateAbonnement()
         {
             var result = ListDto; 
             var Dto = new List<DateAbonnement>();
@@ -157,7 +141,8 @@ namespace ritegeapp.ViewModels
             ShowTotal = false;
             ShowLoadingIndicator = true;
             ShowNoFilterResultLabel = false;
-            ShowData = false; ShowNoDataReceived = false;
+            ShowData = false; 
+            ShowNoDataReceived = false;
         }
         public void ShowNoFilterMessage()
         {
@@ -165,7 +150,8 @@ namespace ritegeapp.ViewModels
             ShowTotal = false;
             ShowLoadingIndicator = false;
             ShowNoFilterResultLabel = true;
-            ShowData = false; ShowNoDataReceived = false;
+            ShowData = false; 
+            ShowNoDataReceived = false;
         }
         public void ShowDataView()
         {
@@ -177,13 +163,14 @@ namespace ritegeapp.ViewModels
             ShowData = true; 
             ShowNoDataReceived = false;
         }
-        public void ShowNoInternetView()
+        public void ShowNoInternetMessage()
         {
             ShowNoInternetLabel = true;
             ShowTotal = false;
             ShowLoadingIndicator = false;
             ShowNoFilterResultLabel = false;
-            ShowData = false; ShowNoDataReceived = false;
+            ShowData = false; 
+            ShowNoDataReceived = false;
         }
         public void ShowNoDataReceivedMessage()
         {
@@ -191,44 +178,44 @@ namespace ritegeapp.ViewModels
             ShowNoInternetLabel = false;
             ShowLoadingIndicator = false;
             ShowNoFilterResultLabel = false;
-            ShowData = false; ShowNoDataReceived = true;
+            ShowData = false; 
+            ShowNoDataReceived = true;
         }
 
         [ICommand]
-        private async void SearchText(object obj)
+        public async void SearchText(object obj)
         {
             await GetData();
         }
         [ICommand]
         public async Task GetData()
         {
-            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            if ((Application.Current as App).IsOnline)
             {
                 ShowLoading();
-                var list = await (Application.Current as App).dataService.GetAbonnementData(DateStart, DateEnd, SearchTextBox);
-                await FilteredDataReceivedAsync(list);
+                var list = await dataService.GetAbonnementData(DateStart, DateEnd, SearchTextBox);
+                await OnDataReceivedAsync(list);
             }
             else
             if (ListDto.Count == 0)
-                ShowNoInternetView();
+                ShowNoInternetMessage();
         }
         [ICommand]
-        private void SortBy(object obj)
+        public void ChangeGroupByView(object obj)
         {
             AbonnementSortMode = !AbonnementSortMode;
             DateAbonnementSortMode = !DateAbonnementSortMode;
         }
         [ICommand]
-        private async void ClearFilter(object obj)
+        public async void ClearFilter(object obj)
         {
             DateStart = DateTime.Today;
             DateEnd = DateTime.Today.AddMonths(1);
             SearchTextBox = "";
-            ShowNoFilterResultLabel = false;
             await GetData();
         }
         [ICommand]
-        private async void OpenStatisticsWindow(object obj)
+        public async void OpenStatisticsPopup(object obj)
         {
             await PopupNavigation.Instance.PushAsync(new GestionAbonnementStatisticsPopup(this));
         }

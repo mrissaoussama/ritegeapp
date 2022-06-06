@@ -61,16 +61,16 @@ namespace ritegeapp.ViewModels
         private bool canTapFilterImages = false;
         [ObservableProperty]
         private decimal totalMoney;
-        #endregion
+        #endregion      
+        IDataService dataService;
+
         public GestionDesSessionsCaissiersViewModel()
         {
+            dataService = DependencyService.Get<IDataService>();
+
             CaissierSortMode = true;
             DateCaissierSortMode = false;
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Connected", async (sender) =>
-            {
-                await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connecté")
-            );
-            });
+           
         }
         private async Task FilteredDataReceivedAsync(List<InfoSessionsDTO> data)
         {
@@ -188,7 +188,7 @@ namespace ritegeapp.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 ShowLoading();
-                await FilteredDataReceivedAsync(await (Application.Current as App).dataService.GetCashierData(dateStart, dateEnd, SearchTextBox));
+                await FilteredDataReceivedAsync(await dataService.GetCashierData(dateStart, dateEnd, SearchTextBox));
             }
             else
             if (ListDto.Count == 0)
