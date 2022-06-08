@@ -3,6 +3,8 @@ using System.Data;
 using RitegeServer;
 namespace RitegeDomain.Database.Repositories
 {
+    using RitegeDomain.Database.Entities.ParkingEntities;
+
     public class EvenementRepository : GenericRepository<Evenement>, IEvenementRepository
     {
         private string connectionString;

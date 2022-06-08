@@ -1,8 +1,10 @@
 ﻿namespace RitegeDomain.QueryHandlers.UtilisateurQueryHandlers;
 
 using AutoMapper;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 using MediatR;
-using RitegeDomain.Database.Queries.Parking.UtilisateurQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.UtilisateurQueries;
 public class GetOneByIdQueryHandler : IRequestHandler<GetOneByIdQuery, Utilisateur>
 {
     private readonly IUtilisateurRepository _repository;

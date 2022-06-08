@@ -36,7 +36,7 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
-        private DateTime dateEnd = DateTime.Today;
+        private DateTime dateEnd = DateTime.Today.AddDays(1).AddTicks(-1);
         [ObservableProperty]
         private bool showNoFilterResultLabel = false;
         [ObservableProperty]
@@ -172,7 +172,7 @@ namespace ritegeapp.ViewModels
         private async void ClearFilter(object obj)
         {
             dateStart = DateTime.Today;
-            dateEnd = DateTime.Today;
+            dateEnd = DateTime.Today.AddDays(1).AddTicks(-1);
             SearchTextBox = "";
             ShowNoFilterResultLabel = false;
             await GetData();

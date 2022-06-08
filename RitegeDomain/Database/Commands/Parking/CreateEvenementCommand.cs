@@ -1,4 +1,5 @@
-namespace RitegeDomain.Database.Commands.Parking.EvenementCommands;
+namespace RitegeDomain.Database.Commands.Parking.EvenementCommands; using RitegeDomain.Database.Entities.ParkingEntities;
+
 public class CreateEvenementCommand : IRequest<int>
 {
     public int ClientId { get; set; }

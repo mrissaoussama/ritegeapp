@@ -3,8 +3,10 @@
 using AutoMapper;
 using MediatR;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.InfoAbonnementDTOQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.InfoAbonnementDTOQueries;
 using RitegeDomain.DTO;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 
 public class InfoAbonnementDTOQueryHandler : IRequestHandler<InfoAbonnementDTOQuery, IEnumerable<InfoAbonnementDTO>>
 {

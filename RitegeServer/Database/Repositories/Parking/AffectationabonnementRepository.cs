@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 
 namespace RitegeDomain.Database.Repositories
 {

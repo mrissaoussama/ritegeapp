@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.AbonneQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.AbonneQueries;
 using RitegeDomain.DTO;
 using RitegeDomain.QueryHandlers.AbonneQueryHandlers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 
 namespace RitegeServer.ServerControllers
 {

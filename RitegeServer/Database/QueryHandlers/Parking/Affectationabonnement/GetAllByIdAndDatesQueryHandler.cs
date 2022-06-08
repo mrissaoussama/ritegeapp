@@ -3,7 +3,8 @@
 using AutoMapper;
 using MediatR;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.AffectationabonnementQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.AffectationabonnementQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
 
 public class GetAllByIdAndDatesQueryHandler : IRequestHandler<GetAllByIdAndDatesQuery, IEnumerable<Affectationabonnement>>
 {

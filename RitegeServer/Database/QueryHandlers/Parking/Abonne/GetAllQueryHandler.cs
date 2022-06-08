@@ -2,8 +2,10 @@
 
 using AutoMapper;
 using MediatR;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.AbonneQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.AbonneQueries;
 
 public class GetAllQueryHandler : IRequestHandler<GetAllQuery, IEnumerable<Abonne>>
 {

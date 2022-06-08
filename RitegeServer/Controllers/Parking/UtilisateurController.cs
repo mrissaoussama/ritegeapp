@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RitegeDomain.Model;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.UtilisateurQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
+using RitegeDomain.Database.Queries.ParkingDBQueries.UtilisateurQueries;
 
 namespace RitegeServer.ServerControllers
 {

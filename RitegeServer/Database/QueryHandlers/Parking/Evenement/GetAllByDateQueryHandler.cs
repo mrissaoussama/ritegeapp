@@ -2,7 +2,8 @@
 
 using AutoMapper;
 using MediatR;
-using RitegeDomain.Database.Queries.Parking.EvenementQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.EvenementQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
 
 public class GetAllByDateQueryHandler : IRequestHandler<GetAllByDateQuery, IEnumerable<Evenement>>
 {

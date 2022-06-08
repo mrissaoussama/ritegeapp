@@ -27,7 +27,7 @@ namespace ritegeapp.Droid.Services
         public const int ServiceRunningNotifID = 1;
         public override Android.App.StartCommandResult OnStartCommand(Android.Content.Intent intent, Android.App.StartCommandFlags flags, int startId)
         {
-            Android.App.Notification notif = DependencyService.Get<INotification>().ReturnNotif();
+            Android.App.Notification notif =(Notification) DependencyService.Get<INotification>().ReturnNotif();
             StartForeground(ServiceRunningNotifID, notif);
             hubConnection =DependencyService.Get<ISignalRService>().GetHub();
             return Android.App.StartCommandResult.Sticky;

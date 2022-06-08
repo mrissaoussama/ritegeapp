@@ -59,7 +59,7 @@
                   WidthRequest="20"
                   xct:IconTintColorEffect.TintColor="{StaticResource Primary}">
             <Image.GestureRecognizers>
-             <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
+             <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}" ></TapGestureRecognizer>
             </Image.GestureRecognizers>
            </Image>
           <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
@@ -126,7 +126,7 @@ Scale="0.75"
                 HorizontalOptions="Start">
           <Label.FormattedText>
            <FormattedString>
-            <Span Text="{Binding RecetteCaisse,StringFormat='{0:G29}' }"></Span>
+             <Span Text="{Binding RecetteCaisse,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"></Span>
             <Span Text=" DT"></Span>
            </FormattedString>
           </Label.FormattedText>
@@ -140,7 +140,7 @@ Scale="0.75"
                 VerticalOptions="Center">
           <Label.FormattedText>
            <FormattedString>
-            <Span Text="{Binding RecetteParking,StringFormat='{0:G29}' }"></Span>
+             <Span Text="{Binding RecetteParking,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"></Span>
             <Span Text=" DT"></Span>
            </FormattedString>
           </Label.FormattedText>
@@ -154,7 +154,7 @@ Scale="0.75"
                 FontSize="Medium"
                 Grid.Row="1"
                 VerticalOptions="Center"
-                Text="{Binding NomPrenomCaissier}"
+                 Text="{Binding NomPrenomCaissier,Converter={StaticResource NullToDash}}"
                 HorizontalOptions="Start"></Label>
          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.cashregisterearning.png}"
                 Scale="0.75"
@@ -168,7 +168,7 @@ Scale="0.75"
                 VerticalOptions="Center">
           <Label.FormattedText>
            <FormattedString>
-            <Span Text="{Binding RecetteCaissier,StringFormat='{0:G29}' }"></Span>
+             <Span Text="{Binding RecetteCaissier,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"></Span>
             <Span Text=" DT"></Span>
            </FormattedString>
           </Label.FormattedText>
@@ -245,7 +245,7 @@ Scale="0.75"
                 HorizontalOptions="Start">
           <Label.FormattedText>
            <FormattedString>
-            <Span Text="{Binding FluxCaisseTotal,StringFormat='{0:G29}' }"></Span>
+            <Span Text="{Binding FluxCaisseTotal,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"></Span>
            </FormattedString>
           </Label.FormattedText>
          </Label>
@@ -259,7 +259,7 @@ Scale="0.75"
                 FontSize="Medium"
                 Grid.Row="1"
                 VerticalOptions="Center"
-                Text="{Binding FluxBorneTotal}"
+                Text="{Binding FluxBorneTotal,Converter={StaticResource NullToDash}}"
                 HorizontalOptions="Start"></Label>
         
         </Grid>
@@ -283,26 +283,27 @@ Scale="0.75"
          </Grid.ColumnDefinitions>
          <StackLayout Orientation="Horizontal">
          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.ticket.png}"
-                Scale="0.75"
-                xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                 Scale="0.5"
+                 Margin="5,0,0,0"
+                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
          <Label Style="{DynamicResource fontGilroyMedium12}"
                 
                 VerticalOptions="Center"
                 FontSize="Medium"
-                Text="{Binding NbTickets,StringFormat='{0:G29}' }"
+                 Text="{Binding NbTickets,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"
                 HorizontalOptions="Start">
           
          </Label>
          </StackLayout>
-         <StackLayout Orientation="Horizontal" Grid.Row="1">
+         <StackLayout Orientation="Horizontal" Grid.Row="1" Margin="30,0,0,0">
           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.staff.png}"
                  Scale="0.75"
                  xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
           <Label Style="{DynamicResource fontGilroyMedium12}"
-                 VerticalOptions="Center"
+                 VerticalOptions="Center" 
                  FontSize="Medium"
-                 Text="{Binding NbAdministrateur,StringFormat='{0:G29}' }"
-                 HorizontalOptions="Start"></Label>
+                 Text="{Binding NbAdministrateur,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"
+                 ></Label>
          </StackLayout>
          <StackLayout Orientation="Horizontal"
                       Grid.Column="1">
@@ -312,7 +313,7 @@ Scale="0.75"
           <Label Style="{DynamicResource fontGilroyMedium12}"
                  VerticalOptions="Center"
                  FontSize="Medium"
-                 Text="{Binding NbAutorite,StringFormat='{0:G29}' }"
+                 Text="{Binding NbAutorite,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"
                  HorizontalOptions="Start"></Label>
          </StackLayout>
          <StackLayout Orientation="Horizontal"
@@ -324,7 +325,7 @@ Scale="0.75"
           <Label Style="{DynamicResource fontGilroyMedium12}"
                  VerticalOptions="Center"
                  FontSize="Medium"
-                 Text="{Binding NbAutorite,StringFormat='{0:G29}' }"
+                 Text="{Binding NbAbonne,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"
                  HorizontalOptions="Start"></Label>
          </StackLayout>
         </Grid>

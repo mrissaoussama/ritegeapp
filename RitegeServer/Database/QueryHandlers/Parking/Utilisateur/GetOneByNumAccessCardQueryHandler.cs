@@ -2,8 +2,10 @@
 
 using AutoMapper;
 using MediatR;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.UtilisateurQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.UtilisateurQueries;
 
 public class GetOneByNumAccessCardQueryHandler : IRequestHandler<GetOneByNumAccessCardQuery, Utilisateur>
 {

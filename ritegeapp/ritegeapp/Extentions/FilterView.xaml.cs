@@ -46,7 +46,7 @@ namespace ritegeapp.Extentions
         }
 
         public static readonly BindableProperty DateEndProperty = BindableProperty.Create
-           ("DateEnd", typeof(DateTime), typeof(FilterView), DateTime.Now, BindingMode.TwoWay, propertyChanged: DateEndPropertyChanged);
+           ("DateEnd", typeof(DateTime), typeof(FilterView), DateTime.Today.AddDays(1).AddTicks(-1), BindingMode.TwoWay, propertyChanged: DateEndPropertyChanged);
 
 
         public string SearchSubjectText

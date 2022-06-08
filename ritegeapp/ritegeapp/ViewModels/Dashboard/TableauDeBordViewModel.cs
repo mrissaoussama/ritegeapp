@@ -24,7 +24,7 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private string parking,nomPrenomCaissier,caissier,caisse;
         [ObservableProperty]
-        private bool? etatCaisse,isLoading,eventListLoading,isRefreshing,showData;
+        private bool etatCaisse,isLoading,eventListLoading,isRefreshing,showData,canClickParkingOrCashRegister;
         [ObservableProperty]
         private int? placeDisponible,placeMax,placeOccupe,nbTickets,nbAdministrateur,nbAutorite,nbEgress,nbAbonne,nbEvents;
         [ObservableProperty]
@@ -67,7 +67,7 @@ namespace ritegeapp.ViewModels
         }
         private void SetDataToNull()
         {
-            EtatCaisse = null;
+            EtatCaisse = false;
             FluxBorne = null;
             FluxCaisse = null;
             RecetteCaisse = null;
@@ -76,7 +76,6 @@ namespace ritegeapp.ViewModels
             NomPrenomCaissier = null;
             Parking = null;
             Caisse = null;
-            EtatCaisse = null;
             NbAdministrateur = null;
             NbAutorite = null;
             NbEgress = null;
@@ -87,6 +86,8 @@ namespace ritegeapp.ViewModels
             PlaceOccupe = null;
             FluxBorneTotal = null;
             FluxCaisseTotal = null;
+
+            CanClickParkingOrCashRegister = false;
         }
         private void InitData()
         {
@@ -110,6 +111,8 @@ namespace ritegeapp.ViewModels
             this.PlaceOccupe = null;
             FluxBorneTotal = 99999;
             FluxCaisseTotal = 99999;
+            CanClickParkingOrCashRegister = false;
+
         }
         private async Task OnDataReceivedAsync(DashBoardDTO data)
         {
@@ -149,13 +152,18 @@ namespace ritegeapp.ViewModels
             this.PlaceDisponible = data.PlaceDisponible;
             this.PlaceOccupe = PlaceMax - data.PlaceDisponible; 
             ShowDataView();
+
         }
         public void ShowLoading()
         {
+            CanClickParkingOrCashRegister = false;
+
             IsLoading = true; IsRefreshing = true; ShowData = false;
         }
         public void ShowDataView()
         {
+            CanClickParkingOrCashRegister = true;
+
             IsLoading = false; IsRefreshing = false; ShowData = true;
         }
         public void ShowNoDataReceivedMessage()
@@ -185,14 +193,17 @@ namespace ritegeapp.ViewModels
             ShowDataView();
         }
         [ICommand]
+
         private async void OpenParkingListView(object obj)
         {
+            if(CanClickParkingOrCashRegister)
             await PopupNavigation.Instance.PushAsync(new ParkingListView(this));
         }
         [ICommand]
         private async void OpenCashRegisterListView(object obj)
         {
-            await PopupNavigation.Instance.PushAsync(new CashRegisterListView(this));
+            if (CanClickParkingOrCashRegister)
+                await PopupNavigation.Instance.PushAsync(new CashRegisterListView(this));
         }
         [ICommand]
         private async void OpenEventListView(object obj)

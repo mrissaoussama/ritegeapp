@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ritegeapp.Services
+namespace ritegeapp.Droid
 {
     public interface INotification
     {

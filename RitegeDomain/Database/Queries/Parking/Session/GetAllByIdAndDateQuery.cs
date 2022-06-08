@@ -2,9 +2,11 @@ global using RitegeDomain.Database;
 global using RitegeDomain.Database.Entities.Parking;
 global using RitegeDomain.Database.IRepositories;
 global using RitegeDomain.Model;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 using AutoMapper;
 using MediatR;
-namespace RitegeDomain.Database.Queries.Parking.SessionQueries;
+namespace RitegeDomain.Database.Queries.ParkingDBQueries.SessionQueries;
 
 public class GetAllByIdAndDateQuery : IRequest<IEnumerable<Session>>
 {

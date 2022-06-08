@@ -4,6 +4,8 @@ using RitegeDomain.Database.Entities.Parking;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 public interface ISessionRepository : IRepository<Session>
 {
 

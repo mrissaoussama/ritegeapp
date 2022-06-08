@@ -3,6 +3,8 @@ using System.Data;
 
 namespace RitegeDomain.Database.Repositories
 {
+    using RitegeDomain.Database.Entities.ParkingEntities;
+
     public class TicketRepository : GenericRepository<Ticket>, ITicketRepository
     {
         private string connectionString;
@@ -50,6 +52,44 @@ namespace RitegeDomain.Database.Repositories
             return Tickets;
         }
 
+        public async Task<Ticket> Add(DateTime dateHeureDebutStationnement, DateTime? dateHeureFinStationnement, string etatTicket, int? idTarifTicket, decimal? Tarif, int idBorneEntree, int? idBorneSortie, string logCaissier, bool? avectarif2)
+        {
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+                query = "insert into parkingdb.Ticket(dateHeureDebutStationnement,dateHeureFinStationnement,etatTicket,idTarifTicket,Tarif,idBorneEntree,idBorneSortie,logCaissier,avectarif2) values(@dateHeureDebutStationnement,@dateHeureFinStationnement,@etatTicket,@idTarifTicket,@Tarif,@idBorneEntree,@idBorneSortie,@logCaissier,@avectarif2)";
+
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                    cmd.Parameters.Add("@dateHeureDebutStationnement", SqlDbType.DateTime2).Value = dateHeureDebutStationnement;
+                    cmd.Parameters.Add("@dateHeureFinStationnement", SqlDbType.DateTime2).Value = dateHeureFinStationnement;
+                    cmd.Parameters.Add("@etatTicket", SqlDbType.NVarChar).Value = etatTicket;
+                    cmd.Parameters.Add("@Tarif", SqlDbType.Decimal).Value = Tarif;
+                    cmd.Parameters.Add("@idTarifTicket", SqlDbType.Int).Value = idTarifTicket;
+                    cmd.Parameters.Add("@idBorneEntree", SqlDbType.Int).Value = idBorneEntree;
+                    cmd.Parameters.Add("@idBorneSortie", SqlDbType.Int).Value = idBorneSortie;
+                    cmd.Parameters.Add("@logCaissier", SqlDbType.NVarChar).Value = logCaissier;
+                    cmd.Parameters.Add("@avectarif2", SqlDbType.Int).Value = avectarif2;
+                    con.Open();
+                     await cmd.ExecuteNonQueryAsync();
+                    con.Close();
+                    var ticket = new Ticket
+                    {
+                        DateHeureDebutStationnement = dateHeureDebutStationnement,
+                        DateHeureFinStationnement = dateHeureFinStationnement,
+                        AvecTarif2 = avectarif2,
+                        EtatTicket = etatTicket,
+                        idBorneEntree = idBorneEntree,
+                        idBorneSortie = idBorneSortie,
+                        IdTarifTicket = idTarifTicket,
+                        LogCaissier = logCaissier,
+                        Tarif = Tarif
+                    };
+                    return ticket;
+                }
+            }
+        }
 
         public TicketRepository()
         {

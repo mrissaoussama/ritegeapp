@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RitegeDomain.Database.Queries.Parking;
+using RitegeDomain.Database.Queries.ParkingDBQueries;
 using RitegeDomain.DTO;
 using RitegeDomain.Model;
 using RitegeServer.Services;
@@ -17,23 +17,49 @@ namespace RitegeServer.Controllers
         {
             _mediator = mediator;
         }
-       
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Route("GetCashRegisterList")]
-        public async Task<ActionResult<List<string>>> GetCashRegisterList()
-        {
+        [Route("GetCashierList")]
+        public async Task<ActionResult<List<string>>> GetCashierList(string? parkingname)
+        { List<string> s = new();
             try
-            {
-                List<string> s = new();
-                s.Add("parking2");
-                s.Add("parking3");
-                s.Add("parking4");
-                s.Add("parking5");
-                s.Add("parking6");
-                s.Add("parking7");
-                s.Add("parking8");
+            {if (string.IsNullOrEmpty(parkingname))
+                {
+                    s.Add("Caissier1");
+                    s.Add("Caissier3");
+                    s.Add("Caissier4");
+                    s.Add("Caissier5");
+                    s.Add("Caissier6");
+                    s.Add("Caissier7");
+                    s.Add("Caissier8");
+                    return s;
+                }
+            if(parkingname == "parking")
+                {
+                    s.Add("Caissier6");
+                    s.Add("Caissier7");
+                    s.Add("Caissier8");
+                    return s;
+                }
+            if(parkingname=="parking1")
+                {
+                    s.Add("Caissier1");
+                    s.Add("Caissier3");
+                    s.Add("Caissier4");
+                    s.Add("Caissier5");
+                    return s;
+
+                }
+                if (parkingname == "parking3")
+                {
+                    s.Add("Caissier1");
+                    s.Add("Oussama Mrissa");
+                    s.Add("Caissier4");
+                    s.Add("Caissier5");
+                    return s;
+
+                }
                 return s;
             }
             catch (Exception ex)
@@ -41,6 +67,40 @@ namespace RitegeServer.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("GetCashRegisterList")]
+        public async Task<ActionResult<List<string>>> GetCashRegisterList(string? parkingname)
+        {
+            List<string> s = new();
+            try
+            {
+
+                if (parkingname == "parking1")
+                {
+                    s.Add("Caisse_21");
+                    s.Add("Caisse_32");
+                    s.Add("Caisse_13");
+                    return s;
+
+                }
+                if (parkingname == "parking3")
+                {
+                    s.Add("Caisse_1");
+                    s.Add("Caisse_2");
+                    s.Add("Caisse_3");
+                    return s;
+
+                }
+                return s;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+     
         //[HttpGet]
         //[ProducesResponseType(StatusCodes.Status200OK)]
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -66,7 +126,7 @@ namespace RitegeServer.Controllers
         [Route("GetEventData")]
         public async Task<ActionResult<List<ParkingEvent>>> GetEventData(DateTime date)
         {
-            var query = new RitegeDomain.Database.Queries.Parking.EvenementQueries.GetAllByDateQuery { Date = date, AlertsOnly = false };
+            var query = new RitegeDomain.Database.Queries.ParkingDBQueries.EvenementQueries.GetAllByDateQuery { Date = date, AlertsOnly = false };
             try
             {
                 var response = await _mediator.Send(query);
@@ -83,7 +143,7 @@ namespace RitegeServer.Controllers
         [Route("GetAlertData")]
         public async Task<ActionResult<List<ParkingEvent>>> GetAlertData(DateTime date)
         {
-            var query = new RitegeDomain.Database.Queries.Parking.EvenementQueries.GetAllByDateQuery { Date = date.Date, AlertsOnly = true };
+            var query = new RitegeDomain.Database.Queries.ParkingDBQueries.EvenementQueries.GetAllByDateQuery { Date = date.Date, AlertsOnly = true };
             try
             {
                 var response = await _mediator.Send(query);
@@ -108,7 +168,7 @@ namespace RitegeServer.Controllers
             //    {
             //        Affectationabonnementquery = new RitegeDomain.Database.Queries.Parking.AffectationabonnementQueries.GetAllByNameAndDatesQuery { StartDate = dateStart, FinishDate = dateEnd,Name=abonneName };
             //    }
-            var query = new RitegeDomain.Database.Queries.Parking.InfoAbonnementDTOQueries.InfoAbonnementDTOQuery { Name = abonneName, FinishDate = dateEnd, StartDate = dateStart };
+            var query = new RitegeDomain.Database.Queries.ParkingDBQueries.InfoAbonnementDTOQueries.InfoAbonnementDTOQuery { Name = abonneName, FinishDate = dateEnd, StartDate = dateStart };
                     try
                     {
                         var response = await _mediator.Send(query);
@@ -151,19 +211,9 @@ namespace RitegeServer.Controllers
                 try
                 {
               
-                var query = new RitegeDomain.Database.Queries.Parking.InfoSessionsDTOQueries.InfoSessionsDTOQuery { Name = caissierName, FinishDate = dateEnd, StartDate = dateStart };
+                var query = new RitegeDomain.Database.Queries.ParkingDBQueries.InfoSessionsDTOQueries.InfoSessionsDTOQuery { Name = caissierName, FinishDate = dateEnd, StartDate = dateStart };
                 var response = await _mediator.Send(query);
-                int caisser = 1;
-                var rand = new Random();
-                foreach (var item in response)
-                {
-                    item.Caissier = "Caissier" + caisser;
-                    item.NbAutorite = rand.Next(0, 2);
-                    item.NbAdministratif = rand.Next(1, 4);
-                    item.NbAbonne = rand.Next(5, 12);
-                    item.NbTickets = rand.Next(5, 12) + item.NbAutorite + item.NbAdministratif + item.NbAbonne;
-                    caisser++;
-                }
+         
                 return Ok(response);
             }
                 catch (Exception ex)
@@ -188,7 +238,7 @@ namespace RitegeServer.Controllers
                 //var dataFilter = new DataFilter();
                 //var list = dataFilter.FilterTicketDTO(ListDtoTicket, dateStart, dateEnd);
                 //return Ok(list);
-                var query = new RitegeDomain.Database.Queries.Parking.InfoTicketDTOQueries.InfoTicketDTOQuery { FinishDate = dateEnd, StartDate = dateStart };
+                var query = new RitegeDomain.Database.Queries.ParkingDBQueries.InfoTicketDTOQueries.InfoTicketDTOQuery { FinishDate = dateEnd, StartDate = dateStart };
                 try
                 {
                     var response = await _mediator.Send(query);
@@ -210,7 +260,7 @@ namespace RitegeServer.Controllers
 
                 try
                 {
-                    var DashboardDTO = new DashBoardDTO("parking3", "Caisse1", "oussama mrissa", true, 15489, 8754, 4871, Flux.Entree, Flux.Sortie, 145, 123, 24, 100, 12, 54, 45);
+                    var DashboardDTO = new DashBoardDTO("parking3", "Caisse_1", "oussama mrissa", true, 500, 150, 840, Flux.Entree, Flux.Sortie, 145, 15, 40, 100, 5, 2, 45);
 
                     return Ok(DashboardDTO);
 
@@ -229,7 +279,7 @@ namespace RitegeServer.Controllers
         {
             try
             {
-                var loginRequest = new RitegeDomain.Database.Queries.Parking.UtilisateurQueries.LoginQuery { Login = login, MotDePasse = motdepasse };
+                var loginRequest = new RitegeDomain.Database.Queries.ParkingDBQueries.UtilisateurQueries.LoginQuery { Login = login, MotDePasse = motdepasse };
 
 
 

@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using RitegeDomain.DTO;
 using RitegeServer.Hubs;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 
 namespace RitegeServer.ServerControllers
 {
@@ -47,19 +50,30 @@ namespace RitegeServer.ServerControllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("AddTicket")]
-        public async Task<ActionResult<string>> AddTicket(RitegeDomain.Database.Commands.Parking.EvenementCommands.CreateEvenementCommand eventToAdd)
+        public async Task<ActionResult<string>> AddTicket(RitegeDomain.Database.Commands.Parking.TicketCommands.CreateTicketCommand ticketToAdd)
         {
             try
             {
-                var response = await _mediator.Send(eventToAdd);
-
-
-                if (Enum.IsDefined(typeof(AlertCodes), eventToAdd.TypeEvent))
+                var response = await _mediator.Send(ticketToAdd);
+                var ticketbornequery = new RitegeDomain.Database.Queries.ParkingDBQueries.BorneQueries.GetOneByIdQuery
                 {
-                    var parkingEvent = new ParkingEvent { DateEvent = eventToAdd.DateEvent, DescriptionEvent = eventToAdd.DescriptionEvent, ParkingId = eventToAdd.ParkingId, TypeEvent = eventToAdd.TypeEvent };
+                    Id = ticketToAdd.idBorneEntree
+                };
+                var ticketborneresponse = await _mediator.Send(ticketbornequery);
+
+
+                if (ticketborneresponse.IdBorne is not 0)
+                {
+                    
                     //var clientid = parkingEvent.ParkingId.ToString();
                     var clientid = 1;
-                    await _hubContext.Clients.Group(clientid.ToString()).SendAsync("AlertReceived", parkingEvent);
+                    var dto = new InfoTicketDTO();
+                    dto.MontantPaye = (decimal)response.Tarif;
+                    dto.DateHeureEntree = response.DateHeureDebutStationnement;
+                    dto.BorneEntree = ticketborneresponse.NomBorne;
+                    InfoTicketDTO[] list=new InfoTicketDTO[] {dto};
+                   
+                    await _hubContext.Clients.Group(clientid.ToString()).SendAsync("GetTicketData", list);
 
                 }
                 return Ok(response);

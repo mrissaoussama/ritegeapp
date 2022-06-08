@@ -3,14 +3,15 @@
 using AutoMapper;
 using MediatR;
 using RitegeDomain.Database.Commands.Parking.EvenementCommands;
-using RitegeDomain.Database.Queries.Parking.EvenementQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.EvenementQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
 
-public class CreateEvennementCommandHandler : IRequestHandler<CreateEvenementCommand, int>
+public class CreateEvenementCommandHandler : IRequestHandler<CreateEvenementCommand, int>
 {
     private readonly IEvenementRepository _repository;
     private readonly IMapper _mapper;
 
-    public CreateEvennementCommandHandler(IEvenementRepository repository, IMapper mapper)
+    public CreateEvenementCommandHandler(IEvenementRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

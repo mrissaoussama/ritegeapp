@@ -1,8 +1,10 @@
 ﻿namespace RitegeDomain.QueryHandlers.AbonnementQueryHandlers;
 
 using AutoMapper;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 using MediatR;
-using RitegeDomain.Database.Queries.Parking.AbonnementQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.AbonnementQueries;
 
 public class GetOneByIdQueryHandler : IRequestHandler<GetOneByIdQuery, Abonnement>
 {

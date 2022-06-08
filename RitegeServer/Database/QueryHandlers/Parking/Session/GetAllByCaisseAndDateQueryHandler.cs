@@ -1,9 +1,11 @@
 ﻿namespace RitegeDomain.QueryHandlers.SessionQueryHandlers;
 
 using AutoMapper;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
 using MediatR;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.SessionQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.SessionQueries;
 
 public class GetAllByCaisseAndDateQueryHandler : IRequestHandler<GetAllByCaisseAndDateQuery, IEnumerable<Session>>
 {

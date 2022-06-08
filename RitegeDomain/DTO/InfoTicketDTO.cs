@@ -8,7 +8,7 @@ namespace RitegeDomain.DTO
     [Serializable]
     public class InfoTicketDTO:IEntity
     {
-        string codeTicket, borneEntree;
+        string codeTicket, borneEntree,borneSortie;
         TypeTicket typeTicket;
         Decimal montantPaye;
         DateTime dateHeureSortie, dateHeureEntree;

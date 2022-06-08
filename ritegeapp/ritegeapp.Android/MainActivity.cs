@@ -14,7 +14,7 @@ using Xamarin.Forms;
 
 namespace ritegeapp.Droid
 {
-    [Activity(Label = "Ritege Parking", ClearTaskOnLaunch = false, FinishOnTaskLaunch = false, Icon = "@mipmap/icon", LaunchMode = LaunchMode.SingleTask, Theme = "@style/SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
+    [Activity(Label = "Ritege Parking", ClearTaskOnLaunch = false, FinishOnTaskLaunch = false, Icon = "@mipmap/icon", LaunchMode = LaunchMode.SingleTask, Theme = "@style/SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize, ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private event EventHandler Creating = delegate { };

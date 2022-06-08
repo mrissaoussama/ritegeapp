@@ -3,7 +3,7 @@ using MediatR;
 using RitegeDomain.Database;
 using RitegeDomain.DTO;
 
-namespace RitegeDomain.Database.Queries.Parking.InfoSessionsDTOQueries;
+namespace RitegeDomain.Database.Queries.ParkingDBQueries.InfoSessionsDTOQueries;
 
 public class InfoSessionsDTOQuery : IRequest<IEnumerable<InfoSessionsDTO>>
 {

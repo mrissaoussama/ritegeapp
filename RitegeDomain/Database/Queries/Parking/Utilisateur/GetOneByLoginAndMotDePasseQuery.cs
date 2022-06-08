@@ -1,6 +1,8 @@
 using AutoMapper;
 using MediatR;
-namespace RitegeDomain.Database.Queries.Parking.UtilisateurQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
+namespace RitegeDomain.Database.Queries.ParkingDBQueries.UtilisateurQueries;
 
 public class GetOneByLoginAndMotDePasseQuery : IRequest<Utilisateur>
 {

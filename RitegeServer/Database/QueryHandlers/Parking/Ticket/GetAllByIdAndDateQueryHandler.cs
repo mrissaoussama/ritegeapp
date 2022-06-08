@@ -1,9 +1,13 @@
 ﻿namespace RitegeDomain.QueryHandlers.TicketQueryHandlers;
 
 using AutoMapper;
+using RitegeDomain.Database.Entities.ParkingEntities;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
+
 using MediatR;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.TicketQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.TicketQueries;
 
 public class GetAllByIdAndDateQueryHandler : IRequestHandler<GetAllByIdAndDateQuery, IEnumerable<Ticket>>
 {

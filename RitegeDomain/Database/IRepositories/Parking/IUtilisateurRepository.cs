@@ -1,4 +1,6 @@
-﻿namespace RitegeDomain.Database.IRepositories;
+﻿using RitegeDomain.Database.Entities.ParkingEntities;
+
+namespace RitegeDomain.Database.IRepositories;
 public interface IUtilisateurRepository : IRepository<Utilisateur>
 {
 

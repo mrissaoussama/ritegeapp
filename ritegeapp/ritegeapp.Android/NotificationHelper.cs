@@ -17,7 +17,7 @@ using Xamarin.Essentials;
 
 namespace ritegeapp.Droid
 {
-    internal class NotificationHelper : ritegeapp.Services.INotification
+    internal class NotificationHelper : INotification
     {
         private static string foregroundChannelId = "2";
         private static Context context = global::Android.App.Application.Context;

@@ -1,4 +1,5 @@
-﻿namespace RitegeDomain.Database.IRepositories;
+﻿namespace RitegeDomain.Database.IRepositories; using RitegeDomain.Database.Entities.ParkingEntities;
+
 public interface IAffectationabonnementRepository : IRepository<Affectationabonnement>
 {
     public Task<IEnumerable<Affectationabonnement>> GetAllAsync();

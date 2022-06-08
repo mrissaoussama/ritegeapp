@@ -1,8 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.AffectationabonnementQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.AffectationabonnementQueries;
 using RitegeDomain.QueryHandlers.AffectationAbonnementQueryHandlers;
+using RitegeDomain.Database.Entities.ParkingEntities;
 
 namespace RitegeServer.ServerControllers
 {

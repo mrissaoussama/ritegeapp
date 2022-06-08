@@ -3,7 +3,8 @@
 using AutoMapper;
 using MediatR;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.AbonneQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.AbonneQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
 
 public class GetOneByIdQueryHandler : IRequestHandler<GetOneByIdQuery, Abonne>
 {

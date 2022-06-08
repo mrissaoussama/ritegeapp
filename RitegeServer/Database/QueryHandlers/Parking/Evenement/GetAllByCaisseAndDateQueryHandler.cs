@@ -3,7 +3,10 @@
 using AutoMapper;
 using MediatR;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.EvenementQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
+using RitegeDomain.Database.Entities.ParkingEntities;
+using RitegeDomain.Database.Queries.ParkingDBQueries.EvenementQueries;
 
 public class GetAllByCaisseAndDateQueryHandler : IRequestHandler<GetAllByCaisseAndDateQuery, IEnumerable<Evenement>>
 {

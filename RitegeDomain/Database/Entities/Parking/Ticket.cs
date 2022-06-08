@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RitegeDomain.Database.Entities.Parking
+namespace RitegeDomain.Database.Entities.ParkingEntities
 {
     // ticket
     public class Ticket : IEntity

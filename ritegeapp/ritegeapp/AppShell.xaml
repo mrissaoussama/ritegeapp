@@ -79,17 +79,24 @@
         When the Flyout is visible this defines the content to display in the flyout.
         FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
-    --> <FlyoutItem Title="Tableau De Bord"
-             Icon="icon_about.png">
-  <ShellContent Route="TableauDeBord"
-                ContentTemplate="{DataTemplate local:TableauDeBord}" />
+    -->
+ <FlyoutItem Title="Gestion Sessions Caissiers"
+             Icon="icon_feed.png">
+  <ShellContent Route="GestionDesSessionsCaissiers"
+                ContentTemplate="{DataTemplate local:GestionDesSessionsCaissiers}" />
  </FlyoutItem>
-
  <FlyoutItem Title="Gestion Recettes"
              Icon="icon_feed.png">
   <ShellContent Route="GestionRecette"
                 ContentTemplate="{DataTemplate local:GestionRecettes}" />
  </FlyoutItem>
+ <FlyoutItem Title="Tableau De Bord"
+             Icon="icon_about.png">
+  <ShellContent Route="TableauDeBord"
+                ContentTemplate="{DataTemplate local:TableauDeBord}" />
+ </FlyoutItem>
+
+
  <FlyoutItem Title="Gestion Abonnement"
              Icon="icon_about.png">
   <ShellContent Route="Gestion Abonnement"
@@ -97,11 +104,6 @@
  </FlyoutItem>
 
 
- <FlyoutItem Title="Gestion Sessions Caissiers"
-             Icon="icon_feed.png">
-  <ShellContent Route="GestionDesSessionsCaissiers"
-                ContentTemplate="{DataTemplate local:GestionDesSessionsCaissiers}" />
- </FlyoutItem>
  <FlyoutItem Title="Evenements"
              Icon="icon_feed.png">
   <ShellContent Route="EventView"

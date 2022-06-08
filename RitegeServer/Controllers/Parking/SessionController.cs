@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.SessionQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.SessionQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
 
 namespace RitegeServer.ServerControllers
 {

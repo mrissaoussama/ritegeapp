@@ -2,7 +2,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.EvenementQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
+using RitegeDomain.Database.Queries.ParkingDBQueries.EvenementQueries;
 using RitegeDomain.QueryHandlers.EvenementQueryHandlers;
 
 namespace RitegeServer.ServerControllers

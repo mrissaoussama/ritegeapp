@@ -1,7 +1,9 @@
 using AutoMapper;
 using MediatR;
 using RitegeDomain.Database;
-namespace RitegeDomain.Database.Queries.Parking.TicketQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
+namespace RitegeDomain.Database.Queries.ParkingDBQueries.TicketQueries;
 
 public class GetAllByIdAndDateQuery : IRequest<IEnumerable<Ticket>>
 {

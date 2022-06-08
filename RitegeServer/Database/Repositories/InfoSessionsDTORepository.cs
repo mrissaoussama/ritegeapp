@@ -2,6 +2,7 @@
 using RitegeDomain.DTO;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace RitegeDomain.Database.Repositories
@@ -16,7 +17,7 @@ namespace RitegeDomain.Database.Repositories
             {
                 string query;
                 if (string.IsNullOrEmpty(name))
-                    query = "SELECT  s.idcaisse,s.idSessions ,s.montant,s.DateDebut,s.DateFin, Nomcaisse from parkingdb.caisse c,parkingdb.sessions s where s.idCaisse=c.idCaisse and  DateDebut >= @start and DateFin<=@finish";
+                    query = "SELECT  s.idcaisse,s.idSessions,s.logCaissier ,s.montant,s.DateDebut,s.DateFin, Nomcaisse from parkingdb.caisse c,parkingdb.sessions s where s.idCaisse=c.idCaisse and  DateDebut >= @start and DateFin<=@finish";
                 else
                     query = "SELECT  s.idcaisse,s.idSessions ,s.montant,s.DateDebut,s.DateFin, Nomcaisse from parkingdb.caisse c,parkingdb.sessions s where s.idCaisse=c.idCaisse and  DateDebut >= @start and DateFin<=@finish and nomAbonnement like @name";
                 using (SqlCommand cmd = new(query))
@@ -32,22 +33,19 @@ namespace RitegeDomain.Database.Repositories
                         while (await sdr.ReadAsync())
                         {
                             int idcaisse = Convert.ToInt32(sdr["idcaisse"]);
+                            int total;
                             var session = new InfoSessionsDTO
                             {
-                                //LibelleAbonnement = Convert.ToString(sdr["nomAbonnement"]),
-                                //PrixAbonnement = Convert.ToDecimal(sdr["montant"]),
-                                //DateActivation = Convert.ToDateTime(sdr["DateActivation"]),
-                                //DateFinActivation = Convert.ToDateTime(sdr["DateDesactivation"]),
-                                //DateAffectation = Convert.ToDateTime(sdr["dateAffectationabonnementcol"]),
-                                //Etat = (Etat)System.Enum.Parse(typeof(Etat), value),
+                            
                                 Recette = Convert.ToDecimal(sdr["montant"]),
                                 DateStartSession = Convert.ToDateTime(sdr["DateDebut"]),
                                 DateEndSession = Convert.ToDateTime(sdr["DateFin"]),
                                 Caisse = Convert.ToString(sdr["Nomcaisse"]),
                                 Index = Convert.ToInt32(sdr["idSessions"]),
+                                Caissier = Convert.ToString(sdr["logCaissier"]),
 
                             };
-                            string query2 = "SELECT  count (DISTINCT typeevent) as total,typeEvent from parkingdb.evenement  where " +
+                            string query2 = "SELECT  count ( typeevent) as total,typeEvent from parkingdb.evenement  where " +
                                  "idCaisse = @idcaisse and dateevent between @start and @finish group by typeEvent ";
                             using (SqlConnection con2 = new(connectionString))
                             {
@@ -65,13 +63,17 @@ namespace RitegeDomain.Database.Repositories
                                             string? typeevent = Convert.ToString(sdr2["typeEvent"]);
                                             if (!string.IsNullOrEmpty(typeevent))
                                             {
-                                                session.NbTickets++;
+                                                total = Convert.ToInt32(sdr2["total"]);
+
+
                                                 switch (typeevent)
                                                 {
-                                                    case "AuthorityEntrance": session.NbAutorite += Convert.ToInt32(sdr2["total"]); break;
-                                                    case "AuthorityExit": session.NbAutorite += Convert.ToInt32(sdr2["total"]); break;
-                                                    case "PersonnelEntrance": session.NbAdministratif += Convert.ToInt32(sdr2["total"]); break;
-                                                    case "PersonnelExit": session.NbAutorite += Convert.ToInt32(sdr2["total"]); break;
+                                                    case "AuthorityEntrance": session.NbAutorite += total; break;
+                                                    case "AuthorityExit": session.NbAutorite += total; break;
+                                                    case "PersonnelEntrance": session.NbAdministratif += total; break;
+                                                    case "PersonnelExit": session.NbAdministratif += total; break;
+                                                    case "AbonneEntrance": session.NbAbonne += total; break;
+                                                    case "AbonneExit": session.NbAbonne += total; break;
 
                                                 }
                                             }
@@ -79,17 +81,42 @@ namespace RitegeDomain.Database.Repositories
                                     }
                                 }
 
-                                abonnes.Add(session);
 
                             }
-                        }
-                        con.Close();
-                    }
-                }
-                return abonnes;
+                            string query3 = "SELECT  count ( idticket) as total from parkingdb.ticket  where " +
+                                "logcaissier = @logcaissier and dateHeureDebutStationnement>= @start and dateHeureFinStationnement<=@finish  ";
+                            using (SqlConnection con3 = new(connectionString))
+                            {
+                                using (SqlCommand cmd3 = new(query3))
+                                {
+                                    cmd3.Connection = con3;
+                                    cmd3.Parameters.Add("@logcaissier", SqlDbType.NVarChar).Value = session.Caissier;
+                                    cmd3.Parameters.Add("@start", SqlDbType.DateTime2).Value = start;
+                                    cmd3.Parameters.Add("@finish", SqlDbType.DateTime2).Value = finish;
+                                    con3.Open();
+                                    using (SqlDataReader sdr3 = await cmd3.ExecuteReaderAsync())
+                                    {
+                                        while (await sdr3.ReadAsync())
+                                        {
 
+                                            session.NbTickets = Convert.ToInt32(sdr3["total"]);
+
+                                        }
+                                    }
+                                }
+                            }
+
+                            abonnes.Add(session);
+
+                        }
+                    }
+                    con.Close();
+                }
             }
+            return abonnes;
+
         }
+    
 
         public InfoSessionsDTORepository()
         {

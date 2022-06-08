@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using Plugin.LocalNotification;
-using RitegeDomain.Database.Queries.Parking.UtilisateurQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.UtilisateurQueries;
 using RitegeDomain.DTO;
 using RitegeDomain.Model;
 using System;

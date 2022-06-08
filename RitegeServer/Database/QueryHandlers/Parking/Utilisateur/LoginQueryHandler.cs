@@ -2,7 +2,9 @@
 
 using AutoMapper;
 using MediatR;
-using RitegeDomain.Database.Queries.Parking.UtilisateurQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
+using RitegeDomain.Database.Queries.ParkingDBQueries.UtilisateurQueries;
 
 public class LoginQueryHandler : IRequestHandler<LoginQuery, string?>
 {

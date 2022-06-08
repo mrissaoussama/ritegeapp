@@ -36,7 +36,7 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
-        private DateTime dateEnd = DateTime.Today;
+        private DateTime dateEnd = DateTime.Today.AddDays(1).AddTicks(-1);
         [ObservableProperty]
         private bool showData;
         [ObservableProperty]
@@ -67,10 +67,13 @@ namespace ritegeapp.ViewModels
             });
             signalRService.HubConnection.On<InfoTicketDTO[]>("GetTicketData", async (data) =>
             {
-               await FilteredDataReceivedAsync(data.ToList());
+
+                ListDto.AddRange(data);
+                NewDataReceivedAsync(data.ToList()); CalculateListTotal();
+
             });
         }
-        private async Task FilteredDataReceivedAsync(List<InfoTicketDTO> data)
+        private async Task DataReceivedAsync(List<InfoTicketDTO> data)
         {
             if (data == null || data.Count == 0)
             {
@@ -78,9 +81,26 @@ namespace ritegeapp.ViewModels
             }
             else
             {
-                ListDto = (data);
-                await Device.InvokeOnMainThreadAsync(() => { GroupByDate(); });
+
+                {
+                    ListDto = (data);
+                    await Device.InvokeOnMainThreadAsync(() =>
+                    {
+                        GroupByDate(); CalculateListTotal();
+                    });
+                }
+              
             }
+        }
+     
+        private void CalculateListTotal()
+        {
+            TotalMoney = ListDto.Sum(x => x.MontantPaye);
+        }
+        private void NewDataReceivedAsync(List<InfoTicketDTO> infoTicketDTOs)
+        {
+            infoTicketDTOs.ForEach(x => ListRecetteToShow.Add(x));
+            ShowDataView();
         }
         private void GroupByDate()
         {
@@ -111,7 +131,9 @@ namespace ritegeapp.ViewModels
             ShowNoInternetLabel = false;
             ShowLoadingIndicator = false;
             ShowNoFilterResultLabel = false;
-            ShowData = true; ShowNoDataReceived = false;
+            ShowData = true;
+            ShowTotal = true;
+            ShowNoDataReceived = false;
         }
         public void ShowNoInternetView()
         {
@@ -138,9 +160,17 @@ namespace ritegeapp.ViewModels
         [ICommand]
         private async void ClearFilter(object obj)
         {
-            dateStart = DateTime.Today;
-            dateEnd = DateTime.Today;
+            DateStart = DateTime.Today;
+            DateEnd = DateTime.Today.AddDays(1).AddTicks(-1);
+            
             ShowNoFilterResultLabel = false;
+            await GetData();
+        }
+        [ICommand]
+
+        private async void Search(object obj)
+        {
+         
             await GetData();
         }
         [ICommand]
@@ -149,8 +179,8 @@ namespace ritegeapp.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
              ShowLoading();
-             var data = await dataService.GetTicketData(dateStart, dateEnd);
-                await FilteredDataReceivedAsync(data);
+             var data = await dataService.GetTicketData(DateStart, DateEnd);
+                await DataReceivedAsync(data);
                 await Task.Run(async () => { await signalRService.Connect(); });
 
             }

@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using RitegeDomain.Database;
 using RitegeDomain.Database.Entities.Parking;
-using RitegeDomain.Database.Queries.Parking.TicketQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.TicketQueries;
 using RitegeDomain.QueryHandlers.TicketQueryHandlers;
+using RitegeDomain.Database.Entities.ParkingEntities;
 
 namespace RitegeServer.ServerControllers
 {

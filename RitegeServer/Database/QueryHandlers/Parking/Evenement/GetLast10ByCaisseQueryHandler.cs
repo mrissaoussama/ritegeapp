@@ -3,7 +3,8 @@
 using AutoMapper;
 using MediatR;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.Parking.EvenementQueries;
+using RitegeDomain.Database.Queries.ParkingDBQueries.EvenementQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
 
 public class GetLast10ByCaisseQueryHandler : IRequestHandler<GetLast10ByCaisseQuery, IEnumerable<Evenement>>
 {

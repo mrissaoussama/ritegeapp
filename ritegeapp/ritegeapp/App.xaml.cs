@@ -38,15 +38,14 @@ namespace ritegeapp
             IsOnline = CheckIfConnectedToInternet();
             Connectivity.ConnectivityChanged += ConnectivityChanged;
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjIzNzIzQDMyMzAyZTMxMmUzMEJwbk0xNVlBUHdJM0I4emZ0K2xMNXViaExUN2Fac1RGaGRQWFFZZEtOZWc9");
-            await Task.Run(async () => { await DependencyService.Get<IDataService>().Initialize(); });
-
-           // await DependencyService.Get<ISignalRService>().Initialize();
+            await DependencyService.Get<IDataService>().Initialize();
+            await DependencyService.Get<ISignalRService>().Initialize();
 
         }
         void RegisterDependencies()
         {
             DependencyService.Register<IGestionAbonnementViewModel, GestionAbonnementViewModel>();
-         //  DependencyService.Register<ISignalRService, SignalRService>();
+         DependencyService.Register<ISignalRService, SignalRService>();
           //  DependencyService.RegisterSingleton<ISignalRService>(new SignalRService());
 
             DependencyService.Register<INotificationService, NotificationService>();

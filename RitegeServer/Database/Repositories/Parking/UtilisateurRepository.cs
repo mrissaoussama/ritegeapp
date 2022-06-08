@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
+using RitegeDomain.Database.Entities.ParkingEntities;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace RitegeDomain.Database.Repositories
 {
-    public class UtilisateurRepository : GenericRepository<Utilisateur>, IUtilisateurRepository
+    public class UtilisateurRepository : GenericRepository<Utilisateur>, IRepositories.IUtilisateurRepository
     {
         private string connectionString;
 

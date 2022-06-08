@@ -41,6 +41,11 @@ builder.Services.AddTransient<IDoorRepository, DoorRepository>();
 builder.Services.AddTransient<IEventRepository, EventRepository>();
 builder.Services.AddTransient<IEventtypeRepository, EventtypeRepository>();
 builder.Services.AddTransient<IUsersystemRepository, UsersystemRepository>();
+builder.Services.AddTransient<IBorneRepository, BorneRepository>();
+builder.Services.AddTransient<ICaisseRepository, CaisseRepository>();
+builder.Services.AddTransient<IClientRepository, ClientRepository>();
+builder.Services.AddTransient<ISocieteRepository, SocieteRepository>();
+builder.Services.AddTransient<IParkingRepository, ParkingRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddHostedService<SendDataHostedService>();

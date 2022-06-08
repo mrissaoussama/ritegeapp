@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RitegeDomain.Database.Entities.Parking
+namespace RitegeDomain.Database.Entities.ParkingEntities
 {
     // affectationabonnement
     public class Affectationabonnement : IEntity

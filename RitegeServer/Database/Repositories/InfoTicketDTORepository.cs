@@ -22,7 +22,7 @@ namespace RitegeDomain.Database.Repositories
                 string query;
 
                 query = "SELECT t.idticket,t.dateHeureDebutStationnement,t.dateHeureFinStationnement,t.Tarif,"+
-                    " (select flux from parkingdb.borne where idBorneEntree=idBorne) as flux from parkingdb.ticket t where "+
+                    " (select nomBorne from parkingdb.borne where idBorneEntree=idBorne) as nomborne from parkingdb.ticket t where "+
                     "dateHeureDebutStationnement>=@start" +
                     " and dateHeureFinStationnement<=@finish ";
                 using (SqlCommand cmd = new(query))
@@ -40,7 +40,7 @@ namespace RitegeDomain.Database.Repositories
                             //string? Typeticketstring = Convert.ToString(sdr["EtatAffectation"]);
                             var ticket = new InfoTicketDTO
                             { CodeTicket = Convert.ToString(sdr["idTicket"]),
-                            BorneEntree = Convert.ToString(sdr["flux"]),
+                            BorneEntree = Convert.ToString(sdr["nomborne"]),
                                 MontantPaye = Convert.ToDecimal(sdr["tarif"]),
                                 DateHeureSortie = Convert.ToDateTime(sdr["dateHeureFinStationnement"]),
                                 DateHeureEntree = Convert.ToDateTime(sdr["dateHeureDebutStationnement"]),

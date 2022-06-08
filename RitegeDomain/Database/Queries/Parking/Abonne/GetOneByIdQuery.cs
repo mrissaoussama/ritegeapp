@@ -1,7 +1,9 @@
 using AutoMapper;
 using MediatR;
 using RitegeDomain.Database;
-namespace RitegeDomain.Database.Queries.Parking.AbonneQueries;
+using RitegeDomain.Database.Entities.ParkingEntities;
+
+namespace RitegeDomain.Database.Queries.ParkingDBQueries.AbonneQueries;
 
 public class GetOneByIdQuery : IRequest<Abonne>
 {

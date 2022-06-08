@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using RitegeDomain.Database.Entities.ParkingEntities;
 using System.Data;
 
 namespace RitegeDomain.Database.Repositories
