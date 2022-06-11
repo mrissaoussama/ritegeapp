@@ -22,9 +22,9 @@ namespace ritegeapp.ViewModels
     public partial class AlertViewerViewModel : ObservableObject
     {
         #region variables      
-        public List<ParkingEvent> ListDto = new List<ParkingEvent>();
+        public List<EventDTO> ListDto = new List<EventDTO>();
         [ObservableProperty]
-        public ObservableCollection<ParkingEvent> listAlertToShow = new ObservableCollection<ParkingEvent>();
+        public ObservableCollection<EventDTO> listAlertToShow = new ObservableCollection<EventDTO>();
         [ObservableProperty]
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
@@ -36,58 +36,58 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private bool showLoadingIndicator;
         [ObservableProperty]
-        private bool showNoInternetLabel;
+        private bool showNoInternetLabel; 
+        [ObservableProperty]
+        private bool showNoFilterResultLabel;
         [ObservableProperty]
         private bool listIsRefreshing = false;
         private XmlErrorCodeStringRetriever codeRetriever=new XmlErrorCodeStringRetriever();
         #endregion
         ISignalRService signalRService;
         IDataService dataService;
+
+        public bool Initialized { get; private set; }
+
         public AlertViewerViewModel()
         {
             signalRService = DependencyService.Get<ISignalRService>();
             dataService=DependencyService.Get<IDataService>();
-            ListenForAlerts();
-        }
-
-        public void ListenForAlerts()
-        {
-            signalRService.HubConnection.On<ParkingEvent[]>("DangerousAlertReceived", async (data) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, EventDTO>(Xamarin.Forms.Application.Current, "GetAlertData", async (sender, data) =>
             {
-                await OnAlertDataReceivedAsync(data.ToList());
+                await UpdateData(data);
+
             });
         }
-
-        private async Task OnAlertDataReceivedAsync(List<ParkingEvent> data)
+        private async Task OnAlertDataReceivedAsync(List<EventDTO> data)
         {
             if (data == null || data.Count == 0)
             {
                 await Device.InvokeOnMainThreadAsync(() => ShowNoDataReceivedMessage());
             }
             else
-            {if(ListAlertToShow.Count>0)
+            {
                     await Device.InvokeOnMainThreadAsync(() => { SetData(data); });
-            else
-                await Device.InvokeOnMainThreadAsync(() => { UpdateData(data); });
+          
             }
         }
-        private void UpdateData(List<ParkingEvent> data)
+        public async Task UpdateData(EventDTO data)
         {
-        for(int i=0;i<data.Count;i++)
-            data[i]= codeRetriever.GetErrorCodeStringAndType(data[i]);
-        data.ForEach(x => ListAlertToShow.Add(x));
-        ShowDataView();
+            data = codeRetriever.GetErrorCodeString(data);
+
+            ListAlertToShow.Add(data);
+            ShowDataView();
         }
-        private void SetData(List<ParkingEvent> data)
+        private void SetData(List<EventDTO> data)
         {
             ListAlertToShow.Clear();
             for (int i = 0; i < data.Count; i++)
-                data[i] = codeRetriever.GetErrorCodeStringAndType(data[i]);
+                data[i] = codeRetriever.GetErrorCodeString(data[i]);
             data.ForEach(x => ListAlertToShow.Add(x));
             ShowDataView();
         }
         public void ShowLoading()
         {
+            ShowNoFilterResultLabel = false;
             ShowLoadingIndicator = true;
             ShowNoInternetLabel = false;
             ShowData = false;
@@ -95,6 +95,7 @@ namespace ritegeapp.ViewModels
         }
         public void ShowNoFilterMessage()
         {
+            ShowNoFilterResultLabel = true;
             ShowNoInternetLabel = false;
             ShowLoadingIndicator = false;
             ShowData = false;
@@ -102,20 +103,26 @@ namespace ritegeapp.ViewModels
         }
         public void ShowDataView()
         {
+            ShowNoFilterResultLabel = false;
+
             ShowNoInternetLabel = false;
             ShowLoadingIndicator = false;
-            ShowData = true; 
+            ShowData = true;
             ShowNoDataReceived = false;
         }
         public void ShowNoInternetView()
         {
+            ShowNoFilterResultLabel = false;
+
             ShowNoInternetLabel = true;
             ShowLoadingIndicator = false;
-            ShowData = false; 
+            ShowData = false;
             ShowNoDataReceived = false;
         }
         public void ShowNoDataReceivedMessage()
         {
+            ShowNoFilterResultLabel = false;
+
             ShowNoInternetLabel = false;
             ShowLoadingIndicator = false;
             ShowData = false;
@@ -124,8 +131,8 @@ namespace ritegeapp.ViewModels
         [ICommand]
         private async void ClearFilter(object obj)
         {
-            dateStart = DateTime.Now;
-            dateEnd = DateTime.Now.AddDays(1);
+            DateStart = DateTime.Now;
+            DateEnd = DateTime.Now.AddDays(1).AddTicks(-1);
             await GetData();
         }
         [ICommand]
@@ -133,8 +140,14 @@ namespace ritegeapp.ViewModels
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
+                if (Initialized==false)
+                {
+                    Initialized = true;
+                    await signalRService.ListenForAlerts();
+                }
                 ShowLoading();
-                await OnAlertDataReceivedAsync(await dataService.GetAlertData(dateStart));
+                await OnAlertDataReceivedAsync(await dataService.GetAlertData(DateStart, DateEnd.AddDays(1).AddTicks(-1)));
+                await signalRService.Connect();
             }
             else
             if (ListDto.Count == 0)

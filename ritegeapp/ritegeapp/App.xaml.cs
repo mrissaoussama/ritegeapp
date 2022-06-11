@@ -4,6 +4,7 @@ using Plugin.LocalNotification.EventArgs;
 using ritegeapp.Services;
 using ritegeapp.Utils;
 using ritegeapp.ViewModels;
+using ritegeapp.Views;
 using System;
 
 using System.Threading.Tasks;
@@ -14,8 +15,8 @@ namespace ritegeapp
 {
     public partial class App : Application
     {
-       // public const string ServerURL = "https://192.168.1.14:45456";
-      // public const string ServerURL = "http://192.168.1.14:45455";
+         //public const string ServerURL = "https://192.168.1.14:45458";
+        // public const string ServerURL = "http://192.168.1.14:45455";
         public const string ServerURL = "https://ritegeserver.conveyor.cloud";
         public const string HubConnectionURL = ServerURL+"/Server";
 
@@ -27,16 +28,19 @@ namespace ritegeapp
         {
             RegisterDependencies();
             InitializeComponent();
-            Starting += onStarting;
-            Starting(this, EventArgs.Empty);
-            MainPage = new AppShell();     
-        }
-  
-        private async void onStarting(object sender, EventArgs args) {
-         Starting -= onStarting;  
-        
             IsOnline = CheckIfConnectedToInternet();
             Connectivity.ConnectivityChanged += ConnectivityChanged;
+
+
+
+           // MainPage = new NavigationPage(new LoginView());
+            MainPage = new AppShell(); 
+         
+
+        }
+        private async void onStarting(object sender, EventArgs args) {
+        
+        
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjIzNzIzQDMyMzAyZTMxMmUzMEJwbk0xNVlBUHdJM0I4emZ0K2xMNXViaExUN2Fac1RGaGRQWFFZZEtOZWc9");
             await DependencyService.Get<IDataService>().Initialize();
             await DependencyService.Get<ISignalRService>().Initialize();
@@ -45,11 +49,11 @@ namespace ritegeapp
         void RegisterDependencies()
         {
             DependencyService.Register<IGestionAbonnementViewModel, GestionAbonnementViewModel>();
-         DependencyService.Register<ISignalRService, SignalRService>();
-          //  DependencyService.RegisterSingleton<ISignalRService>(new SignalRService());
+         DependencyService.RegisterSingleton<ISignalRService>(new SignalRService());
+           DependencyService.RegisterSingleton<ISignalRService>(new SignalRService());
 
-            DependencyService.Register<INotificationService, NotificationService>();
-            DependencyService.Register<IDataService, DataService>();
+      DependencyService.Register<INotificationService, NotificationService>();
+            DependencyService.RegisterSingleton<IDataService>(new DataService());
 
         }
         private bool CheckIfConnectedToInternet()
@@ -94,7 +98,8 @@ namespace ritegeapp
             if (signalRService.Initialized)
             {
                DependencyService.Get<IEventService>().SetHub(signalRService.HubConnection);
-                signalRService.StopListeningForNotImportantData();
+                signalRService.StopListeningForDashboardData();
+                signalRService.StopListeningForTicketData();
             }
         }
 

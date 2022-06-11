@@ -111,11 +111,11 @@
     <Compile Include="StrokeTextView.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\Avenir Book.ttf" />
-    <AndroidAsset Include="Assets\fontello.ttf" />
+    <GoogleServicesJson Include="google-services.json" />
     <AndroidAsset Include="Assets\Gilroy-Medium.ttf" />
     <AndroidAsset Include="Assets\Gilroy-Regular.ttf" />
-    <GoogleServicesJson Include="google-services.json" />
+    <AndroidAsset Include="Assets\Avenir Book.ttf" />
+    <AndroidAsset Include="Assets\fontello.ttf" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />

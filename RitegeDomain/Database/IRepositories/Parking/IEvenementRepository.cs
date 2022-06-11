@@ -8,6 +8,10 @@ namespace RitegeDomain.Database.IRepositories
     public interface IEvenementRepository : IRepository<Evenement>
     {
         public Task<int> Add(DateTime dateEvent, string descriptionEvent,string typeEvent,int? idCaisse,int?idBorne,string logCaissier);
+        public Task<int> GetTodayAdministrateurAsync(int idParking, int idCaisse);
+        public Task<int> GetTodayAuthoriteAsync(int idParking, int idCaisse);
+        public Task<int> GetTodayAbonneAsync(int idParking, int idCaisse);
+
         public Task<IEnumerable<Evenement>> GetLast10Async(bool AlertsOnly);
         public Task<IEnumerable<Evenement>> GetLast10ByBorneAsync(long id, bool AlertsOnly);
         public Task<IEnumerable<Evenement>> GetLast10ByCaisseAndBorneAsync(long idCaisse,long idBorne, bool AlertsOnly);

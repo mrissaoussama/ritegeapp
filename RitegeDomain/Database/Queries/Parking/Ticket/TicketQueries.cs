@@ -11,3 +11,8 @@ public class GetAllByIdAndDateQuery : IRequest<IEnumerable<Ticket>>
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
 }
+public class GetTodayTicketsQuery : IRequest<int>
+{
+    public int IdParking { get; set; }
+    public int IdCaisse { get; set; }
+}

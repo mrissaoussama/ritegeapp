@@ -91,6 +91,37 @@ namespace RitegeDomain.Database.Repositories
             }
         }
 
+        public async Task<int> GetTodaysTicketsAsync(int IdParking, int idCaisse)
+        {
+            int total = 0;
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+            
+                
+                    query = "select  count(distinct idticket) as tickettotal from parkingdb.ticket t,parkingdb.sessions s where t.LogCaissier=s.logCaissier and t.dateHeureDebutStationnement >= @dateStart and(t.dateHeureFinStationnement <=@dateEnd or t.dateHeureFinStationnement is null) and t.logCaissier = (select top(1) logCaissier from parkingdb.sessions where idCaisse = @idCaisse)";
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                        cmd.Parameters.Add("@idCaisse", SqlDbType.Int).Value = idCaisse;
+                    cmd.Parameters.Add("@dateStart", SqlDbType.DateTime2).Value = DateTime.Today;
+                    cmd.Parameters.Add("@dateEnd", SqlDbType.DateTime2).Value = DateTime.Today.AddDays(1).AddTicks(-1);
+
+                    con.Open();
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+                            
+                                total = Convert.ToInt32(sdr["tickettotal"]);
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return total;
+        }
+
         public TicketRepository()
         {
             connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["parkingdb"].ConnectionString;

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.AspNetCore.SignalR;
-    using RitegeDomain.DTO;
 using RitegeServer.Services;
 using System.Diagnostics;
 using System.Net;
@@ -10,51 +9,21 @@ using System.Security.Claims;
 
 namespace RitegeServer.Hubs
 {
-    public static class UserAndParkingHandler
-    {
-        public static Dictionary<string, List<string>> ConnectedIds = new Dictionary<string, List<string>>();
-    }
+ 
     [Authorize]
     public class DataHub : Hub
     {
-        //     public static IHubContext<DataHub> GlobalContext { get; private set; }
-
-
-        public static List<InfoTicketDTO> ListDtoTicket { get; set; }
-        public static DashBoardDTO DashboardDTO { get; set; }
-        DataFilter dataFilter;
-
-        public DataHub(
-
-            //IHubContext<DataHub> ctx
-            )
+        IMobileClientHandler mobileClientHandler;
+        public DataHub(IMobileClientHandler mobileClientHandler)
         {
-            dataFilter = new DataFilter();
-            setupticketdata();
-     
-            if (DashboardDTO == null)
-            {
-                DashboardDTO = new DashBoardDTO("parking", "Caisse1", "oussama mrissa", true, 15489, 8754, 4871, Flux.Entree, Flux.Sortie, 145, 123, 24, 100, 12, 54, 45);
-            }
-        }
-        private void setupticketdata()
-        {
-            if (ListDtoTicket is null || ListDtoTicket.Count == 0)
-            {
-                ListDtoTicket = new List<InfoTicketDTO>();
-                var data = new InfoTicketDTO("10410110810811110", "Borne1", 20, DateTime.Today, DateTime.Today, TypeTicket.TicketStationnement);
-                var data1 = new InfoTicketDTO("119111114108100", "Borne1", 45, DateTime.Today, DateTime.Today, TypeTicket.TicketStationnement);
-                var data2 = new InfoTicketDTO("11510199114101116", "Borne2", 15, DateTime.Today, DateTime.Today, TypeTicket.TicketStationnement);
-                ListDtoTicket.Add(data);
-                ListDtoTicket.Add(data2);
-                ListDtoTicket.Add(data1);
-            }
+            this.mobileClientHandler = mobileClientHandler;
         }
 
         public override System.Threading.Tasks.Task OnDisconnectedAsync(Exception?stopCalled)
         {
-            var groupid = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdUtilisateur").Value;
-            UserAndParkingHandler.ConnectedIds[groupid].Remove(Context.ConnectionId);
+            var IdSociete = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdSociete").Value;
+
+            mobileClientHandler.RemoveClient(IdSociete, Context.UserIdentifier);
                 if (stopCalled is not null)
             Console.WriteLine(String.Format("Client {0} disconnected. exception {1}", Context.ConnectionId,stopCalled.Message));
 
@@ -63,29 +32,40 @@ namespace RitegeServer.Hubs
         }
         public override Task OnConnectedAsync()
         {
-            Debug.WriteLine("new user");
-            var groupid= ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdUtilisateur").Value;
-            Groups.AddToGroupAsync(Context.ConnectionId, groupid);
-            if (UserAndParkingHandler.ConnectedIds.Keys.Contains(groupid))
-            { 
-                UserAndParkingHandler.ConnectedIds[groupid].Add(Context.ConnectionId);
-            }
-            else
-            {
-                UserAndParkingHandler.ConnectedIds.Add(groupid, new List<string> { Context.ConnectionId });
-            }
+            var IdSociete = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdSociete").Value;
+            var IdClient = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdClient").Value;
+            Debug.WriteLine("new user with IdSociete={0}, IdClient{1}",IdSociete,IdClient);
+          //  var userid = Context.User.Claims.FirstOrDefault(c => c.Type == "UserId").Value;
+            Groups.AddToGroupAsync(Context.ConnectionId, IdSociete);
+            mobileClientHandler.AddClient(IdSociete, IdClient, Context.UserIdentifier);
             return base.OnConnectedAsync();
         }
-        public async Task GetTicketData(DateTime dateStart, DateTime dateEnd)
+    
+   
+        public void SetDashboardParking(int idparking)
         {
-            var filteredlist = dataFilter.FilterTicketDTO(ListDtoTicket, dateStart, dateEnd);
-            await Clients.Caller.SendAsync("GetTicketData", filteredlist);
-        }
-       
-        public async Task DangerousEventReceived(ParkingEvent parkingEvent)
-        {
-            await Clients.Group(((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdUtilisateur").Value).SendAsync("DangerousEventReceived", parkingEvent);
+            var IdSociete = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdSociete").Value;
 
+            mobileClientHandler.SetDashboardParking(IdSociete.Trim(), Context.UserIdentifier, idparking);
         }
+        public void SetTicketParking(int idparking)
+        {
+            var IdSociete = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdSociete").Value;
+
+            mobileClientHandler.SetTicketParking(IdSociete.Trim(), Context.UserIdentifier, idparking);
+        }
+        public void SetCashRegister(int idCashRegister)
+        {
+            var IdSociete = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdSociete").Value;
+
+            mobileClientHandler.SetCashRegister(IdSociete.Trim(), Context.UserIdentifier, idCashRegister);
+        }
+        public void SetIsListeningToEvents(bool IsListening)
+        {
+            var IdSociete = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdSociete").Value;
+
+            mobileClientHandler.SetIsListeningToEvents(IdSociete.Trim(), Context.UserIdentifier, IsListening);
+        }
+      
     }
 }

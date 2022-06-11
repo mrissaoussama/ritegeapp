@@ -363,5 +363,98 @@ namespace RitegeDomain.Database.Repositories
                 }
             }
         }
+
+        public async Task<int> GetTodayAdministrateurAsync(int idParking, int idCaisse)
+        {
+            int total = 0;
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+
+
+                query = "SELECT  count ( typeevent) as total,typeEvent from parkingdb.evenement  where typeevent like '%abonne%' and idCaisse =@idCaisse and dateevent between @dateStart and @dateEnd group by typeEvent";
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                    cmd.Parameters.Add("@idCaisse", SqlDbType.Int).Value = idCaisse;
+                    cmd.Parameters.Add("@dateStart", SqlDbType.DateTime2).Value = DateTime.Today;
+                    cmd.Parameters.Add("@dateEnd", SqlDbType.DateTime2).Value = DateTime.Today.AddDays(1).AddTicks(-1);
+
+                    con.Open();
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+
+                            total = Convert.ToInt32(sdr["total"]);
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return total;
+        }
+
+        public async Task<int> GetTodayAuthoriteAsync(int idParking, int idCaisse)
+        {
+            int total = 0;
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+
+
+                query = "SELECT  count ( typeevent) as total,typeEvent from parkingdb.evenement  where typeevent like '%Authority%' and idCaisse =@idCaisse and dateevent between @dateStart and @dateEnd group by typeEvent";
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                    cmd.Parameters.Add("@idCaisse", SqlDbType.Int).Value = idCaisse;
+                    cmd.Parameters.Add("@dateStart", SqlDbType.DateTime2).Value = DateTime.Today;
+                    cmd.Parameters.Add("@dateEnd", SqlDbType.DateTime2).Value = DateTime.Today.AddDays(1).AddTicks(-1);
+
+                    con.Open();
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+
+                            total = Convert.ToInt32(sdr["total"]);
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return total;
+        }
+
+        public async Task<int> GetTodayAbonneAsync(int idParking, int idCaisse)
+        {
+            int total = 0;
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+
+
+                query = "SELECT  count ( typeevent) as total,typeEvent from parkingdb.evenement  where typeevent like '%Personnel%' and idCaisse =@idCaisse and dateevent between @dateStart and @dateEnd group by typeEvent";
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                    cmd.Parameters.Add("@idCaisse", SqlDbType.Int).Value = idCaisse;
+                    cmd.Parameters.Add("@dateStart", SqlDbType.DateTime2).Value = DateTime.Today;
+                    cmd.Parameters.Add("@dateEnd", SqlDbType.DateTime2).Value = DateTime.Today.AddDays(1).AddTicks(-1);
+
+                    con.Open();
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+
+                            total = Convert.ToInt32(sdr["total"]);
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return total;
+        }
     }
 }

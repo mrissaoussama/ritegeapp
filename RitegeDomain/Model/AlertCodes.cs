@@ -1,15 +1,14 @@
 ﻿namespace RitegeDomain.Model
 {
-    public enum AlertCodes
-    {
-        CodeEvent21, CodeEvent17, ForceOpenAlarm,
-    }
+
     public static class AlertString
     {
+        public static string[] AlertCodes = new[] { "21", "17" };
+
         public static string GetAlertSqlString()
         {
-            string str = "in(";
-            foreach (AlertCodes alertcode in (AlertCodes[])Enum.GetValues(typeof(AlertCodes)))
+        string str = "in(";
+            foreach (var alertcode in AlertCodes)
             {
                 str += "'" + alertcode + "',";
             }

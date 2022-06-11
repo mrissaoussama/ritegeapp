@@ -4,6 +4,7 @@ using System.Text;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
 using ritegeapp.Utils;
+using RitegeDomain.DTO;
 using RitegeDomain.Model;
 using Xamarin.Forms;
 
@@ -20,7 +21,7 @@ namespace ritegeapp.Services
             DependencyService.Register<IMessage>();
 
         }
-        public void CreateAlertNotification(ParkingEvent parkingEvent)
+        public void CreateAlertNotification(EventDTO parkingEvent)
         {
             var notification = new NotificationRequest
             {

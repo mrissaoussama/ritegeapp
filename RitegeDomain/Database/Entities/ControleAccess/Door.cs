@@ -27,6 +27,7 @@ namespace RitegeDomain.Database.Entities.ControleAccess
         public bool HasSlaveReader { get; set; } // hasSlaveReader
         public string Flow { get; set; } // flow (length: 10)
         public bool? Activated { get; set; } // activated
+        public int? IdParking { get; set; }
     }
 
 }

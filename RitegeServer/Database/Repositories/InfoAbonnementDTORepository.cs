@@ -25,10 +25,11 @@ namespace RitegeDomain.Database.Repositories
                         "ab.dateActivation," +
                         "ab.dateDesactivation," +
                         "ab.etatAffectation," +
-                        "a.montant," +
+                        "a.montant," + "nom,prenom ," +
+
                         "a.nomAbonnement," +
                         "pa.periodeAbonnement " +
-                        "FROM parkingdb.abonnement a,parkingdb.affectationabonnement ab, parkingdb.periodeAbonnement pa" +
+                        "FROM parkingdb.abonnement a,parkingdb.affectationabonnement ab, parkingdb.periodeAbonnement pa,parkingdb.abonne" +
                         " where" +
                         " a.idAbonnement = ab.idAbonnement and" +
                         " pa.ordre = a.periodeAbonnement and " + 
@@ -39,9 +40,10 @@ namespace RitegeDomain.Database.Repositories
                         "ab.dateDesactivation," +
                         "ab.etatAffectation," +
                         "a.montant," +
+                        "nom,prenom,"+
                         "a.nomAbonnement," +
                         "pa.periodeAbonnement " +
-                        "FROM parkingdb.abonnement a,parkingdb.affectationabonnement ab, parkingdb.periodeAbonnement pa" +
+                        "FROM parkingdb.abonnement a,parkingdb.affectationabonnement ab, parkingdb.periodeAbonnement pa,parkingdb.abonne" +
                         " where" +
                         " a.idAbonnement = ab.idAbonnement and" +
                         " pa.ordre = a.periodeAbonnement and " +
@@ -55,7 +57,6 @@ namespace RitegeDomain.Database.Repositories
                         cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = "%" + name + "%";
                     cmd.Parameters.Add("@start", SqlDbType.DateTime2).Value = start;
                     cmd.Parameters.Add("@finish", SqlDbType.DateTime2).Value = finish;
-                    var client =0;
                     con.Open();
                     using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
                     {
@@ -66,6 +67,7 @@ namespace RitegeDomain.Database.Repositories
                             var abonnement = new InfoAbonnementDTO
                             {
                                 LibelleAbonnement = Convert.ToString(sdr["nomAbonnement"]),
+                                NomPrenomAbonne = Convert.ToString(sdr["Prenom"]) + " " + Convert.ToString(sdr["Nom"]),
                                 PrixAbonnement = Convert.ToDecimal(sdr["montant"]),
                                 DateActivation = Convert.ToDateTime(sdr["DateActivation"]),
                                 DateFinActivation = Convert.ToDateTime(sdr["DateDesactivation"]),
@@ -81,8 +83,7 @@ namespace RitegeDomain.Database.Repositories
                                 abonnement.TypeAbonnement = (TypeAbonnementEnum)System.Enum.Parse(typeof(TypeAbonnementEnum), TypeAbonnementString);
                             }
                            
-                            abonnement.NomPrenomAbonne = abonnement.LibelleAbonnement.Replace("Abonnement","");
-
+                        
                             abonnes.Add(abonnement);
                         }
                     }

@@ -8,33 +8,18 @@ namespace RitegeDomain.DTO
     [Serializable]
     public class InfoTicketDTO:IEntity
     {
-        string codeTicket, borneEntree,borneSortie;
+        string borneEntree,codeTicket;string?  borneSortie;
         TypeTicket typeTicket;
         Decimal montantPaye;
-        DateTime dateHeureSortie, dateHeureEntree;
+        DateTime? dateHeureSortie; DateTime dateHeureEntree;
 
-        public InfoTicketDTO(string codeTickets, string borneEntree, decimal montantPaye, DateTime dateHeureSortie, DateTime dateHeureEntree)
-        {
-            CodeTicket = codeTickets;
-            BorneEntree = borneEntree;
-            MontantPaye = montantPaye;
-            DateHeureSortie = dateHeureSortie;
-            DateHeureEntree = dateHeureEntree;
-        }
         public InfoTicketDTO() { }
-        public InfoTicketDTO(string codeTickets, string borneEntree, decimal montantPaye, DateTime dateHeureSortie, DateTime dateHeureEntree, TypeTicket typeTicket)
-        {
-            CodeTicket = codeTickets;
-            BorneEntree = borneEntree;
-            MontantPaye = montantPaye;
-            DateHeureSortie = dateHeureSortie;
-            DateHeureEntree = dateHeureEntree;
-            TypeTicket = typeTicket;
-        }
+     
         public string CodeTicket { get => codeTicket; set => codeTicket = value; }
         public string BorneEntree { get => borneEntree; set => borneEntree = value; }
+        public string? BorneSortie { get => borneSortie; set => borneSortie = value; }
         public decimal MontantPaye { get => montantPaye; set => montantPaye = value; }
-        public DateTime DateHeureSortie { get => dateHeureSortie; set => dateHeureSortie = value; }
+        public DateTime? DateHeureSortie { get => dateHeureSortie; set => dateHeureSortie = value; }
         public DateTime DateHeureEntree { get => dateHeureEntree; set => dateHeureEntree = value; }
         public TypeTicket TypeTicket { get => typeTicket; set => typeTicket = value; }
     }

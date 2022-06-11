@@ -49,16 +49,7 @@ namespace ritegeapp.Extentions
            ("DateEnd", typeof(DateTime), typeof(FilterView), DateTime.Today.AddDays(1).AddTicks(-1), BindingMode.TwoWay, propertyChanged: DateEndPropertyChanged);
 
 
-        public string SearchSubjectText
-        {
-            get => (string)GetValue(SearchSubjectTextProperty);
-            set => SetValue(SearchSubjectTextProperty, value);
-        }
-
-        public static readonly BindableProperty SearchSubjectTextProperty = BindableProperty.Create
-            ("SearchSubjectText", typeof(string), typeof(FilterView), "", BindingMode.TwoWay, propertyChanged: SearchSubjectChanged);
-
-
+  
         public string SearchTextBoxEntry
         {
             get => (string)GetValue(SearchTextBoxEntryProperty);
@@ -122,11 +113,7 @@ namespace ritegeapp.Extentions
             var control = (FilterView)bindable;
             control.SearchTextBoxField.Text = (string)newValue;
         }
-        private static void SearchSubjectChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var control = (FilterView)bindable;
-            control.SearchSubject.Text = (string)newValue;
-        }
+
         private static void CanTapSearchTextChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var control = (FilterView)bindable;

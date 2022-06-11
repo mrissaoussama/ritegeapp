@@ -193,7 +193,7 @@ namespace ritegeapp.ViewModels
             if ((Application.Current as App).IsOnline)
             {
                 ShowLoading();
-                var list = await dataService.GetAbonnementData(DateStart, DateEnd, SearchTextBox);
+                var list = await dataService.GetAbonnementData(DateStart, DateEnd.AddDays(1).AddTicks(-1), SearchTextBox);
                 await OnDataReceivedAsync(list);
             }
             else
@@ -210,7 +210,7 @@ namespace ritegeapp.ViewModels
         public async void ClearFilter(object obj)
         {
             DateStart = DateTime.Today;
-            DateEnd = DateTime.Today.AddMonths(1);
+            DateEnd = DateTime.Today.AddMonths(3);
             SearchTextBox = "";
             await GetData();
         }

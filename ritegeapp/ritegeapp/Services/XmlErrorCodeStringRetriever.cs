@@ -1,7 +1,9 @@
-﻿using RitegeDomain.Model;
+﻿using RitegeDomain.DTO;
+using RitegeDomain.Model;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Xml;
 
@@ -9,15 +11,16 @@ namespace ritegeapp.Services
 {
     public class XmlErrorCodeStringRetriever
     {
+        Assembly assembly = typeof(App).GetTypeInfo().Assembly;
+
         string xmlEmbeddedResourcePath = "ritegeapp.Resources.LangFrensh.xml";
         public XmlErrorCodeStringRetriever()
         {
 
         }
         //public bool EventCodeIsDangerous()
-        public ParkingEvent GetErrorCodeStringAndType(ParkingEvent parkingEvent)
+        public EventDTO GetErrorCodeString(EventDTO parkingEvent)
         {
-            var assembly = typeof(App).GetTypeInfo().Assembly;
             using (Stream stream = assembly.GetManifestResourceStream(xmlEmbeddedResourcePath))
             using (XmlReader reader = XmlReader.Create(stream))
             {
@@ -26,14 +29,8 @@ namespace ritegeapp.Services
                 {
                     if (reader.NodeType == XmlNodeType.Element)
                     {
-                        if (reader.Name == "Entry" && reader.GetAttribute("key") == parkingEvent.TypeEvent)
+                        if (reader.Name == "Entry" && reader.GetAttribute("key") == "CodeEvent"+parkingEvent.CodeEvent.ToString())
                         {
-                                         if (Enum.IsDefined(typeof(AlertCodes), parkingEvent.TypeEvent))
-                            {
-                                parkingEvent.TypeEvent = "Alert";
-                            }
-                            else parkingEvent.TypeEvent = "Evennement";
-
                             parkingEvent.DescriptionEvent=reader.ReadInnerXml();
                             return parkingEvent;
                         }
@@ -44,5 +41,6 @@ namespace ritegeapp.Services
             parkingEvent.DescriptionEvent="Pas de description";
             return parkingEvent;
         }
+     
     }
 }

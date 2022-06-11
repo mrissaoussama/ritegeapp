@@ -10,20 +10,20 @@ namespace RitegeDomain.Database.Repositories
     public class InfoSessionsDTORepository : GenericRepository<InfoSessionsDTO>, IInfoSessionsDTORepository
     {//implement
         private string connectionString;
-        public async Task<IEnumerable<InfoSessionsDTO?>> GetAllByNameAndDatesAsync(string? name, DateTime start, DateTime finish)
+        public async Task<IEnumerable<InfoSessionsDTO?>> GetAllByNameAndDatesAsync(int? idCaissier, DateTime start, DateTime finish)
         {
             List<InfoSessionsDTO> abonnes = new List<InfoSessionsDTO>();
             using (SqlConnection con = new(connectionString))
             {
                 string query;
-                if (string.IsNullOrEmpty(name))
-                    query = "SELECT  s.idcaisse,s.idSessions,s.logCaissier ,s.montant,s.DateDebut,s.DateFin, Nomcaisse from parkingdb.caisse c,parkingdb.sessions s where s.idCaisse=c.idCaisse and  DateDebut >= @start and DateFin<=@finish";
+                if (idCaissier==0)
+                    query = "SELECT  s.idcaisse,s.idSessions,s.logCaissier ,s.montant,s.DateDebut,s.DateFin, Nomcaisse from parkingdb.caisse c,parkingdb.sessions s where s.idCaisse=c.idCaisse and  DateDebut >= @start and( DateFin<=@finish or DateFin is null)";
                 else
-                    query = "SELECT  s.idcaisse,s.idSessions ,s.montant,s.DateDebut,s.DateFin, Nomcaisse from parkingdb.caisse c,parkingdb.sessions s where s.idCaisse=c.idCaisse and  DateDebut >= @start and DateFin<=@finish and nomAbonnement like @name";
+                    query = "SELECT  s.idcaisse,s.idSessions,s.logCaissier ,s.montant,s.DateDebut,s.DateFin, Nomcaisse from parkingdb.caisse c, parkingdb.sessions s where s.idCaisse = c.idCaisse and s.logCaissier like (select login from parkingdb.utilisateur where idUtilisateur=@idCaissier)";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;
-                    cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = "%" + name + "%";
+                    cmd.Parameters.Add("@idCaissier", SqlDbType.Int).Value = idCaissier;
                     cmd.Parameters.Add("@start", SqlDbType.DateTime2).Value = start;
                     cmd.Parameters.Add("@finish", SqlDbType.DateTime2).Value = finish;
 
@@ -37,14 +37,16 @@ namespace RitegeDomain.Database.Repositories
                             var session = new InfoSessionsDTO
                             {
                             
-                                Recette = Convert.ToDecimal(sdr["montant"]),
                                 DateStartSession = Convert.ToDateTime(sdr["DateDebut"]),
-                                DateEndSession = Convert.ToDateTime(sdr["DateFin"]),
                                 Caisse = Convert.ToString(sdr["Nomcaisse"]),
                                 Index = Convert.ToInt32(sdr["idSessions"]),
                                 Caissier = Convert.ToString(sdr["logCaissier"]),
 
                             };
+                            if (sdr["montant"] != DBNull.Value)
+                                session.Recette = Convert.ToDecimal(sdr["montant"]);
+                            if (sdr["DateFin"] != DBNull.Value)
+                                session.DateEndSession = Convert.ToDateTime(sdr["DateFin"]);
                             string query2 = "SELECT  count ( typeevent) as total,typeEvent from parkingdb.evenement  where " +
                                  "idCaisse = @idcaisse and dateevent between @start and @finish group by typeEvent ";
                             using (SqlConnection con2 = new(connectionString))

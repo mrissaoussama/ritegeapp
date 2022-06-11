@@ -1,13 +1,12 @@
 using AutoMapper;
 using MediatR;
-using RitegeDomain.Database;
 using RitegeDomain.DTO;
 
-namespace RitegeDomain.Database.Queries.ParkingDBQueries.InfoSessionsDTOQueries;
+namespace RitegeDomain.Database.Queries;
 
 public class InfoSessionsDTOQuery : IRequest<IEnumerable<InfoSessionsDTO>>
 {
-    public string Name { get; set; }
+    public int? idCaissier { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime FinishDate { get; set; }
 }

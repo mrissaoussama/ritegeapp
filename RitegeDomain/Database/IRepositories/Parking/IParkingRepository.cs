@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 public interface IParkingRepository : IRepository<Parking>
 {
     //  public Task<Caisse> GetOneByIdAsync(int ParkingId);
-    public Task<Parking> GetOneByIdParkingAsync(int idSociete);
+    public Task<Parking> GetOneByIdParkingAsync(int idParking);
+    public Task<decimal> GetParkingEarningsByIdAsync(int idParking);
     public Task<Parking> GetOneByNomParkingAsync(string nomParking);
     public Task<IEnumerable<Parking>> GetAllByIdSocieteAsync(int idSociete);
     // public Task<IEnumerable<Session>> GetAllByCaisseAndBorneAndDateAsync(long idCaisse, DateTime start, DateTime end);

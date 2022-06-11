@@ -18,7 +18,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, string?>
     }
     public async Task<string?> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.Login(request.Login, request.MotDePasse);
+        var entities = await _repository.GetOneByLoginAndMotDePasseAsync(request.Login, request.MotDePasse);
         return _mapper.Map<string?>(entities);
     }
 }

@@ -17,7 +17,7 @@ public class GetAllByDateQueryHandler : IRequestHandler<GetAllByDateQuery, IEnum
     }
     public async Task<IEnumerable<Evenement>> Handle(GetAllByDateQuery request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllByDateAsync(request.Date, request.AlertsOnly);
+        var entities = await _repository.GetAllByDateAsync(request.DateStart, request.AlertsOnly);
         return _mapper.Map<IEnumerable<Evenement>>(entities);
     }
 }

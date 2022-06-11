@@ -1,9 +1,10 @@
-﻿using RitegeDomain.Model;
+﻿using RitegeDomain.DTO;
+using RitegeDomain.Model;
 
 namespace ritegeapp.Services
 {
     public interface INotificationService
     {
-        void CreateAlertNotification(ParkingEvent parkingEvent);
+        void CreateAlertNotification(EventDTO parkingEvent);
     }
 }

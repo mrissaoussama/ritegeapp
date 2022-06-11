@@ -2,126 +2,263 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ritegeapp.Views.AlertView"
+             xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
              xmlns:local="clr-namespace:ritegeapp.Views"
+             xmlns:extentions="clr-namespace:ritegeapp.Extentions"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:converters1="clr-namespace:ritegeapp.Converters"
+             xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
              BackgroundColor="{StaticResource BackgroundColor}"
              Title="Alertes">
-
-
+ <ContentPage.Resources>
+  <ResourceDictionary>
+   <converters1:TypeTicketToStringConverter x:Key="TypeTicketToString" />
+   <converters1:NullToDashConverter x:Key="NullToDash" />
+  </ResourceDictionary>
+ </ContentPage.Resources>
  <ContentPage.Content>
-   <!--no result label-->
-  <Grid HorizontalOptions="CenterAndExpand"
-        VerticalOptions="CenterAndExpand"
+  <!--no result label-->
+  <Grid  HorizontalOptions="FillAndExpand"
+         VerticalOptions="FillAndExpand"
          BackgroundColor="{StaticResource BackgroundColor}">
-   <ActivityIndicator 
-                         Color="{StaticResource Primary}"
-                         IsVisible="{Binding ShowLoadingIndicator}"
-                      IsRunning="{Binding ShowLoadingIndicator}" />
-
-    <Label FontSize="Medium"
-           TextColor="{StaticResource Primary}"
-           IsVisible="{Binding ShowNoDataReceived}"
-           LineBreakMode="WordWrap">
-     <Label.FormattedText>
-      <!--no result label-->
-      <FormattedString>
-       <Span Text="Pas de resultat, Cliquer "
-             TextColor="{StaticResource LabelColor}" />
-       <Span Text="ici"
-             TextColor="{StaticResource Primary}">
-        <Span.GestureRecognizers>
-         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
-        </Span.GestureRecognizers>
-       </Span>
-       <Span Text=" pour réessayer"
-             TextColor="{StaticResource LabelColor}" />
-      </FormattedString>
-     </Label.FormattedText>
-    </Label>
-    <Label FontSize="Medium"
-           TextColor="{StaticResource Primary}"
-           IsVisible="{Binding ShowNoInternetLabel}"
-           LineBreakMode="WordWrap">
-     <Label.FormattedText>
-      <!--no result label-->
-      <FormattedString>
-       <Span Text="Pas de connexion, Activer Wifi ou Données Mobile puis cliquer "
-             TextColor="{StaticResource LabelColor}" />
-       <Span Text="ici"
-             TextColor="{StaticResource Primary}">
-        <Span.GestureRecognizers>
-         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
-        </Span.GestureRecognizers>
-       </Span>
-       <Span Text=" pour réessayer"
-             TextColor="{StaticResource LabelColor}" />
-      </FormattedString>
-     </Label.FormattedText>
-    </Label>
-    <RefreshView 
-                 IsRefreshing="{Binding ListIsRefreshing}"
-                 IsEnabled="{Binding ShowData}"
-                 Command="{Binding GetDataCommand}"
-                 IsVisible="{Binding ShowData}">
-     <ScrollView
-                 IsVisible="{Binding ShowData}">
-      <ListView
-                ItemsSource="{Binding ListAlertToShow}"
-                SeparatorVisibility="None"
-                SeparatorColor="Transparent"
-       
-                BackgroundColor="{StaticResource BackgroundColor}"
-                HorizontalOptions="Fill"
-                VerticalOptions="Fill"
-                HasUnevenRows="True">
-       <ListView.ItemTemplate>
-        <DataTemplate>
-         <ViewCell StyleId="no-selection">
-          <ViewCell.View>
-          <Frame x:Name="frame"
-                 BackgroundColor="Transparent"
-                 BorderColor="{StaticResource Primary}"
-                 Padding="5">
-           <Frame.GestureRecognizers>
-            <TapGestureRecognizer Tapped="Frame_Tapped"></TapGestureRecognizer>
-           </Frame.GestureRecognizers>
-           <StackLayout>
-          <Label FontSize="Medium"
-                 Grid.Row="0"
-                 TextColor="{StaticResource Primary}"
-                 FontAttributes="Bold">
-           <Label.FormattedText>
-             <FormattedString>
-              <Span                 TextColor="{StaticResource LabelColor}"
-                                    Text="Type: "></Span>
-               <Span Text="{Binding TypeEvent}"></Span>
-              <Span     TextColor="{StaticResource LabelColor}" Text=" | Date: "></Span>
-               <Span Text="{Binding DateEvent, StringFormat='{0:dd/MM/yyyy HH:mm}'}"></Span>
-             </FormattedString>
-           </Label.FormattedText>
-           </Label>
-           <Label FontSize="Medium"
-                  Grid.Row="0"
-                  TextColor="{StaticResource Primary}"
-                  FontAttributes="Bold">
-            <Label.FormattedText>
-             <FormattedString>
-              <Span TextColor="{StaticResource LabelColor}" Text="Description: "></Span>
-               <Span Text="{Binding DescriptionEvent}"></Span>
-             </FormattedString>
-            </Label.FormattedText>
-           </Label>          </StackLayout>
-</Frame>
+   <Grid.RowDefinitions>
+    <RowDefinition Height="50"></RowDefinition>
+   </Grid.RowDefinitions>
+   <Frame  BackgroundColor="Transparent"
+           BorderColor="{StaticResource Primary}"
+           Padding="8"
+           VerticalOptions="Center"
+           Margin="0,5,0,0">
+    <Grid VerticalOptions="Center">
+     <Grid.RowDefinitions></Grid.RowDefinitions>
+     <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+     <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
+            Grid.Row="0"
+            Margin="0,-5,0,0"
+            xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+            Grid.Column="0"></Image>
+     <Frame BorderColor="{StaticResource Primary}"
+            Margin="-5,0,-45,0"
+            Grid.Row="0"
+            Grid.Column="1"
+            Grid.ColumnSpan="1"
+            Padding="-10"
+            BackgroundColor="{StaticResource BackgroundColor}">
+      <DatePicker x:Name="DateStartPicker"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center"
+                  FontSize="Small"
+                  Date="{Binding DateStart}"
+                  TextColor="{StaticResource LabelColor}"
+                  Format="dd/MM/yyyy" />
+     </Frame>
+     <Frame BorderColor="{StaticResource Primary}"
+            Grid.Column="3"
+            Grid.ColumnSpan="1"
+            Margin="5,0,-60,0"
+            Padding="-10"
+            BackgroundColor="{StaticResource BackgroundColor}">
+      <DatePicker Format="dd/MM/yyyy"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center"
+                  MinimumDate="{Binding DateEnd}"
+                  FontSize="Small"
+                  x:Name="DateEndLabel"
+                  Date="{Binding DateEnd}"
+                  TextColor="{StaticResource LabelColor}" />
+     </Frame>
+     <Grid  Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Grid.Column="6">
+      <Image Source="search.png"
+             x:Name="CanTapSearchText"
+             xct:TouchEffect.Command="{Binding GetDataCommand}"
+             xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+             xct:TouchEffect.PressedScale="0.7"
+             xct:TouchEffect.PressedOpacity="0.7"></Image>
+      <Image Source="clearfilter.png"
+             x:Name="CanClearFilter"
+             IsEnabled="{Binding CanClearFilterCommand}"
+             xct:TouchEffect.Command="{Binding ClearFilterCommand}"
+             xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+             Grid.Column="1"
+             xct:TouchEffect.PressedScale="0.7"
+             xct:TouchEffect.PressedOpacity="0.7"></Image>
+     </Grid>
+    </Grid>
+   </Frame>
+   <ActivityIndicator Scale="0.5"
+                      Color="{StaticResource Primary}"
+                      Grid.Row="1"
+                      IsVisible="{Binding ShowLoadingIndicator}"
+                      IsRunning="true" />
+   <Label FontSize="Medium"
+          Grid.Row="1"
+          TextColor="{StaticResource LabelColor}"
+          IsVisible="{Binding ShowNoFilterResultLabel}"
+          LineBreakMode="WordWrap">
+    <Label.FormattedText>
+     <!--no result label-->
+     <FormattedString>
+      <Span Text="Pas de resultat, Cliquer "
+            Grid.Row="1"
+            TextColor="{StaticResource LabelColor}" />
+      <Span Text="Ici"
+            TextColor="{StaticResource LabelColor}">
+       <Span.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding ClearFilterCommand}" />
+       </Span.GestureRecognizers>
+      </Span>
+      <Span Text=" pour désactiver le filtre"
+            Grid.Row="1"
+            TextColor="{StaticResource LabelColor}" />
+     </FormattedString>
+    </Label.FormattedText>
+   </Label>
+   <Label FontSize="Medium"
+          Grid.Row="1"
+          TextColor="{StaticResource LabelColor}"
+          IsVisible="{Binding ShowNoDataReceived}"
+          LineBreakMode="WordWrap">
+    <Label.FormattedText>
+     <!--no result label-->
+     <FormattedString>
+      <Span Text="Pas de resultat, Cliquer "
+            TextColor="{StaticResource LabelColor}" />
+      <Span Text="ici"
+            TextColor="{StaticResource LabelColor}">
+       <Span.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+       </Span.GestureRecognizers>
+      </Span>
+      <Span Text=" pour réessayer"
+            TextColor="{StaticResource LabelColor}" />
+     </FormattedString>
+    </Label.FormattedText>
+   </Label>
+   <Label FontSize="Medium"
+          TextColor="{StaticResource LabelColor}"
+          IsVisible="{Binding ShowNoInternetLabel}"
+          Grid.Row="1"
+          LineBreakMode="WordWrap">
+    <Label.FormattedText>
+     <!--no result label-->
+     <FormattedString>
+      <Span Text="Pas de connexion, Activer Wifi ou Données Mobile puis cliquer "
+            TextColor="{StaticResource LabelColor}" />
+      <Span Text="ici"
+            TextColor="{StaticResource LabelColor}">
+       <Span.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+       </Span.GestureRecognizers>
+      </Span>
+      <Span Text=" pour réessayer"
+            TextColor="{StaticResource LabelColor}" />
+     </FormattedString>
+    </Label.FormattedText>
+   </Label>
+   <RefreshView Grid.Row="1"
+                IsRefreshing="{Binding ListIsRefreshing}"
+                IsEnabled="{Binding ShowData}"
+                Command="{Binding GetDataCommand}"
+                IsVisible="{Binding ShowData}">
+    <ScrollView IsVisible="{Binding ShowData}">
+     <ListView ItemsSource="{Binding ListAlertToShow}"
+               SeparatorVisibility="None"
+               SeparatorColor="Transparent"
+               BackgroundColor="{StaticResource BackgroundColor}"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill"
+               HasUnevenRows="True">
+      <ListView.ItemTemplate>
+       <DataTemplate>
+        <ViewCell StyleId="no-selection">
+         <ViewCell.View>
+          <Grid VerticalOptions="FillAndExpand">
+           <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+           </Grid.RowDefinitions>
+           <Frame BorderColor="{StaticResource Primary}"
+                  Padding="5"
+                  Margin="0,5,0,0"
+                  BackgroundColor="{StaticResource BackgroundColor}">
+            <syncfusion:SfExpander IconColor="{StaticResource Primary}"
+                                   HeaderBackgroundColor="{StaticResource BackgroundColor}">
+             <syncfusion:SfExpander.Header>
+              <Grid>
+               <StackLayout Orientation="Horizontal"
+                            Margin="10,0,10,0">
+                <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.alert2.png}"
+                       WidthRequest="20"
+                       xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                <Label FontSize="Small"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       TextColor="{StaticResource LabelColor}"
+                       FontAttributes="Bold">
+                 <Label.FormattedText>
+                  <FormattedString>
+                   <Span Text="{Binding DateEvent, StringFormat='{0:dd/MM/yyyy}'}"></Span>
+                   <Span Text="  "></Span>
+                   <Span Text="{Binding HeureEvent}"></Span>
+                  </FormattedString>
+                 </Label.FormattedText>
+                </Label>
+               </StackLayout>
+              </Grid>
+             </syncfusion:SfExpander.Header>
+             <syncfusion:SfExpander.Content Margin="0,5,0,0">
+              <Grid>
+               <Grid.RowDefinitions></Grid.RowDefinitions>
+               <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+               <Label TextColor="{StaticResource LabelColor}"
+                      Text="Index Event:"></Label>
+               <Label Grid.Column="1"
+                      TextColor="{StaticResource LabelColor}"
+                      Text="{Binding IndexEvent}"></Label>
+               <Label Grid.Row="1"
+                      TextColor="{StaticResource LabelColor}"
+                      Text="Numero Porte:"></Label>
+               <Label Grid.Row="1"
+                      TextColor="{StaticResource LabelColor}"
+                      Grid.Column="1"
+                      Text="{Binding DoorNumber}"></Label>
+               <Label Text="Numero Utilisateur:"
+                      Grid.Row="2"
+                      TextColor="{StaticResource LabelColor}"></Label>
+               <Label  Grid.Column="1"
+                       Grid.Row="2"
+                       TextColor="{StaticResource LabelColor}"
+                       Text="{Binding UserNumber}"></Label>
+               <Label Grid.Row="3"
+                      TextColor="{StaticResource LabelColor}"
+                      Text="Id Tag:"></Label>
+               <Label Grid.Row="3"
+                      Grid.Column="1"
+                      TextColor="{StaticResource LabelColor}"
+                      Text="{Binding CodeEvent}"></Label>
+               <Label Grid.Row="4"
+                      TextColor="{StaticResource LabelColor}"
+                      Text="Description:"></Label>
+               <Label Grid.Row="4"
+                      Grid.Column="1"
+                      TextColor="{StaticResource LabelColor}"
+                      Text="{Binding DescriptionEvent,Converter={StaticResource NullToDash}}"></Label>
+              </Grid>
+             </syncfusion:SfExpander.Content>
+            </syncfusion:SfExpander>
+           </Frame>
+          </Grid>
          </ViewCell.View>
-         </ViewCell>
-        </DataTemplate>
-       </ListView.ItemTemplate>
-      </ListView>
-     </ScrollView>
-    </RefreshView>
-    <!--custom dots menu with image support-->
-    <!--<RelativeLayout>
+        </ViewCell>
+       </DataTemplate>
+      </ListView.ItemTemplate>
+     </ListView>
+    </ScrollView>
+   </RefreshView>
+   <!--custom dots menu with image support-->
+   <!--<RelativeLayout>
      <ListView x:Name="SecondaryToolbarListView" 
                VerticalOptions="Start"
                HorizontalOptions="Fill"
@@ -150,6 +287,6 @@
       </ListView.ItemTemplate>
      </ListView>
     </RelativeLayout>-->
-   </Grid>
+  </Grid>
  </ContentPage.Content>
 </ContentPage>

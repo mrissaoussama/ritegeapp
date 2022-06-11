@@ -28,15 +28,20 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private bool showNoFilterResultLabel = false;
         [ObservableProperty]
-        private bool resetFilterButton = false;
+        private bool resetFilterButton, canClickParkingList,parkingIsLoading;
         [ObservableProperty]
-        private string statisticsToolBarItemName = "Statistiques";
+        private Dictionary<int, string> parkingList = new();
+
         [ObservableProperty]
-        private string expandOption1Text = "Développer Dates";
+        private int idParking;
+        [ObservableProperty]
+        private string parkingName;
+
+ 
         [ObservableProperty]
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
-        private DateTime dateEnd = DateTime.Today.AddDays(1).AddTicks(-1);
+        private DateTime dateEnd = DateTime.Today;
         [ObservableProperty]
         private bool showData;
         [ObservableProperty]
@@ -53,9 +58,13 @@ namespace ritegeapp.ViewModels
         private bool canTapFilterImages = false;
         [ObservableProperty]
         private decimal totalMoney;
+ 
         #endregion
         ISignalRService signalRService;
         IDataService dataService;
+
+        public bool Initialized { get; private set; }
+
         public GestionRecettesViewModel()
         {
             signalRService = DependencyService.Get<ISignalRService>();
@@ -65,14 +74,19 @@ namespace ritegeapp.ViewModels
                 await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Connecté")
             );
             });
-            signalRService.HubConnection.On<InfoTicketDTO[]>("GetTicketData", async (data) =>
+         
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, InfoTicketDTO>(Xamarin.Forms.Application.Current, "GetTicketData", async (sender, data) =>
             {
-
-                ListDto.AddRange(data);
-                NewDataReceivedAsync(data.ToList()); CalculateListTotal();
-
+                ListDto.Add(data);
+                NewDataReceivedAsync(data); CalculateListTotal();
+            });
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, ParkingData>(Xamarin.Forms.Application.Current, "TicketViewParkingClicked", async (sender, arg) =>
+            {
+                await Device.InvokeOnMainThreadAsync(() => ParkingChanged(arg.IdParking, arg.ParkingName));
             });
         }
+
+    
         private async Task DataReceivedAsync(List<InfoTicketDTO> data)
         {
             if (data == null || data.Count == 0)
@@ -97,14 +111,15 @@ namespace ritegeapp.ViewModels
         {
             TotalMoney = ListDto.Sum(x => x.MontantPaye);
         }
-        private void NewDataReceivedAsync(List<InfoTicketDTO> infoTicketDTOs)
+        private void NewDataReceivedAsync(InfoTicketDTO infoTicketDTOs)
         {
-            infoTicketDTOs.ForEach(x => ListRecetteToShow.Add(x));
+            ListRecetteToShow.Add(infoTicketDTOs);
             ShowDataView();
         }
         private void GroupByDate()
         {
             ListRecetteToShow.Clear();
+            
             ListDto.ForEach(x => ListRecetteToShow.Add(x));
             ShowDataView();
         }
@@ -161,7 +176,7 @@ namespace ritegeapp.ViewModels
         private async void ClearFilter(object obj)
         {
             DateStart = DateTime.Today;
-            DateEnd = DateTime.Today.AddDays(1).AddTicks(-1);
+            DateEnd = DateTime.Today;
             
             ShowNoFilterResultLabel = false;
             await GetData();
@@ -179,19 +194,68 @@ namespace ritegeapp.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
              ShowLoading();
-             var data = await dataService.GetTicketData(DateStart, DateEnd);
-                await DataReceivedAsync(data);
-                await Task.Run(async () => { await signalRService.Connect(); });
+                if (Initialized==false)
+                {
+                    Initialized = true;
+                    ParkingIsLoading = true;
+                    CanClickParkingList = false;
+                    ParkingList = await dataService.GetParkingList();
+                    ParkingIsLoading = false;
 
+                    if (ParkingList.Count != 0)
+                    {
+                        IdParking = ParkingList.First().Key;
+                        ParkingName = ParkingList.First().Value;
+
+                        var data = await dataService.GetTicketData(DateStart, DateEnd.AddDays(1).AddTicks(-1), IdParking);
+                        await DataReceivedAsync(data);
+                        CanClickParkingList = true;
+                        await Task.Run(async () => { await signalRService.Connect(); });
+                        await signalRService.ListenForTicketData(IdParking);
+
+                    }
+                }
+                else
+                {
+                    CanClickParkingList = false;
+
+                    var data = await dataService.GetTicketData(DateStart, DateEnd.AddDays(1).AddTicks(-1), IdParking);
+                    await DataReceivedAsync(data);
+                    CanClickParkingList = true;
+                    await Task.Run(async () => { await signalRService.Connect(); });
+                }
             }
             else
             if (ListDto.Count == 0)
                 ShowNoInternetView();
             }
-        [ICommand]
-        private async void OpenStatisticsWindow(object obj)
+        public async Task ParkingChanged(int idParking, string parkingName)
         {
-            await PopupNavigation.Instance.PushAsync(new GestionRecetteStatisticsPopup(this));
+            if (ParkingName == parkingName)
+                Debug.WriteLine("same parking");
+            else
+            {
+                ListDto.Clear();
+                CanClickParkingList = false;
+                IdParking = idParking;
+                ParkingName = parkingName;
+                ShowLoading();
+                ListRecetteToShow.Clear();
+                var data = await dataService.GetTicketData(DateStart, DateEnd.AddDays(1).AddTicks(-1), IdParking);
+                await DataReceivedAsync(data);
+                CanClickParkingList = true;
+                await Task.Run(async () => { await signalRService.Connect(); });
+                await signalRService.ListenForTicketData(IdParking);
+
+                Debug.WriteLine("different parking");
+            }
         }
+        [ICommand]
+        private async void OpenParkingListView(object obj)
+        {
+            if (CanClickParkingList)
+                await PopupNavigation.Instance.PushAsync(new ParkingListView(this,"Ticket"));
+        }
+
     }
 }

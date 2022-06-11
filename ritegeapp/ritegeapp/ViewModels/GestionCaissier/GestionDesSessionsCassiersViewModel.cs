@@ -27,22 +27,25 @@ namespace ritegeapp.ViewModels
         public ObservableCollection<Caissier> listCaissierToShow = new ObservableCollection<Caissier>();
         [ObservableProperty]
         public ObservableCollection<DateCaissier> listDateCaissierToShow = new ObservableCollection<DateCaissier>();
-        [ObservableProperty]
-        private string searchTextBox = "";
+
         [ObservableProperty]
         private string caissier;
         [ObservableProperty]
-        private string parking;
+        private string parking,nomCaissier;
+        [ObservableProperty]
+        private int idCaissier;
+        [ObservableProperty]
+        public Dictionary<int, string> listCaissier;
         [ObservableProperty]
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
-        private DateTime dateEnd = DateTime.Today.AddDays(1).AddTicks(-1);
+        private DateTime dateEnd = DateTime.Today;
         [ObservableProperty]
         private bool showNoFilterResultLabel = false;
         [ObservableProperty]
         private bool resetFilterButton = false;
         [ObservableProperty]
-        private bool caissierSortMode;
+        private bool caissierSortMode,canClickCaissierList;
         [ObservableProperty]
         private bool dateCaissierSortMode;
         [ObservableProperty]
@@ -64,15 +67,20 @@ namespace ritegeapp.ViewModels
         #endregion      
         IDataService dataService;
 
+        public bool Initialized { get; private set; }
+
         public GestionDesSessionsCaissiersViewModel()
         {
             dataService = DependencyService.Get<IDataService>();
 
             CaissierSortMode = true;
             DateCaissierSortMode = false;
-           
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, CaissierData>(Xamarin.Forms.Application.Current, "CaissierClicked", async (sender, arg) =>
+            {
+                await Device.InvokeOnMainThreadAsync(() => CaissierClicked(arg.IdCaisser, arg.CaissierName));
+            });
         }
-        private async Task FilteredDataReceivedAsync(List<InfoSessionsDTO> data)
+        private async Task DataReceivedAsync(List<InfoSessionsDTO> data)
         {
             if (data == null || data.Count == 0)
             {
@@ -172,8 +180,8 @@ namespace ritegeapp.ViewModels
         private async void ClearFilter(object obj)
         {
             dateStart = DateTime.Today;
-            dateEnd = DateTime.Today.AddDays(1).AddTicks(-1);
-            SearchTextBox = "";
+            dateEnd = DateTime.Today;
+
             ShowNoFilterResultLabel = false;
             await GetData();
         }
@@ -187,14 +195,40 @@ namespace ritegeapp.ViewModels
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
+                CanClickCaissierList = false;
                 ShowLoading();
-                await FilteredDataReceivedAsync(await dataService.GetCashierData(dateStart, dateEnd, SearchTextBox));
+                if(Initialized==false)
+                {
+                    Initialized = true;
+                    ListCaissier = await dataService.GetCashierList();
+                    Caissier = "—";
+                }
+
+                await DataReceivedAsync(await dataService.GetCashierData(dateStart, dateEnd.AddDays(1).AddTicks(-1), IdCaissier));
+                CanClickCaissierList = true;
+
             }
             else
             if (ListDto.Count == 0)
                 ShowNoInternetView();
         }
-
+        public async Task CaissierClicked(int idCashRegister, string CaissierName)
+        {
+            if (Caissier == CaissierName)
+                Debug.WriteLine("same caisse");
+            else
+            {
+                IdCaissier = idCashRegister;
+                Caissier = CaissierName;
+                CanClickCaissierList = false;
+                ShowLoading();
+                
+                await DataReceivedAsync(await dataService.GetCashierData(dateStart, dateEnd.AddDays(1).AddTicks(-1), IdCaissier));
+                ShowDataView();
+                CanClickCaissierList = true;
+                Debug.WriteLine("different caisse");
+            }
+        }
         [ICommand]
         private void SortBy(object obj)
         {
@@ -206,5 +240,13 @@ namespace ritegeapp.ViewModels
         {
             await PopupNavigation.Instance.PushAsync(new GestionCaissierStatisticsPopup(this));
         }
+        
+        [ICommand]
+        private async void OpenCaissierList(object obj)
+        {
+            if (CanClickCaissierList)
+                await PopupNavigation.Instance.PushAsync(new CaissierListView(this));
+        }
+
     }
 }

@@ -123,6 +123,35 @@ namespace RitegeDomain.Database.Repositories
             return Caisse;
         }
 
+        public async Task<decimal> GetTodayEarningsByIdAsync(int idCaisse)
+        {
+            decimal total = 0;
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+                query = "SELECT Sum(montant) as montantparking from parkingdb.sessions where dateDebut>=@dateStart and (DateFin is NULL or DateFin<=@dateEnd) and idCaisse =@idCaisse";
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                    cmd.Parameters.Add("@idCaisse", SqlDbType.Int).Value = idCaisse;
+                    cmd.Parameters.Add("@dateStart", SqlDbType.DateTime).Value = DateTime.Today;
+                    cmd.Parameters.Add("@dateEnd", SqlDbType.DateTime).Value = DateTime.Today.AddDays(1).AddTicks(-1);
 
+
+                    con.Open();
+                    using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await sdr.ReadAsync())
+                        {
+                            if (sdr["montantparking"] != DBNull.Value)
+                                total = Convert.ToDecimal(sdr["montantparking"]);
+
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return total;
+        }
     }
 }

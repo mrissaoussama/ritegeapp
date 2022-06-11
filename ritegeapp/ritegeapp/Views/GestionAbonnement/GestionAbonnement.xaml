@@ -18,13 +18,12 @@
   <Grid BackgroundColor="{StaticResource BackgroundColor}"
         Margin="0,5,0,0">
    <Grid.RowDefinitions>
-    <RowDefinition Height="140"></RowDefinition>
-    <RowDefinition Height="60"></RowDefinition>
+    <RowDefinition Height="110"></RowDefinition>
+    <RowDefinition Height="30"></RowDefinition>
    </Grid.RowDefinitions>
    <extentions:FilterView             x:DataType="viewmodels:GestionAbonnementViewModel"
                                       DateStart="{Binding DateStart,Mode=TwoWay}"
                                       DateEnd="{Binding DateEnd}"
-                                      SearchSubjectText="Abonné"
                                       SearchTextBoxEntry="{Binding SearchTextBox}"
                                       CanTapSearchTextBool="{Binding CanTapFilterImages}"
                                       CanTapSearchTextCommand="{Binding SearchTextCommand}"
@@ -39,7 +38,7 @@
                         IsRunning="true" />
    <Label FontSize="Medium"
           Grid.Row="1"
-          TextColor="{StaticResource Primary}"
+          TextColor="{StaticResource LabelColor}"
           IsVisible="{Binding ShowNoFilterResultLabel}"
           LineBreakMode="WordWrap">
     <Label.FormattedText>
@@ -48,7 +47,7 @@
       <Span Text="Pas de resultat, Cliquer "
             TextColor="{StaticResource LabelColor}" />
       <Span Text="Ici"
-            TextColor="{StaticResource Primary}">
+            TextColor="{StaticResource LabelColor}">
        <Span.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding ClearFilterCommand}" />
        </Span.GestureRecognizers>
@@ -60,7 +59,7 @@
    </Label>
    <Label FontSize="Medium"
           Grid.Row="1"
-          TextColor="{StaticResource Primary}"
+          TextColor="{StaticResource LabelColor}"
           IsVisible="{Binding ShowNoDataReceived}"
           LineBreakMode="WordWrap">
     <Label.FormattedText>
@@ -69,7 +68,7 @@
       <Span Text="Pas de resultat, Cliquer "
             TextColor="{StaticResource LabelColor}" />
       <Span Text="ici"
-            TextColor="{StaticResource Primary}">
+            TextColor="{StaticResource LabelColor}">
        <Span.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
        </Span.GestureRecognizers>
@@ -81,7 +80,7 @@
    </Label>
    <Label FontSize="Medium"
           Grid.Row="1"
-          TextColor="{StaticResource Primary}"
+          TextColor="{StaticResource LabelColor}"
           IsVisible="{Binding ShowNoInternetLabel}"
           LineBreakMode="WordWrap">
     <Label.FormattedText>
@@ -90,7 +89,7 @@
       <Span Text="Pas de connexion, Activer Wifi ou Données Mobile puis cliquer "
             TextColor="{StaticResource LabelColor}" />
       <Span Text="ici"
-            TextColor="{StaticResource Primary}">
+            TextColor="{StaticResource LabelColor}">
        <Span.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
        </Span.GestureRecognizers>
@@ -115,9 +114,9 @@
        <Span Text="Total: "
              TextColor="{StaticResource LabelColor}"></Span>
        <Span Text="{Binding TotalMoney,StringFormat='{0:G29}' }"
-             TextColor="{StaticResource Primary}"></Span>
+             TextColor="{StaticResource LabelColor}"></Span>
        <Span Text=" DT"
-             TextColor="{StaticResource Primary}"></Span>
+             TextColor="{StaticResource LabelColor}"></Span>
       </FormattedString>
      </Label.FormattedText>
     </Label>
@@ -162,10 +161,10 @@
                               Margin="10,0,10,0">
                   <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.person.png}"
                          WidthRequest="20"
-                         xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                         xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                
                  <Label FontSize="Medium"
-                         TextColor="{StaticResource Primary}"
+                         TextColor="{StaticResource LabelColor}"
                          BackgroundColor="{StaticResource BackgroundColor}"
                          FontAttributes="Bold">
                   <Label.FormattedText>
@@ -208,22 +207,22 @@
                           </Grid.ColumnDefinitions>
                           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
                                  WidthRequest="20"
-                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                           <Label Grid.Column="1"
                                  FontSize="Small"
-                                 TextColor="{StaticResource Primary}"
+                                 TextColor="{StaticResource LabelColor}"
                                  Text="{Binding DateActivation , StringFormat='{0:dd/MM/yyyy}'}"></Label>
                           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendarcheckmark.png}"
                                  Grid.Column="2"
                                  WidthRequest="20"
-                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                           <Label FontSize="Small"
-                                 TextColor="{StaticResource Primary}"
+                                 TextColor="{StaticResource LabelColor}"
                                  Grid.Column="3"
                                  Grid.ColumnSpan="2"
                                  Text="{Binding DateFinActivation, StringFormat='{0:dd/MM/yyyy}'}"></Label>
                           <Label Grid.Column="5"
-                                 TextColor="{StaticResource Primary}">
+                                 TextColor="{StaticResource LabelColor}">
                            <Label.FormattedText>
                             <FormattedString>
                              <Span Text="{Binding PrixAbonnement,StringFormat='{0:G29}' }"></Span>
@@ -241,7 +240,7 @@
                          <Label Text="Date Affectation:"
                                 TextColor="{StaticResource LabelColor}"></Label>
                          <Label  Grid.Column="1"
-                                 TextColor="{StaticResource Primary}"
+                                 TextColor="{StaticResource LabelColor}"
                                  Text="{Binding DateAffectation, StringFormat='{0:d}'}"></Label>
                         
                          <Label Grid.Row="1"
@@ -249,14 +248,14 @@
                                 TextColor="{StaticResource LabelColor}"></Label>
                          <Label Grid.Row="1"
                                 Grid.Column="1"
-                                TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                                 Text="{Binding TypeAbonnement}"></Label>
                          <Label Grid.Row="2"
                                 Text="Libelle Abonnement:"
                                 TextColor="{StaticResource LabelColor}"></Label>
                          <Label Grid.Row="2"
                                 Grid.Column="1"
-                                TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                                 Text="{Binding LibelleAbonnement}"></Label>
                        
                         </Grid>
@@ -309,10 +308,10 @@
                               Margin="10,0,10,0">
                   <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
                          WidthRequest="20"
-                         xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                         xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                   <Label FontSize="Medium"
                          BackgroundColor="{StaticResource BackgroundColor}"
-                         TextColor="{StaticResource Primary}"
+                         TextColor="{StaticResource LabelColor}"
                          FontAttributes="Bold">
                    <Label.FormattedText>
                     <FormattedString>
@@ -355,22 +354,22 @@
                           </Grid.ColumnDefinitions>
                           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.contract.png}"
                                  WidthRequest="20"
-                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                           <Label Grid.Column="1"
                                  FontSize="Small"
-                                 TextColor="{StaticResource Primary}"
+                                 TextColor="{StaticResource LabelColor}"
                                  Text="{Binding DateAffectation, StringFormat='{0:dd/MM/yyyy}'}"></Label>
                           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendarcheckmark.png}"
                                  Grid.Column="2"
                                  WidthRequest="20"
-                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                           <Label FontSize="Small"
-                                 TextColor="{StaticResource Primary}"
+                                 TextColor="{StaticResource LabelColor}"
                                  Grid.Column="3"
                                  Grid.ColumnSpan="2"
                                  Text="{Binding DateFinActivation, StringFormat='{0:dd/MM/yyyy}'}"></Label>
                           <Label Grid.Column="5"
-                                 TextColor="{StaticResource Primary}">
+                                 TextColor="{StaticResource LabelColor}">
                            <Label.FormattedText>
                             <FormattedString>
                              <Span Text="{Binding PrixAbonnement,StringFormat='{0:G29}' }"></Span>
@@ -394,21 +393,21 @@
                          <Label Text="Type Abonnement:"
                                 TextColor="{StaticResource LabelColor}"></Label>
                          <Label Grid.Column="1"
-                                TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                                 Text="{Binding TypeAbonnement}"></Label>
                          <Label Grid.Row="1"
                                 Text="Libelle Abonnement:"
                                 TextColor="{StaticResource LabelColor}"></Label>
                          <Label Grid.Row="1"
                                 Grid.Column="1"
-                                TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                                 Text="{Binding LibelleAbonnement}"></Label>
                          <Label Grid.Row="2"
                                 Text="Abonné:"
                                 TextColor="{StaticResource LabelColor}"></Label>
                          <Label Grid.Row="2"
                                 Grid.Column="1"
-                                TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                                 Text="{Binding NomPrenomAbonne}"></Label>
                         </Grid>
                        </syncfusion:SfExpander.Content>

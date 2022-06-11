@@ -27,7 +27,7 @@
  <ContentPage.Content>
   <RefreshView IsRefreshing="{Binding IsRefreshing}"
                IsEnabled="{Binding ShowData}"
-               Command="{Binding GetDataCommand}">
+               Command="{Binding GetDataButtonCommand}">
    <ScrollView>
     <StackLayout>
      <Grid>
@@ -62,7 +62,9 @@
              <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}" ></TapGestureRecognizer>
             </Image.GestureRecognizers>
            </Image>
-          <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+          <Label skeleton:Skeleton.IsBusy="{Binding ParkingIsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
                  Style="{DynamicResource fontGilroyMedium12}"
                  Margin="0,0,0,5"
                  FontSize="Large"
@@ -91,7 +93,9 @@
             <TapGestureRecognizer Command="{Binding OpenCashRegisterListViewCommand}"></TapGestureRecognizer>
            </Image.GestureRecognizers>
           </Image>
-          <Label skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+          <Label skeleton:Skeleton.IsBusy="{Binding CashRegisterIsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
                  Style="{DynamicResource fontGilroyMedium12}"
                  Margin="0,0,0,5"
                  FontSize="Large"
@@ -119,8 +123,12 @@
           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.moneybag.png}"
 Scale="0.75"
                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
-         <Label Style="{DynamicResource fontGilroyMedium12}"
-                Grid.Column="1"
+          <Label Style="{DynamicResource fontGilroyMedium12}"
+                 skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
+                 Grid.Column="1"
+                 WidthRequest="80"
                 VerticalOptions="Center"
                 FontSize="Medium"
                 HorizontalOptions="Start">
@@ -135,8 +143,11 @@ Scale="0.75"
                 Scale="0.75"
                 Grid.Column="2"
                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
-         <Label Style="{DynamicResource fontGilroyMedium12}"
-                Grid.Column="3" FontSize="Medium"
+          <Label Style="{DynamicResource fontGilroyMedium12}"
+                 skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
+                 Grid.Column="3" FontSize="Medium"
                 VerticalOptions="Center">
           <Label.FormattedText>
            <FormattedString>
@@ -149,8 +160,11 @@ Scale="0.75"
                 Scale="0.75"
                 Grid.Row="1"
                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
-         <Label Style="{DynamicResource fontGilroyMedium12}"
-                Grid.Column="1"
+          <Label Style="{DynamicResource fontGilroyMedium12}"
+                 skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
+                 Grid.Column="1"
                 FontSize="Medium"
                 Grid.Row="1"
                 VerticalOptions="Center"
@@ -161,8 +175,11 @@ Scale="0.75"
                 Grid.Row="1"
                 Grid.Column="2"
                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
-         <Label Style="{DynamicResource fontGilroyMedium12}"
-                Grid.Column="3"
+          <Label Style="{DynamicResource fontGilroyMedium12}"
+                 skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
+                 Grid.Column="3"
                 FontSize="Medium"
                 Grid.Row="1"
                 VerticalOptions="Center">
@@ -210,7 +227,10 @@ Scale="0.75"
          </control:ProgressRing>
          <StackLayout VerticalOptions="CenterAndExpand">
           <Label FontAttributes="Bold"
-                 FontSize="20"
+                 FontSize="40" Margin="0,0,0,-15" WidthRequest="50"
+                 skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
                  Text="{Binding PlaceDisponible,Converter={StaticResource NullToDash}}"
                  VerticalOptions="CenterAndExpand"
                  HorizontalOptions="CenterAndExpand">
@@ -221,7 +241,8 @@ Scale="0.75"
             </MultiBinding>
            </Label.TextColor>
           </Label>
-          <Label Text="Places Disponible"
+          <Label Text="Places Disponibles"
+                 Margin="0,10,0,0"
                  TextColor="{StaticResource LabelColor}"
                  HorizontalTextAlignment="Center" />
          </StackLayout>
@@ -240,6 +261,10 @@ Scale="0.75"
                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
          <Label Style="{DynamicResource fontGilroyMedium12}"
                 Grid.Column="1"
+                WidthRequest="50"
+                skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
                 VerticalOptions="Center"
                 FontSize="Medium"
                 HorizontalOptions="Start">
@@ -256,6 +281,10 @@ Scale="0.75"
                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
          <Label Style="{DynamicResource fontGilroyMedium12}"
                 Grid.Column="1"
+                WidthRequest="50"
+                skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
                 FontSize="Medium"
                 Grid.Row="1"
                 VerticalOptions="Center"
@@ -287,9 +316,12 @@ Scale="0.75"
                  Margin="5,0,0,0"
                  xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
          <Label Style="{DynamicResource fontGilroyMedium12}"
-                
-                VerticalOptions="Center"
-                FontSize="Medium"
+                 skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
+                 VerticalOptions="Center"
+                 FontSize="Medium"
+                 WidthRequest="40"
                  Text="{Binding NbTickets,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"
                 HorizontalOptions="Start">
           
@@ -300,7 +332,11 @@ Scale="0.75"
                  Scale="0.75"
                  xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
           <Label Style="{DynamicResource fontGilroyMedium12}"
-                 VerticalOptions="Center" 
+                 VerticalOptions="Center"
+                 WidthRequest="40"
+                 skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
                  FontSize="Medium"
                  Text="{Binding NbAdministrateur,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"
                  ></Label>
@@ -312,7 +348,11 @@ Scale="0.75"
                  xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
           <Label Style="{DynamicResource fontGilroyMedium12}"
                  VerticalOptions="Center"
+                 WidthRequest="40"
                  FontSize="Medium"
+                 skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
                  Text="{Binding NbAutorite,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"
                  HorizontalOptions="Start"></Label>
          </StackLayout>
@@ -324,6 +364,10 @@ Scale="0.75"
                  xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
           <Label Style="{DynamicResource fontGilroyMedium12}"
                  VerticalOptions="Center"
+                 skeleton:Skeleton.IsBusy="{Binding IsLoading}"
+                 skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+                 skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
+                 WidthRequest="40"
                  FontSize="Medium"
                  Text="{Binding NbAbonne,Converter={StaticResource NullToDash},StringFormat='{0:G29}' }"
                  HorizontalOptions="Start"></Label>

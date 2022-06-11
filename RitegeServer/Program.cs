@@ -3,6 +3,7 @@ global using RitegeDomain.Database.Repositories;using MediatR;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 
 using RitegeServer.Hubs;
@@ -17,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSignalR();
 builder.Services.AddSignalRCore();
+builder.Services.AddSingleton<IUserIdProvider, JWTUserIdProvider>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -29,6 +31,8 @@ builder.Services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>)
 builder.Services.AddTransient<IInfoAbonnementDTORepository, InfoAbonnementDTORepository>();
 builder.Services.AddTransient<IInfoSessionsDTORepository, InfoSessionsDTORepository>();
 builder.Services.AddTransient<IInfoTicketDTORepository, InfoTicketDTORepository>();
+builder.Services.AddTransient<IDashboardDTORepository, DashboardDTORepository>();
+builder.Services.AddTransient<IEventDTORepository, EventDTORepository>();
 builder.Services.AddTransient<IAbonneRepository, AbonneRepository>();
 builder.Services.AddTransient<IAbonnementRepository, AbonnementRepository>();
 builder.Services.AddTransient<IAffectationabonnementRepository, AffectationabonnementRepository>();
@@ -46,6 +50,8 @@ builder.Services.AddTransient<ICaisseRepository, CaisseRepository>();
 builder.Services.AddTransient<IClientRepository, ClientRepository>();
 builder.Services.AddTransient<ISocieteRepository, SocieteRepository>();
 builder.Services.AddTransient<IParkingRepository, ParkingRepository>();
+builder.Services.AddTransient<IQueryManager, QueryManager>();
+builder.Services.AddSingleton<IMobileClientHandler, MobileClientHandler>();
 
 builder.Services.AddControllers();
 builder.Services.AddHostedService<SendDataHostedService>();

@@ -44,8 +44,8 @@
             var tokentoinsert = new NotificationToken(token);
             try
             {
-                await SecureStorage.SetAsync("token", tokentoinsert.Token);
-                await SecureStorage.SetAsync("tokenDate", tokentoinsert.Date.ToString());
+                await SecureStorage.SetAsync("ClientToken", tokentoinsert.Token);
+                await SecureStorage.SetAsync("ClientTokenDate", tokentoinsert.Date.ToString());
 
                 (Application.Current as App).Token = token;
 
@@ -55,21 +55,25 @@
                 Debug.WriteLine("Error Setting Token");
 
             }
-           
+
         }
         public async Task<string?> GetToken()
         {
-            NotificationToken? t=new();
+            NotificationToken? t = new();
             {
                 //await dbcontext.Database.ExecuteSqlRawAsync("delete from Token");
                 try
                 {
-                    t.Token = await SecureStorage.GetAsync("token");
-                    t.Date =DateTime.Parse(await SecureStorage.GetAsync("tokenDate"));
+                    t.Token = await SecureStorage.GetAsync("ClientToken");
+                    if(!string.IsNullOrEmpty(await SecureStorage.GetAsync("ClientTokenDate")))
+                    t.Date = DateTime.Parse(await SecureStorage.GetAsync("ClientTokenDate"));
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine("Error Getting Token");
+                    //await Login();
+                    return null;
+
                 }
             }
             if (!string.IsNullOrEmpty(t.Token))
@@ -82,18 +86,21 @@
                 }
                 else
                 {
-                    (Application.Current as App).Token = await Login();
-                    await NewTokenReceived(t.Token);
-                    return (Application.Current as App).Token;
+                    return null;
+
+                    //(Application.Current as App).Token = await Login();
+                    //await NewTokenReceived(t.Token);
+                    //return (Application.Current as App).Token;
                 }
             }
             else
             {
-                (Application.Current as App).Token = await Login();
-                return (Application.Current as App).Token;
+                return null;
+                //(Application.Current as App).Token = await Login();
+                //return (Application.Current as App).Token;
             }
         }
-        public async Task<string?> Login()
+        public async Task<string?> Login(string email,string password)
         {
             Debug.WriteLine("Login Called //////////////////////");
             {
@@ -104,8 +111,8 @@
                     string uri = (App.ServerURL + "/Parking/login");
                     var parameters = new Dictionary<string, string>
                     {
-                    { "login", "oussama" },
-                    { "motdepasse", "mrissa" }
+                    { "login",email},
+                    { "motdepasse", password }
                     };
                     uri = QueryHelpers.AddQueryString(uri, parameters);
 
@@ -230,68 +237,81 @@
 
             }
         }
-        public async Task<List<ParkingEvent>> GetEventData(DateTime date)
+        public async Task<List<EventDTO>> GetEventData(DateTime dateStart, DateTime dateEnd)
         {
             var parameters = new Dictionary<string, string>
             {
-                { nameof(date), date.ToString("O") },
+                { nameof(dateStart), dateStart.ToString("O") },
+                { nameof(dateEnd), dateEnd.ToString("O") },
 
             };
-            var list = await GetData<List<ParkingEvent>>("/Parking/GetEventData", parameters);
+            var list = await GetData<List<EventDTO>>("/Parking/GetEventData", parameters);
             return list;
         }
-        public async Task<List<ParkingEvent>> GetLast10Events()
+        public async Task<List<EventDTO>> GetAlertData(DateTime dateStart, DateTime dateEnd)
         {
             var parameters = new Dictionary<string, string>
             {
-            };
-            var list = await GetData<List<ParkingEvent>>("/Parking/GetLast10Events", parameters);
-            return list;
-        }
-        public async Task<List<ParkingEvent>> GetAlertData(DateTime date)
-        {
-            var parameters = new Dictionary<string, string>
-            {
-                { nameof(date), date.ToString("O") },
+         { nameof(dateStart), dateStart.ToString("O") },
+                { nameof(dateEnd), dateEnd.ToString("O") },
 
             };
-            var list = await GetData<List<ParkingEvent>>("/Parking/GetAlertData", parameters);
+            var list = await GetData<List<EventDTO>>("/Parking/GetAlertData", parameters);
             return list;
         }
-        public async Task<List<string>> GetParkingList()
+        public async Task<Dictionary<int, string>> GetParkingList()
         {
+            Debug.WriteLine("DS GetParkingList()");
+
             var parameters = new Dictionary<string, string>
             {
                 //{ nameof(c), dateStart.ToString("O") },
                 //	{ nameof(dateEnd), dateEnd.ToString("O") },
 
             };
-            var list = await GetData<List<string>>("/Parking/GetParkingList", parameters);
+            var list = await GetData<Dictionary<int, string>>("/Parking/GetParkingList", parameters);
             return list;
 
         }
 
-        public async Task<List<string>> GetCashierList(string parkingname)
+        public async Task<Dictionary<int, string>> GetCashierList()
         {
+            Debug.WriteLine("DS GetCashierList()");
+
             var parameters = new Dictionary<string, string>
             {
-                { nameof(parkingname), parkingname},
                 //	{ nameof(dateEnd), dateEnd.ToString("O") },
 
             };
-            var list = await GetData<List<string>>("/Parking/GetCashierList", parameters);
+            var list = await GetData<Dictionary<int, string>>("/Parking/GetCashierList", parameters);
             return list;
 
         }
-        public async Task<List<string>> GetCashRegisterList(string parkingname)
+        public async Task<Dictionary<int, string>> GetCashierListByParking(int idParking)
         {
+            Debug.WriteLine("DS GetCashierList()");
+
             var parameters = new Dictionary<string, string>
             {
-                { nameof(parkingname), parkingname},
+                { nameof(idParking), idParking.ToString()},
                 //	{ nameof(dateEnd), dateEnd.ToString("O") },
 
             };
-            var list = await GetData<List<string>>("/Parking/GetCashRegisterList", parameters);
+            var list = await GetData<Dictionary<int, string>>("/Parking/GetCashierList", parameters);
+            return list;
+
+        }
+        public async Task<Dictionary<int, string>> GetCashRegisterList(int idParking)
+        {
+            Debug.WriteLine("DS GetCashRegisterList()");
+
+            var parameters = new Dictionary<string, string>
+            {
+                { nameof(idParking), idParking.ToString()},
+                //	{ nameof(dateEnd), dateEnd.ToString("O") },
+
+            };
+            var list = await GetData<Dictionary<int, string>>("/Parking/GetCashRegisterList", parameters);
             return list;
 
         }
@@ -309,34 +329,38 @@
             var list = await GetData<List<InfoAbonnementDTO>>("/Parking/GetAbonnementData", parameters);
             return list;
         }
-        public async Task<List<InfoSessionsDTO>> GetCashierData(DateTime dateStart, DateTime dateEnd, string? caissierName)
+        public async Task<List<InfoSessionsDTO>> GetCashierData(DateTime dateStart, DateTime dateEnd, int? idCaissier)
         {
             var parameters = new Dictionary<string, string>
         {
             { nameof(dateStart), dateStart.ToString("O") },
             { nameof(dateEnd), dateEnd.ToString("O") },
-            { nameof(caissierName), caissierName},
+            { nameof(idCaissier), idCaissier.ToString()},
         };
 
             var list = await GetData<List<InfoSessionsDTO>>("/Parking/GetCashierData", parameters);
             return list;
 
         }
-        public async Task<List<InfoTicketDTO>> GetTicketData(DateTime dateStart, DateTime dateEnd)
+        public async Task<List<InfoTicketDTO>> GetTicketData(DateTime dateStart, DateTime dateEnd, int idParking)
         {
             var parameters = new Dictionary<string, string>
         {
             { nameof(dateStart), dateStart.ToString("O") },
             { nameof(dateEnd), dateEnd.ToString("O") },
+            { nameof(idParking), idParking.ToString()},
+
         };
             var list = await GetData<List<InfoTicketDTO>>("/Parking/GetTicketData", parameters);
             return list;
         }
-        public async Task<DashBoardDTO> GetDashboardData(int idparking)
+        public async Task<DashBoardDTO> GetDashboardData(int idParking, int idCaisse)
         {
+            Debug.WriteLine("DS GetDashboardData()");
             var parameters = new Dictionary<string, string>
             {
-                 { nameof(idparking), idparking.ToString()}
+                 { nameof(idParking), idParking.ToString()},
+                 { nameof(idCaisse), idCaisse.ToString()}
             };
             var data = await GetData<DashBoardDTO>("/Parking/GetDashboardData", parameters);
             return data;
@@ -346,6 +370,28 @@
         {
             if ((Application.Current as App).IsShowingAlert == false)
                 MessagingCenter.Send(Xamarin.Forms.Application.Current, "CommunicationError", ex.Message);
+        }
+        public async Task<List<ParkingEvent>> GetLast10Events()
+        {
+            var parameters = new Dictionary<string, string>
+            {
+            };
+            var list = await GetData<List<ParkingEvent>>("/Parking/GetLast10Events", parameters);
+            return list;
+        }
+
+        public async Task Disconnect()
+        {
+            (Application.Current as App).Token = null;
+            SecureStorage.RemoveAll();
+            try
+            {
+                MessagingCenter.Send(Xamarin.Forms.Application.Current, "LogOut");
+            }
+            catch (Exception e)
+            {
+
+            }
         }
     }
 }

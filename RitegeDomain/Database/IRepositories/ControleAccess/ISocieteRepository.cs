@@ -5,8 +5,10 @@ public interface ISocieteRepository : IRepository<Societe>
 {
 
     public Task<Societe> GetOneByIdAsync(int id);
-    //public Task<List<Client>> GetAllAsync();
-   public Task<Societe> GetOneByNameAsync(string name);
+    public Task<Societe> GetOneByIdParkingAsync(int idparking);
+    public Task<decimal> GetCompanyEarningsByIdAsync(int idSociete);
+    public Task<Societe> GetOneByNameAsync(string name);
+    public Task<Societe> GetOneByIdDoorAsync(int idDoor);
 
  //   public Task<Client> GetAllByIdSociete(string email, string password);
 

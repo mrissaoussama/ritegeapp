@@ -20,10 +20,11 @@ namespace ritegeapp.Views
             //);
 
         }
-        public ParkingListView(ObservableObject viewmodel)
+
+        public ParkingListView(ObservableObject viewmodel,string viewName)
         {
             InitializeComponent();
-            BindingContext = new ParkingListViewViewModel(viewmodel);
+            BindingContext = new ParkingListViewViewModel(viewmodel,viewName);
         }
 
         private void OnClose(object sender, EventArgs e)

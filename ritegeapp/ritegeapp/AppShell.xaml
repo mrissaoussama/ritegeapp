@@ -2,7 +2,8 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:ritegeapp.Views"
-       Title="ritegeapp"
+       Title="ritegeapp" 
+       xmlns:extentions="clr-namespace:ritegeapp.Extentions" 
        xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
        FlyoutBackgroundColor="{StaticResource BackgroundColor}"
        x:Class="ritegeapp.AppShell">
@@ -80,40 +81,45 @@
         FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
+ <FlyoutItem Title="Tableau De Bord" x:Name="dashboard"
+             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.home.png}">
+  <ShellContent Route="TableauDeBord"
+                ContentTemplate="{DataTemplate local:TableauDeBord}" />
+ </FlyoutItem>
  <FlyoutItem Title="Gestion Sessions Caissiers"
-             Icon="icon_feed.png">
+             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.cashier.png}">
   <ShellContent Route="GestionDesSessionsCaissiers"
                 ContentTemplate="{DataTemplate local:GestionDesSessionsCaissiers}" />
  </FlyoutItem>
  <FlyoutItem Title="Gestion Recettes"
-             Icon="icon_feed.png">
+             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.ticket.png}">
   <ShellContent Route="GestionRecette"
                 ContentTemplate="{DataTemplate local:GestionRecettes}" />
  </FlyoutItem>
- <FlyoutItem Title="Tableau De Bord"
-             Icon="icon_about.png">
-  <ShellContent Route="TableauDeBord"
-                ContentTemplate="{DataTemplate local:TableauDeBord}" />
- </FlyoutItem>
-
-
  <FlyoutItem Title="Gestion Abonnement"
-             Icon="icon_about.png">
+             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.contract.png}">
   <ShellContent Route="Gestion Abonnement"
                 ContentTemplate="{DataTemplate local:GestionAbonnement}" />
  </FlyoutItem>
-
-
  <FlyoutItem Title="Evenements"
-             Icon="icon_feed.png">
+             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.event.png}">
   <ShellContent Route="EventView"
                 ContentTemplate="{DataTemplate local:EventView}" />
  </FlyoutItem>
  <FlyoutItem Title="Alertes"
-             Icon="icon_feed.png">
+             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.alert2.png}">
   <ShellContent Route="AlertView"
                 ContentTemplate="{DataTemplate local:AlertView}" />
  </FlyoutItem>
+ <FlyoutItem Title="Alertes" IsVisible="False" x:Name="login"
+             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.alert2.png}">
+  <ShellContent Route="AlertView"
+                ContentTemplate="{DataTemplate local:LoginView}" />
+ </FlyoutItem>
+ <MenuItem Text="Déconnecter"
+           StyleClass="MenuItemLayoutStyle"
+           Clicked="MenuItem_Clicked"></MenuItem>
+
  <!--
         TabBar lets you define content that won't show up in a flyout menu. When this content is active
         the flyout menu won't be available. This is useful for creating areas of the application where 

@@ -5,13 +5,20 @@ namespace ritegeapp.Services
 {
     public interface ISignalRService
     {
-        public bool Initialized { get; set; }
-        public HubConnection HubConnection { get; set; }
-        public HubConnection GetHub();
+        HubConnection HubConnection { get; set; }
+        bool Initialized { get; set; }
+
         Task Connect();
         Task Disconnect();
+        HubConnection GetHub();
         Task Initialize();
-        void ListenForAlerts();
-        void StopListeningForNotImportantData();
+        Task ListenForAlerts();
+        Task ListenForDashboardData(int? idparking, int? idcaisse);
+        Task ListenForEventData();
+        Task ListenForTicketData(int idParking);
+        void StartAlertService();
+        Task StopListeningForDashboardData();
+        Task StopListeningForEventData();
+        Task StopListeningForTicketData();
     }
 }

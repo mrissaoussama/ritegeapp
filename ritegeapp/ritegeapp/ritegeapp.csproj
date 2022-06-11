@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\LabelIcons\alert.png" />
+    <None Remove="images\LabelIcons\alert2.png" />
     <None Remove="images\LabelIcons\calendar.png" />
     <None Remove="images\LabelIcons\calendarcheckmar.png" />
     <None Remove="images\LabelIcons\calendarcheckmark.png" />
@@ -16,12 +18,16 @@
     <None Remove="images\LabelIcons\cashregister.png" />
     <None Remove="images\LabelIcons\cashregisterearning.png" />
     <None Remove="images\LabelIcons\contract.png" />
+    <None Remove="images\LabelIcons\event.png" />
+    <None Remove="images\LabelIcons\event2.png" />
+    <None Remove="images\LabelIcons\home.png" />
     <None Remove="images\LabelIcons\moneybag.png" />
     <None Remove="images\LabelIcons\parking.png" />
     <None Remove="images\LabelIcons\parkingearnings.png" />
     <None Remove="images\LabelIcons\person.png" />
     <None Remove="images\LabelIcons\police.png" />
     <None Remove="images\LabelIcons\staff.png" />
+    <None Remove="images\LabelIcons\statistics.png" />
     <None Remove="images\LabelIcons\subscribercard.png" />
     <None Remove="images\LabelIcons\ticket.png" />
     <None Remove="images\LabelIcons\timeend.png" />
@@ -38,7 +44,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="images\LabelIcons\alert.png" />
+    <EmbeddedResource Include="images\LabelIcons\alert2.png" />
     <EmbeddedResource Include="images\LabelIcons\cashregisterearning.png" />
+    <EmbeddedResource Include="images\LabelIcons\event.png" />
+    <EmbeddedResource Include="images\LabelIcons\event2.png" />
+    <EmbeddedResource Include="images\LabelIcons\home.png" />
     <EmbeddedResource Include="images\LabelIcons\staff.png" />
   </ItemGroup>
 
@@ -61,6 +72,7 @@
     <EmbeddedResource Include="images\LabelIcons\calendar.png" />
     <EmbeddedResource Include="images\LabelIcons\contract.png" />
     <EmbeddedResource Include="images\LabelIcons\police.png" />
+    <EmbeddedResource Include="images\LabelIcons\statistics.png" />
     <EmbeddedResource Include="images\LabelIcons\subscribercard.png" />
     <EmbeddedResource Include="images\LabelIcons\ticket.png" />
     <EmbeddedResource Include="images\LabelIcons\timeend.png" />
@@ -106,8 +118,17 @@
     <Compile Update="DarkTheme.xaml.cs">
       <DependentUpon>DarkTheme.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Extentions\FilterViewCaissier.xaml.cs">
+      <DependentUpon>FilterViewCaissier.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Extentions\FilterView.xaml.cs">
       <DependentUpon>FilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\CaissierListView.xaml.cs">
+      <DependentUpon>CaissierListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\EventListView.xaml.cs">
       <DependentUpon>EventListView.xaml</DependentUpon>

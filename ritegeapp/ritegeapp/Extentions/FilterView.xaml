@@ -13,16 +13,16 @@
        BackgroundColor="{StaticResource BackgroundColor}">
  <Frame.Content>
   <Grid Margin="0,-10,0,0">
-   <Grid.RowDefinitions></Grid.RowDefinitions>
-   <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+
    <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
           Grid.Row="0"
-          xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"
+          xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
           Grid.Column="0"></Image>
    <Frame BorderColor="{StaticResource Primary}"
           Grid.Row="0"
           Grid.Column="1"
-          Padding="0"
+          Padding="-10"
+         
           Grid.ColumnSpan="2"
           BackgroundColor="{StaticResource BackgroundColor}">
     <DatePicker x:Name="DateStartPicker"
@@ -30,7 +30,7 @@
                 VerticalOptions="Center"
                 FontSize="Small"
                 Date="{Binding DateStart}"
-                TextColor="{StaticResource Primary}"
+                TextColor="{StaticResource LabelColor}"
                 Format="dd/MM/yyyy" />
    </Frame>
    <Label Text="—"
@@ -42,7 +42,7 @@
    <Frame BorderColor="{StaticResource Primary}"
           Grid.Column="4"
           Grid.ColumnSpan="2"
-          Padding="0"
+          Padding="-10"
           BackgroundColor="{StaticResource BackgroundColor}">
     <DatePicker Format="dd/MM/yyyy"
                 HorizontalOptions="Center"
@@ -50,46 +50,41 @@
                 FontSize="Small"
                 x:Name="DateEndLabel"
                 Date="{Binding DateEnd}"
-                TextColor="{StaticResource Primary}" />
+                TextColor="{StaticResource LabelColor}" />
    </Frame>
-   <Label Text="Recherche"
-          x:Name="SearchSubject"
-          FontSize="Small"
-          VerticalOptions="Center"
-          TextColor="{StaticResource LabelColor}"
+   <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.person.png}"
+          WidthRequest="20"
           Grid.Row="1"
-          Grid.Column="0" />
+          Grid.Column="0"
+          xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
    <Entry  Grid.Row="1"
            Grid.Column="1"
            Text="{Binding SearchTextBox}"
-           Grid.ColumnSpan="2"
+           Grid.ColumnSpan="3"
            x:Name="SearchTextBoxField"
-           Placeholder="Recherche"
+           Placeholder="Recherche" VerticalOptions="End"
            FontSize="Small"
            PlaceholderColor="{StaticResource Primary}"
            TextColor="{StaticResource Primary}"></Entry>
    <Grid  Grid.Row="1"
-          Grid.ColumnSpan="3"
-          Grid.Column="3">
+          Grid.ColumnSpan="2"
+          Grid.Column="4">
     <Image Source="search.png"
            x:Name="CanTapSearchText"
            Scale="0.7"
            xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
-           xct:TouchEffect.PressedScale="0.7"
            xct:TouchEffect.PressedOpacity="0.7"></Image>
     <Image Source="clearfilter.png"
-           x:Name="CanClearFilter" Scale="0.7"
+           x:Name="CanClearFilter"
+           Scale="0.7"
            IsEnabled="{Binding CanClearFilterCommand}"
            xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
            Grid.Column="1"
-           
-           xct:TouchEffect.PressedScale="0.7"
            xct:TouchEffect.PressedOpacity="0.7"></Image>
     <Image Source="sortby.png"
            x:Name="CanSort"
            Scale="0.7"
-           xct:TouchEffect.PressedScale="0.7"
-           xct:TouchEffect.PressedOpacity="0.7"
+           xct:TouchEffect.PressedOpacity="0.6"
            xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
            Grid.Column="2"></Image>
    </Grid>

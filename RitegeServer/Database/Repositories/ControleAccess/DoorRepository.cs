@@ -10,13 +10,13 @@ namespace RitegeDomain.Database.Repositories
 
 
 
-        public async Task<Door> GetOneByIdAsync(long id)
+        public async Task<Door> GetOneByIdSocieteAsync(long id)
         {
             Door Door = new();
             using (SqlConnection con = new(connectionString))
             {
                 string query;
-                query = "SELECT * FROM controleaccessdb.Door where IdDoor=@IdDoor";
+                query = "SELECT * FROM controleaccessdb.Door where idparking in (select idparking from parkingdb.dbo.parking where idsociete=@id)";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;
@@ -43,6 +43,8 @@ namespace RitegeDomain.Database.Repositories
                                 FonctionMateriel = Convert.ToString(sdr["FonctionMateriel"]),
                                 HasSlaveReader = Convert.ToBoolean(sdr["HasSlaveReader"]),
                                 Activated = Convert.ToBoolean(sdr["Activated"]),
+                            IdParking =  Convert.ToInt16(sdr["IdParking"]),
+
                             };
                         }
                     }

@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.SignalR;
 using RitegeDomain.DTO;
 using RitegeServer.Hubs;
 using RitegeDomain.Database.Entities.ParkingEntities;
-
+using RitegeDomain.Database.Commands.Parking.EvenementCommands;
+using RitegeDomain.Database.Commands.Parking.TicketCommands;
+using RitegeDomain.Database.Commands.EventCommands;
+using System.Linq;
 
 namespace RitegeServer.ServerControllers
 {
@@ -12,30 +15,45 @@ namespace RitegeServer.ServerControllers
     [Route("Server")]
     public class ServerController : ControllerBase
     {
-        private readonly IHubContext<DataHub> _hubContext;
+        IMobileClientHandler mobileClientHandler;
+    
         private readonly IMediator _mediator;
 
-        public ServerController(IHubContext<DataHub> hubContext,IMediator mediator)
-        {    _hubContext = hubContext;
-            _mediator = mediator;
+        public ServerController(IHubContext<DataHub> hubContext,IMediator mediator, IMobileClientHandler mobileClientHandler)
+        { 
+            _mediator = mediator; 
+            this.mobileClientHandler = mobileClientHandler;
+
         }
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("AddEvent")]
-        public async Task<ActionResult<string>> AddEvent(RitegeDomain.Database.Commands.Parking.EvenementCommands.CreateEvenementCommand eventToAdd)
+        public async Task<ActionResult<string>> AddEvent(CreateEventCommand eventToAdd)
         {
             try
             {
                 var response = await _mediator.Send(eventToAdd);
 
-
-                if (Enum.IsDefined(typeof(AlertCodes), eventToAdd.TypeEvent))
+ var societequery = new RitegeDomain.Database.Queries.ControleAccess.SocieteQueries.GetOneByIdDoorQuery
+                    {
+                        IdDoor = eventToAdd.DoorNumber
+                    };
+                    Societe? societeResponse = await _mediator.Send(societequery);
+                    var dto = new EventDTO
+                    {
+                        CodeEvent = eventToAdd.CodeEvent,
+                        DateEvent = eventToAdd.DateEvent,
+                        DoorNumber = eventToAdd.DoorNumber,
+                        UserNumber = eventToAdd.UserNumber,
+                        Flux = eventToAdd.Flux,
+                        HeureEvent = eventToAdd.HeureEvent
+                    };
+                await mobileClientHandler.SendEventToListeningClients(dto, societeResponse.IdSociete);
+                if (AlertString.AlertCodes.Contains(Convert.ToString( eventToAdd.CodeEvent)))
                 {
-                    var parkingEvent = new ParkingEvent { DateEvent = eventToAdd.DateEvent, DescriptionEvent = eventToAdd.DescriptionEvent, ParkingId = eventToAdd.ParkingId, TypeEvent = eventToAdd.TypeEvent };
-                    //var clientid = parkingEvent.ParkingId.ToString();
-                    var clientid = 1;
-                    await _hubContext.Clients.Group(clientid.ToString()).SendAsync("AlertReceived", parkingEvent);
+
+                    await mobileClientHandler.SendAlertToClients(dto, societeResponse.IdSociete);
 
                 }
                 return Ok(response);
@@ -50,33 +68,58 @@ namespace RitegeServer.ServerControllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("AddTicket")]
-        public async Task<ActionResult<string>> AddTicket(RitegeDomain.Database.Commands.Parking.TicketCommands.CreateTicketCommand ticketToAdd)
+        public async Task<ActionResult<string>> AddTicket(CreateTicketCommand ticketToAdd)
         {
             try
             {
-                var response = await _mediator.Send(ticketToAdd);
-                var ticketbornequery = new RitegeDomain.Database.Queries.ParkingDBQueries.BorneQueries.GetOneByIdQuery
+                Ticket? AddTicketResponse = await _mediator.Send(ticketToAdd);
+                var TicketBorneQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.BorneQueries.GetOneByIdQuery
                 {
                     Id = ticketToAdd.idBorneEntree
                 };
-                var ticketborneresponse = await _mediator.Send(ticketbornequery);
+                Borne? TicketBorneResponse = await _mediator.Send(TicketBorneQuery);
 
-
-                if (ticketborneresponse.IdBorne is not 0)
+                if (TicketBorneResponse.IdBorne!=0)
                 {
-                    
-                    //var clientid = parkingEvent.ParkingId.ToString();
-                    var clientid = 1;
                     var dto = new InfoTicketDTO();
-                    dto.MontantPaye = (decimal)response.Tarif;
-                    dto.DateHeureEntree = response.DateHeureDebutStationnement;
-                    dto.BorneEntree = ticketborneresponse.NomBorne;
-                    InfoTicketDTO[] list=new InfoTicketDTO[] {dto};
-                   
-                    await _hubContext.Clients.Group(clientid.ToString()).SendAsync("GetTicketData", list);
+                    dto.MontantPaye = (decimal)AddTicketResponse.Tarif;
+                    dto.DateHeureEntree = AddTicketResponse.DateHeureDebutStationnement;
+                    if(AddTicketResponse.DateHeureFinStationnement!=null)
+                        dto.DateHeureSortie = (DateTime)AddTicketResponse.DateHeureFinStationnement;
 
+                    dto.BorneEntree = TicketBorneResponse.NomBorne;
+
+                    var getAssociatedSessionquery = new RitegeDomain.Database.Queries.ParkingDBQueries.SessionQueries.GetOneByTicketLogCaissierAndTicketDates
+                    {
+                        LogCaissier = AddTicketResponse.LogCaissier,
+                        DateStart = AddTicketResponse.DateHeureDebutStationnement,
+                        DateEnd = AddTicketResponse.DateHeureFinStationnement
+                    };
+                    Session? getAssociatedSessionResoponse = await _mediator.Send(getAssociatedSessionquery);
+
+                    var updateSessionEarningsCommand= new RitegeDomain.Database.Commands.Parking.SessionCommands.UpdateSessionEarningsByIdCommand
+                    {
+                        IdSessions=getAssociatedSessionResoponse.IdSessions,Montant=ticketToAdd.Tarif
+                    };
+                    int? updateSessionEarningsResoponse = await _mediator.Send(updateSessionEarningsCommand);
+
+                    var getParkingByIdQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.ParkingQueries.GetOneByIdParkingQuery
+                    {
+                        IdParking = TicketBorneResponse.IdParking
+                    };
+                    Parking? getParkingByIdResponse = await _mediator.Send(getParkingByIdQuery);
+                   await mobileClientHandler.SendTicketDataToListeningClients(dto, getParkingByIdResponse.IdSociete, getParkingByIdResponse.IdParking);
+                    DashBoardDTO dash = new();
+                    dash.RecetteParking = dto.MontantPaye;
+                    dash.RecetteCaisse = dto.MontantPaye;
+                    dash.RecetteCaissier = dto.MontantPaye;
+                    dash.Caisse = getAssociatedSessionResoponse.idCaisse.ToString();
+                    dash.NbTickets = 1;
+
+                    await mobileClientHandler.SendDashboardDataToListeningClients(dash, getParkingByIdResponse.IdSociete, getParkingByIdResponse.IdParking,getAssociatedSessionResoponse.idCaisse);
                 }
-                return Ok(response);
+            
+                return Ok(AddTicketResponse);
 
             }
             catch (Exception ex)
@@ -93,7 +136,7 @@ namespace RitegeServer.ServerControllers
         {
             try
             {
-                await _hubContext.Clients.All.SendAsync("DangerousEventReceived", parkingEvent);
+            //    await _hubContext.Clients.All.SendAsync("DangerousEventReceived", parkingEvent);
 
                 return Ok("sent alerts to " +0);
             }
@@ -146,7 +189,7 @@ namespace RitegeServer.ServerControllers
             try
             {
               
-                    await _hubContext.Clients.All.SendAsync("ResetToken");
+              //      await _hubContext.Clients.All.SendAsync("ResetToken");
                 return Ok();
                 }
 

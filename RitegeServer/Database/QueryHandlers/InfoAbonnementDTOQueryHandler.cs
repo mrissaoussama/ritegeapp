@@ -1,12 +1,11 @@
-﻿namespace RitegeDomain.QueryHandlers.InfoAbonnementDTOQueryHandlers;
+﻿namespace RitegeServer.Database.QueryHandlers;
 
 using AutoMapper;
 using MediatR;
 using RitegeDomain.Database;
-using RitegeDomain.Database.Queries.ParkingDBQueries.InfoAbonnementDTOQueries;
 using RitegeDomain.DTO;
 using RitegeDomain.Database.Entities.ParkingEntities;
-
+using RitegeDomain.Database.Queries;
 
 public class InfoAbonnementDTOQueryHandler : IRequestHandler<InfoAbonnementDTOQuery, IEnumerable<InfoAbonnementDTO>>
 {

@@ -19,3 +19,8 @@ public class GetOneByIdQuery : IRequest<Caisse>
     public int Id { get; set; }
 
 }
+public class GetTodayEarningsByIdQuery : IRequest<decimal>
+{
+    public int IdCaisse { get; set; }
+
+}

@@ -35,15 +35,6 @@ namespace RitegeServer.Services
             return result;
 
         }
-        public IEnumerable<InfoTicketDTO> FilterTicketDTO(List<InfoTicketDTO> listToFilter,
-      DateTime dateStart, DateTime dateEnd)
-        {
-            Debug.WriteLine(listToFilter[0].DateHeureEntree);
-            Debug.WriteLine(listToFilter[0].DateHeureSortie);
-            var result = listToFilter.Where(dto => dto.DateHeureEntree.Date >= dateStart.Date && dto.DateHeureSortie.Date <= dateEnd.Date).ToList();
-
-            return result;
-
-        }
+    
     }
 }

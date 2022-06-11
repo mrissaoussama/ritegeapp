@@ -21,9 +21,13 @@ namespace ritegeapp.Services
 {
     public class SignalRService : ISignalRService
     {
-       public bool Initialized { get; set; }
+        public bool Initialized { get; set; }
 
         public INotificationService notificationService;
+        private bool isListeningToDashboardData;
+        private bool isListeningToTicketData;
+        private bool isListeningToAlerts;
+        private bool isListeningToEvents;
 
         public HubConnection HubConnection { get; set; }
 
@@ -57,10 +61,9 @@ namespace ritegeapp.Services
                     MessagingCenter.Send(Xamarin.Forms.Application.Current, "Reconnecting");
                     return Task.CompletedTask;
                 };
-                await Task.Run(async () => { await Connect(); });
-
+                await Connect();
                 ListenForAlerts();
-                StartAlertService();
+                //    StartAlertService();
             }
         }
         public HubConnection GetHub()
@@ -72,32 +75,88 @@ namespace ritegeapp.Services
             DependencyService.Get<IEventService>().StartService();
         }
 
-        public void StopListeningForNotImportantData()
+        public async Task ListenForTicketData(int idParking)
         {
-            Debug.WriteLine("dashboardunsub");
-
-            HubConnection.Remove("GetDashboardData");
-            HubConnection.Remove("GetTicketData");
-        }
-        public void ListenForAlerts()
-        {
-            HubConnection.On<ParkingEvent>("AlertReceived", async (data) =>
+            await Initialize();
+            await HubConnection.InvokeAsync("SetTicketParking", idParking);
+            if (isListeningToTicketData == false)
             {
-                var coderetriever = new XmlErrorCodeStringRetriever();
-                var parkingEvent = coderetriever.GetErrorCodeStringAndType(data);
+                isListeningToTicketData = true;
+
+                HubConnection.On<InfoTicketDTO>("GetTicketData", (data) =>
+                {
+                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetTicketData", data);
+                });
+
+            }
+        }
+        public async Task StopListeningForTicketData()
+        {
+            await HubConnection.InvokeAsync("SetTicketParking", -1);
+            HubConnection.Remove("GetTicketData");
+            isListeningToTicketData = false;
+        }
+        public async Task ListenForDashboardData(int? idparking, int? idcaisse)
+        {
+            await Initialize();
+            if (idparking is not null)
+                await HubConnection.InvokeAsync("SetDashboardParking", idparking);
+            if (idcaisse is not null)
+                await HubConnection.InvokeAsync("SetCashRegister", idcaisse);
+            if (isListeningToDashboardData == false)
+            {
+                isListeningToDashboardData = true;
+                HubConnection.On<DashBoardDTO>("GetDashboardData", (data) =>
+                {
+                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetDashboardData", data);
+                });
+            }
+        }
+        public async Task StopListeningForDashboardData()
+        {
+            await HubConnection.InvokeAsync("SetDashboardParking", -1);
+            await HubConnection.InvokeAsync("SetCashRegister", -1);
+            HubConnection.Remove("GetDashboardData");
+            isListeningToDashboardData = false;
+        }
+        public async Task ListenForAlerts()
+        {
+
+            if (isListeningToAlerts == false)
+            {
+                isListeningToAlerts = true;
+                HubConnection.On<EventDTO>("GetAlertData", async (data) =>
+                {
+                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetEventData", data);
+
+                    var coderetriever = new XmlErrorCodeStringRetriever();
+                var parkingEvent = coderetriever.GetErrorCodeString(data);
                 notificationService.CreateAlertNotification(parkingEvent);
             });
-            HubConnection.On<DashBoardDTO>("GetDashboardData", (data) =>
-            {
-                Debug.WriteLine("dashboard data received");
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetDashboardData", data);
+            }
 
-            });
-            HubConnection.On<List<InfoTicketDTO>>("GetTicketData", (data) =>
-            {
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetTicketData", data);
 
-            });
+        }
+        public async Task ListenForEventData()
+        {
+            await Initialize();
+            await HubConnection.InvokeAsync("SetIsListeningToEvents", true);
+            if (isListeningToEvents == false)
+            {
+                isListeningToEvents = true;
+
+                HubConnection.On<EventDTO>("GetEventData", (data) =>
+                {
+                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GetEventData", data);
+                });
+
+            }
+        }
+        public async Task StopListeningForEventData()
+        {
+            await HubConnection.InvokeAsync("SetIsListeningToEvents", false);
+            HubConnection.Remove("GetEventData");
+            isListeningToEvents = false;
         }
         public async Task Connect()
         {

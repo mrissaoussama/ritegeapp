@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage                xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                   x:Class="ritegeapp.Views.LoginView"
+                 x:Name="LoginPage"
+      
+                 BackgroundColor="{StaticResource BackgroundColor}"
+                 >
+ <ContentPage.Content>
+  <StackLayout Orientation="Vertical"
+               Padding="30"
+               Spacing="40">
+   <BoxView HeightRequest="10" />
+   <Image HorizontalOptions="Center"
+          WidthRequest="300"
+          Source="xamarin_logo.png" />
+   <Frame   BackgroundColor="{StaticResource BackgroundColor}" BorderColor="{StaticResource Primary}"
+          HasShadow="False">
+    <StackLayout Orientation="Vertical" BackgroundColor="Transparent"
+                 Spacing="10">
+     <Entry x:Name="Email"
+            Text="{Binding Email}"
+            IsEnabled="{Binding CanClickButtonOrFields}"
+            Placeholder="Email"
+            PlaceholderColor="White"
+            HeightRequest="40"
+            Keyboard="Email"
+            TextColor="White" />
+     <Entry x:Name="Password"
+            IsEnabled="{Binding CanClickButtonOrFields}"
+            Text="{Binding Password}"
+            Placeholder="Mot de passe"
+            PlaceholderColor="White"
+            HeightRequest="40"
+            IsPassword="True"
+            TextColor="White" />
+    </StackLayout>
+   </Frame>
+   <Button Command="{Binding GetDataCommand}"
+           IsEnabled="{Binding CanClickButtonOrFields}"
+           IsVisible="{Binding IsLoading,Converter={StaticResource BooleanNegation}}"
+           Text="Login"
+           TextColor="White"
+           FontAttributes="Bold"
+           FontSize="Large"
+           HorizontalOptions="FillAndExpand"
+           BackgroundColor="{StaticResource Primary}" />
+   <ActivityIndicator Scale="0.5"
+                      Color="{StaticResource Primary}"
+                      Grid.Row="1"
+                      IsVisible="{Binding IsLoading}"
+                      IsRunning="true" />
+   <Label Text="{Binding ErrorText}"
+          IsVisible="{Binding ShowError}"
+          TextColor="White" 
+          HorizontalOptions="Center"></Label>
+  </StackLayout>
+ </ContentPage.Content>
+</ContentPage>

@@ -14,3 +14,18 @@ public class GetOneByIdQuery : IRequest<Societe>
     public int IdSociete { get; set; }
 
 }
+public class GetOneByIdParkingQuery : IRequest<Societe>
+{
+    public int IdParking { get; set; }
+
+}
+public class GetOneByIdDoorQuery : IRequest<Societe>
+{
+    public int IdDoor { get; set; }
+
+}
+public class GetCompanyEarningsByIdQuery : IRequest<decimal>
+{
+    public int IdSociete { get; set; }
+
+}

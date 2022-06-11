@@ -9,19 +9,19 @@ using RitegeDomain.Database.Queries.ParkingDBQueries.ParkingQueries;
 
 namespace RitegeDomain.QueryHandlers.ParkingDBQueryHandlers.ParkingQueryHandlers;
 
-public class GetOneByIdParkingQueryHandler : IRequestHandler<GetOneByIdParkingQuery,Parking>
+public class GetAllByIdSocieteQueryHandler : IRequestHandler<GetAllByIdSociete, IEnumerable<Parking>>
 {
     private readonly IParkingRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetOneByIdParkingQueryHandler(IParkingRepository repository, IMapper mapper)
+    public GetAllByIdSocieteQueryHandler(IParkingRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
-    public async Task<Parking> Handle(GetOneByIdParkingQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Parking>> Handle(GetAllByIdSociete request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetOneByIdParkingAsync(request.IdParking);
-        return _mapper.Map<Parking>(entities);
+        var entities = await _repository.GetAllByIdSocieteAsync(request.IdSociete);
+        return _mapper.Map <IEnumerable <Parking >> (entities);
     }
 }

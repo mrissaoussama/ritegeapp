@@ -4,7 +4,7 @@ namespace RitegeDomain.DTO
 {
     public enum Flux { Entree, Sortie }
 
-    public class DashBoardDTO
+    public class DashBoardDTO:IEntity
     {
         string _parking, _caisse, _nomPrenomCaissier;
         bool _etatCaisse;
@@ -12,6 +12,10 @@ namespace RitegeDomain.DTO
         //recetteCaissier: recette en cours, recetteCaisse:total journee
         Flux _fluxBorne, _fluxCaisse;
         int _nbTickets, _nbAdministrateur, _placeDisponible, _placeMax, _nbAutorite, _nbEgress, _nbAbonne;
+
+        public DashBoardDTO()
+        {
+        }
 
         public DashBoardDTO(string parking, string caisse, string nomPrenomCaissier, bool etatCaisse, decimal recetteParking, decimal recetteCaissier, decimal recetteCaisse, Flux fluxBorne, Flux fluxCaisse, int nbTickets, int nbAdministrateur, int placeDisponible, int placemax, int nbAutorite, int nbEgress, int nbAbonne)
         {

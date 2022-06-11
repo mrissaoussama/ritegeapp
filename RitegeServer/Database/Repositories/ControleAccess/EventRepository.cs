@@ -13,6 +13,35 @@ namespace RitegeDomain.Database.Repositories
 
         }
 
+        public async Task<int> AddAsync(DateTime DateEvent, string HeureEvent, ushort DoorNumber, ushort? UserNumber, ushort CodeEvent,ushort codeController,ushort indiceController,bool selected, ushort? Flux)
+        {
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+                query = "insert into [controleaccessdb].[controleaccessdb].event(dateEvent,heureevent,doornumber,usernumber,codeevent,codecontroller,indicecontroller,selected,flux) values(@DateEvent,@HeureEvent,@DoorNumber,@UserNumber,@CodeEvent,@codecontroller,@indicecontroller,@selected,@flux)";
+
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                    cmd.Parameters.Add("@DateEvent", SqlDbType.Date).Value = DateEvent;
+                    cmd.Parameters.Add("@HeureEvent", SqlDbType.NVarChar).Value = HeureEvent;
+                    cmd.Parameters.Add("@DoorNumber", SqlDbType.SmallInt).Value = DoorNumber;
+                    cmd.Parameters.Add("@UserNumber", SqlDbType.SmallInt).Value = UserNumber;
+                    cmd.Parameters.Add("@CodeEvent", SqlDbType.SmallInt).Value = CodeEvent;
+                    cmd.Parameters.Add("@codeController", SqlDbType.SmallInt).Value = codeController;
+                    cmd.Parameters.Add("@indiceController", SqlDbType.SmallInt).Value = indiceController;
+                    cmd.Parameters.Add("@selected", SqlDbType.SmallInt).Value = selected;
+                    cmd.Parameters.Add("@Flux", SqlDbType.SmallInt).Value = Flux;
+                 
+                    con.Open();
+                    await cmd.ExecuteNonQueryAsync();
+                    con.Close();
+                   
+                    return 1;
+                }
+            }
+        }
+
         public async Task<List<Event>> GetAllByDateAsync(DateTime date)
         {
             List<Event> Events = new();

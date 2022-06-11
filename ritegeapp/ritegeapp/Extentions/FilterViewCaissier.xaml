@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:extentions="clr-namespace:ritegeapp.Extentions"
+       xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+       x:Class="ritegeapp.Extentions.FilterViewCaissier"
+       HasShadow="False"
+       CornerRadius="6"
+       Grid.Row="0"
+       HorizontalOptions="Center"
+       VerticalOptions="Center"
+       BorderColor="{StaticResource Primary}"
+       BackgroundColor="{StaticResource BackgroundColor}">
+ <Frame.Content>
+  <Grid Margin="0,-10,0,0">
+
+   <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
+          Grid.Row="0"
+          xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+          Grid.Column="0"></Image>
+   <Frame BorderColor="{StaticResource Primary}"
+          Grid.Row="0"
+          Grid.Column="1"
+          Padding="-10"
+         
+          Grid.ColumnSpan="2"
+          BackgroundColor="{StaticResource BackgroundColor}">
+    <DatePicker x:Name="DateStartPicker"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="Small"
+                Date="{Binding DateStart}"
+                TextColor="{StaticResource LabelColor}"
+                Format="dd/MM/yyyy" />
+   </Frame>
+   <Label Text="—"
+          HorizontalOptions="CenterAndExpand"
+          TextColor="{StaticResource LabelColor}"
+          Grid.Row="0"
+          FontSize="40"
+          Grid.Column="3"></Label>
+   <Frame BorderColor="{StaticResource Primary}"
+          Grid.Column="4"
+          Grid.ColumnSpan="2"
+          Padding="-10"
+          BackgroundColor="{StaticResource BackgroundColor}">
+    <DatePicker Format="dd/MM/yyyy"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="Small"
+                x:Name="DateEndLabel"
+                Date="{Binding DateEnd}"
+                TextColor="{StaticResource LabelColor}" />
+   </Frame>
+   <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.cashier.png}"
+          WidthRequest="20"
+          Grid.Row="1"
+          Grid.Column="0"
+          xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+   <Label  Grid.Row="1"
+           Grid.Column="1"
+           Text="{Binding SearchTextBox}"
+           Grid.ColumnSpan="3"
+           x:Name="SearchTextBoxField"
+           VerticalOptions="Center"
+           FontSize="Small"
+           
+           TextColor="{StaticResource Primary}"></Label>
+   <Grid  Grid.Row="1"
+          Grid.ColumnSpan="3"
+          Grid.Column="3">
+    <Image Source="search.png"
+           x:Name="CanTapSearchText"
+           Scale="0.7"
+           xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+           xct:TouchEffect.PressedOpacity="0.7"></Image>
+    <Image Source="clearfilter.png"
+           x:Name="CanClearFilter"
+           Scale="0.7"
+           IsEnabled="{Binding CanClearFilterCommand}"
+           xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+           Grid.Column="1"
+           xct:TouchEffect.PressedOpacity="0.7"></Image>
+    <Image Source="sortby.png"
+           x:Name="CanSort"
+           Scale="0.7"
+           xct:TouchEffect.PressedOpacity="0.6"
+           xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+           Grid.Column="2"></Image>
+    <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.statistics.png}"
+           x:Name="statistics"
+           Scale="0.7"
+           xct:TouchEffect.PressedOpacity="0.6"
+           xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+           Grid.Column="3"></Image>
+   </Grid>
+  </Grid>
+ </Frame.Content>
+</Frame>

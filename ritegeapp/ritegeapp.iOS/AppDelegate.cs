@@ -22,17 +22,16 @@ namespace ritegeapp.iOS
         {
 
             global::Xamarin.Forms.Forms.Init();
-            SQLitePCL.Batteries_V2.Init();
             Syncfusion.XForms.iOS.Expander.SfExpanderRenderer.Init();
          
-            Plugin.LocalNotification.NotificationCenter.AskPermission();
+            Plugin.LocalNotification.LocalNotificationCenter.AskPermission();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
         }
         public override void WillEnterForeground(UIApplication uiApplication)
         {
-            Plugin.LocalNotification.NotificationCenter.ResetApplicationIconBadgeNumber(uiApplication);
+            Plugin.LocalNotification.LocalNotificationCenter.ResetApplicationIconBadgeNumber(uiApplication);
         }
     }
 }

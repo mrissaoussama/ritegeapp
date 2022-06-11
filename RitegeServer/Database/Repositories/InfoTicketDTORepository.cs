@@ -14,23 +14,23 @@ namespace RitegeDomain.Database.Repositories
             connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["parkingdb"].ConnectionString;
 
         }
-        public async Task<IEnumerable<InfoTicketDTO?>> GetAllByDatesAsync(DateTime start, DateTime finish)
+        public async Task<IEnumerable<InfoTicketDTO?>> GetAllByDatesAsync(DateTime dateStart, DateTime dateEnd,int idParking)
         {
             List<InfoTicketDTO> tickets = new List<InfoTicketDTO>();
             using (SqlConnection con = new(connectionString))
             {
                 string query;
 
-                query = "SELECT t.idticket,t.dateHeureDebutStationnement,t.dateHeureFinStationnement,t.Tarif,"+
-                    " (select nomBorne from parkingdb.borne where idBorneEntree=idBorne) as nomborne from parkingdb.ticket t where "+
-                    "dateHeureDebutStationnement>=@start" +
-                    " and dateHeureFinStationnement<=@finish ";
+                query = "SELECT t.idticket,t.dateHeureDebutStationnement,t.dateHeureFinStationnement,t.Tarif,entree.nomBorne as BorneEntree,sortie.nomBorne as BorneSortie from parkingdb.ticket t LEFT JOIN parkingdb.borne as entree ON entree.idborne = t.idBorneEntree LEFT JOIN parkingdb.borne as sortie ON sortie.idborne = t.idBorneSortie where entree.idparking=@idParking and " +
+                    "dateHeureDebutStationnement>=@dateStart" +
+                    " and( dateHeureFinStationnement<=@dateEnd or  dateHeureFinStationnement is null) ";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;
 
-                    cmd.Parameters.Add("@start", SqlDbType.DateTime2).Value = start;
-                    cmd.Parameters.Add("@finish", SqlDbType.DateTime2).Value = finish;
+                    cmd.Parameters.Add("@dateStart", SqlDbType.DateTime2).Value = dateStart;
+                    cmd.Parameters.Add("@dateEnd", SqlDbType.DateTime2).Value = dateEnd;
+                    cmd.Parameters.Add("@idParking", SqlDbType.Int).Value = idParking;
 
                     con.Open();
                     using (SqlDataReader sdr = await cmd.ExecuteReaderAsync())
@@ -40,19 +40,19 @@ namespace RitegeDomain.Database.Repositories
                             //string? Typeticketstring = Convert.ToString(sdr["EtatAffectation"]);
                             var ticket = new InfoTicketDTO
                             { CodeTicket = Convert.ToString(sdr["idTicket"]),
-                            BorneEntree = Convert.ToString(sdr["nomborne"]),
+                            BorneEntree = Convert.ToString(sdr["BorneEntree"]),
                                 MontantPaye = Convert.ToDecimal(sdr["tarif"]),
-                                DateHeureSortie = Convert.ToDateTime(sdr["dateHeureFinStationnement"]),
                                 DateHeureEntree = Convert.ToDateTime(sdr["dateHeureDebutStationnement"]),
                                 TypeTicket = TypeTicket.TicketStationnement,
                         
                                 
                             };
+                            if (sdr["dateHeureFinStationnement"] != DBNull.Value)
+                                ticket.DateHeureSortie = Convert.ToDateTime(sdr["dateHeureFinStationnement"]);
+                            if (sdr["BorneSortie"] != DBNull.Value)
+                                ticket.BorneSortie = Convert.ToString(sdr["BorneSortie"]);
 
-                            //if (Typeticketstring is not null)
-                            //{
-                            //    ticket.TypeAbonnement = (TypeAbonnementEnum)System.Enum.Parse(typeof(TypeAbonnementEnum), Typeticketstring);
-                            //}
+
                             tickets.Add(ticket);
                         }
                     }

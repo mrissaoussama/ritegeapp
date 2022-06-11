@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:extentions="clr-namespace:ritegeapp.Extentions"
@@ -7,33 +8,33 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
              xmlns:local="clr-namespace:ritegeapp.Utils"
-             Title="Gestion Sessions Caissiers"
+             Title="Sessions Caissiers" 
              Unfocused="ContentPage_Unfocused"
              BackgroundColor="{StaticResource BackgroundColor}">
- <ContentPage.ToolbarItems>
-  <ToolbarItem Text="Statistiques"
-               Command="{Binding OpenStatisticsWindowCommand}"
-               Order="Secondary"
-               Priority="0" />
- </ContentPage.ToolbarItems>
+
+
  <ContentPage.Content>
   <Grid BackgroundColor="{StaticResource BackgroundColor}"
         Margin="0,5,0,0">
    <Grid.RowDefinitions>
-    <RowDefinition Height="140"></RowDefinition>
+    <RowDefinition Height="100"></RowDefinition>
     <RowDefinition Height="40"></RowDefinition>
+    <RowDefinition Height="Auto"></RowDefinition>
    </Grid.RowDefinitions>
-   <extentions:FilterView             x:DataType="viewmodels:GestionDesSessionsCaissiersViewModel"
+   <extentions:FilterViewCaissier             x:DataType="viewmodels:GestionDesSessionsCaissiersViewModel"
                                       DateStart="{Binding DateStart}"
                                       DateEnd="{Binding DateEnd}"
-                                      SearchSubjectText="Nom"
-                                      SearchTextBoxEntry="{Binding SearchTextBox}"
+                                      SearchTextBoxEntry="{Binding Caissier}"
+                                      CaissierCommand="{Binding OpenCaissierListCommand}"
                                       CanTapSearchTextBool="{Binding CanTapFilterImages}"
                                       CanTapSearchTextCommand="{Binding SearchTextCommand}"
                                       CanClearFilterBool="{Binding CanTapFilterImages}"
                                       CanClearFilterCommand="{Binding ClearFilterCommand}"
                                       CanSortBool="{Binding CanTapFilterImages}"
-                                      CanSortCommand="{Binding SortByCommand}"></extentions:FilterView>
+                                      CanSortCommand="{Binding SortByCommand}"
+                                              ShowStatistics="true"
+                                              ShowStatisticsCommand="{Binding OpenStatisticsWindowCommand}"
+                                              ></extentions:FilterViewCaissier>
    <ActivityIndicator   Scale="0.5"
                         Color="{StaticResource Primary}"
                         Grid.Row="2"
@@ -43,7 +44,7 @@
           Grid.Row="1" Margin="15" 
           HorizontalOptions="CenterAndExpand"
           VerticalOptions="CenterAndExpand"
-          TextColor="{StaticResource Primary}"
+                       TextColor="{StaticResource LabelColor}"
           IsVisible="{Binding ShowNoFilterResultLabel}"
           LineBreakMode="WordWrap">
     <Label.FormattedText>
@@ -112,25 +113,20 @@
     <Label FontSize="Small"
            HorizontalOptions="Center"
            VerticalOptions="Center"
-           Text="{Binding TotalMoney}"
            FontAttributes="Bold">
      <Label.FormattedText>
       <FormattedString>
        <Span Text="Total: "
              TextColor="{StaticResource LabelColor}"></Span>
        <Span Text="{Binding TotalMoney,StringFormat='{0:G29}' }"
-             TextColor="{StaticResource Primary}"></Span>
+             TextColor="{StaticResource LabelColor}"></Span>
        <Span Text=" DT"
-             TextColor="{StaticResource Primary}"></Span>
+             TextColor="{StaticResource LabelColor}"></Span>
       </FormattedString>
      </Label.FormattedText>
     </Label>
    </Frame>
-   <RefreshView Grid.Row="2"
-                IsRefreshing="{Binding ListIsRefreshing}"
-                IsEnabled="{Binding ShowData}"
-                Command="{Binding GetDataCommand}"
-                IsVisible="{Binding ShowData}">
+ 
     <ScrollView Grid.Row="1"
                 IsVisible="{Binding ShowData}">
      <StackLayout>
@@ -163,9 +159,9 @@
                               Margin="10,0,10,0">
                   <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.cashier.png}"
                          WidthRequest="20"
-                         xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                         xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                   <Label FontSize="Medium"
-                         TextColor="{StaticResource Primary}"
+                         TextColor="{StaticResource LabelColor}"
                          BackgroundColor="{StaticResource BackgroundColor}"
                          FontAttributes="Bold">
                    <Label.FormattedText>
@@ -191,9 +187,7 @@
                             Margin="5,5,5,5"
                             Padding="5"
                             BackgroundColor="{StaticResource BackgroundColor}">
-                      <!--<Frame.GestureRecognizers>
-                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
-                    </Frame.GestureRecognizers>-->
+                     
                       <syncfusion:SfExpander Grid.Row="1"
                                              IconColor="{StaticResource Primary}"
                                              HeaderBackgroundColor="{StaticResource BackgroundColor}">
@@ -212,24 +206,35 @@
                           </Grid.ColumnDefinitions>
                           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
                                  WidthRequest="20"
-                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                           <Label Grid.Column="1"
+                                 FontSize="Small" HorizontalOptions="Center" VerticalOptions="Center"
+                                 TextColor="{StaticResource LabelColor}"
+                                 Text="{Binding DateStartSession , StringFormat='{0:dd/MM/yyyy}'}"></Label>
+                          <StackLayout Orientation="Horizontal" Grid.Column="2">
+                          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.timestart.png}"
+                                 
+                                 WidthRequest="15"
+                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                          <Label 
                                  FontSize="Small"
-                                 TextColor="{StaticResource Primary}"
-                                 Text="{Binding DateStartSession , StringFormat='{0:dd/MM/yyyy hh:mm}'}"></Label>
-                          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendarcheckmark.png}"
-                                 Grid.Row="1"
-                                 WidthRequest="20"
-                                 xct:IconTintColorEffect.TintColor="{StaticResource LabelColor}"></Image>
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 TextColor="{StaticResource LabelColor}"
+                                 Text="{Binding DateStartSession , StringFormat='{0:HH:mm}'}"></Label>
+                          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.timeend.png}"
+                                 WidthRequest="15"
+                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                           <Label FontSize="Small"
-                                 TextColor="{StaticResource Primary}"
-                                 Grid.Column="1"
-                                 Grid.Row="1" 
-                                 Text="{Binding DateEndSession, StringFormat='{0:dd/MM/yyyy hh:mm}'}"></Label>
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 TextColor="{StaticResource LabelColor}"
+                                  Text="{Binding DateEndSession, StringFormat='{0:HH:mm}'}"></Label>
+                          </StackLayout>
                           <Label Grid.Column="3"
-                                 Grid.RowSpan="2"
+                                
                                  HorizontalOptions="Center" VerticalOptions="Center"
-                                 TextColor="{StaticResource Primary}">
+                                 TextColor="{StaticResource LabelColor}">
                            <Label.FormattedText>
                             <FormattedString>
                              <Span Text="{Binding Recette,StringFormat='{0:G29}' }"></Span>
@@ -251,35 +256,35 @@
                       <Label Text="Index:"
                              TextColor="{StaticResource LabelColor}"></Label>
                       <Label Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding Index}"></Label>
                       <Label Grid.Row="1"
                              TextColor="{StaticResource LabelColor}"
                              Text="Nombre Tickets:"></Label>
                       <Label Grid.Row="1"
                              Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding NbTickets}"></Label>
                       <Label Grid.Row="2"
                              TextColor="{StaticResource LabelColor}"
                              Text="Nombre Autorités:"></Label>
                       <Label Grid.Row="2"
                              Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding NbAutorite}"></Label>
                       <Label Grid.Row="3"
                              TextColor="{StaticResource LabelColor}"
                              Text="Nombre Administratifs:"></Label>
                       <Label Grid.Row="3"
                              Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding NbAdministratif}"></Label>
                       <Label Grid.Row="4"
                              TextColor="{StaticResource LabelColor}"
                              Text="Nombre Abonnements:"></Label>
                       <Label Grid.Row="4"
                              Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding NbAbonne}"></Label>
                      </Grid>
                        </syncfusion:SfExpander.Content>
@@ -321,6 +326,7 @@
            </Grid.RowDefinitions>
              <Frame BorderColor="{StaticResource Primary}"
                     Padding="10"
+                    Margin="0,5,0,0"
                     BackgroundColor="{StaticResource BackgroundColor}">
               <syncfusion:SfExpander HeaderBackgroundColor="{StaticResource BackgroundColor}"
                                      IconColor="{StaticResource Primary}">
@@ -334,7 +340,7 @@
                         WidthRequest="20"
                         xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                  <Label FontSize="Medium"
-                      TextColor="{StaticResource Primary}"
+                        TextColor="{StaticResource LabelColor}"
                         Grid.Row="0"
                         Grid.Column="1"
                         FontAttributes="Bold">
@@ -342,7 +348,7 @@
                  <FormattedString>
                   <Span Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"></Span>
                   <Span Text=" : "></Span>
-                  <Span Text="{Binding Total}"></Span>
+                    <Span Text="{Binding Total,StringFormat='{0:G29}' }"></Span>
                   <Span Text=" DT"></Span>
                  </FormattedString>
                 </Label.FormattedText>
@@ -357,7 +363,9 @@
                  <DataTemplate>
                   <Grid>
                    <Frame BorderColor="{StaticResource Primary}"
-                            InputTransparent="True" 
+                            InputTransparent="True"
+                            Margin="5,5,5,5"
+                            Padding="5"
                             BackgroundColor="{StaticResource BackgroundColor}">
                       <syncfusion:SfExpander IconColor="{StaticResource Primary}"
                                              HeaderBackgroundColor="{StaticResource BackgroundColor}">
@@ -378,21 +386,21 @@
                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                          <Label Grid.Column="1"
                                 FontSize="Small"
-                                TextColor="{StaticResource Primary}"
-                                Text="{Binding DateStartSession, StringFormat='{0:hh:mm}'}"></Label>
+                                TextColor="{StaticResource LabelColor}"
+                                Text="{Binding DateStartSession, StringFormat='{0:HH:mm}'}"></Label>
                          <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.timeend.png}"
                                 Grid.Column="2"
                                 WidthRequest="15"
                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
                          <Label FontSize="Small"
-                                TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                                 Grid.Column="3"
-                                Text="{Binding DateEndSession, StringFormat='{0:hh:mm}'}"></Label>
+                                Text="{Binding DateEndSession, StringFormat='{0:HH:mm}'}"></Label>
                          <Label Grid.Column="4"
-                                TextColor="{StaticResource Primary}">
+                                TextColor="{StaticResource LabelColor}">
                           <Label.FormattedText>
                            <FormattedString>
-                            <Span Text="{Binding Recette}"></Span>
+                            <Span Text="{Binding Recette,StringFormat='{0:G29}' }"></Span>
                             <Span Text=" DT"></Span>
                            </FormattedString>
                           </Label.FormattedText>
@@ -411,42 +419,42 @@
                       <Label Text="Index:"
                              TextColor="{StaticResource LabelColor}"></Label>
                       <Label Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding Index}"></Label>
                       <Label Grid.Row="1"
                              TextColor="{StaticResource LabelColor}"
                              Text="Nombre Tickets:"></Label>
                       <Label Grid.Row="1"
                              Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding NbTickets}"></Label>
                       <Label Grid.Row="2"
                              TextColor="{StaticResource LabelColor}"
                              Text="Nombre Autorités:"></Label>
                       <Label Grid.Row="2"
                              Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding NbAutorite}"></Label>
                       <Label Grid.Row="3"
                              TextColor="{StaticResource LabelColor}"
                              Text="Nombre Administratifs:"></Label>
                       <Label Grid.Row="3"
                              Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding NbAdministratif}"></Label>
                       <Label Grid.Row="4"
                              TextColor="{StaticResource LabelColor}"
                              Text="Nombre Abonnements:"></Label>
                       <Label Grid.Row="4"
                              Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding NbAbonne}"></Label>
                       <Label Grid.Row="5"
                              TextColor="{StaticResource LabelColor}"
                              Text="Caissier:"></Label>
                       <Label Grid.Row="5"
                              Grid.Column="1"
-                             TextColor="{StaticResource Primary}"
+                                TextColor="{StaticResource LabelColor}"
                              Text="{Binding Caissier}"></Label>
                         </Grid>
                        </syncfusion:SfExpander.Content>
@@ -469,7 +477,6 @@
       </Grid>
      </StackLayout>
     </ScrollView>
-   </RefreshView>
   </Grid>
  </ContentPage.Content>
 </ContentPage>

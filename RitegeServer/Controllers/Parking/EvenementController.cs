@@ -26,7 +26,7 @@ namespace RitegeServer.ServerControllers
         [Route("GetAllByDate")]
         public async Task<ActionResult<List<Evenement>>> GetAllByDateAsync(DateTime date)
         {
-            var query = new GetAllByDateQuery { Date = date };
+            var query = new GetAllByDateQuery { DateStart = date };
             try
             {
                 var response = await _mediator.Send(query);

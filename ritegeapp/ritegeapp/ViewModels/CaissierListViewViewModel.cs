@@ -10,16 +10,16 @@ using Xamarin.Forms;
 
 namespace ritegeapp.ViewModels
 {
-    public partial class CashRegisterListViewViewModel : ObservableObject
+    public partial class CaissierListViewViewModel : ObservableObject
     {
-        public CashRegisterListViewViewModel(ObservableObject viewmodel)
+        public CaissierListViewViewModel(ObservableObject viewmodel)
         {
-            CashRegisterList = new();
-            parentvm = viewmodel;
+            CaissierList = new();
+            parentvm = (GestionDesSessionsCaissiersViewModel)viewmodel;
         }
-        public ObservableObject parentvm;
+        public GestionDesSessionsCaissiersViewModel parentvm;
         [ObservableProperty]
-        private ObservableCollection<CashRegisterData> cashRegisterList=new();
+        private ObservableCollection<CaissierData> caissierList=new();
         [ObservableProperty]
         private bool isLoading = true;
         [ObservableProperty]
@@ -30,22 +30,27 @@ namespace ritegeapp.ViewModels
             await PopupNavigation.Instance.PopAllAsync();
         }
         [ICommand]
-        private async void CashRegisterClicked(object parameter)
+        private async void CaissierClicked(object parameter)
         {
-            Debug.WriteLine(((CashRegisterData)parameter).CashRegisterName);
+            Debug.WriteLine(((CaissierData)parameter).CaissierName);
             {
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "CashRegisterClicked", ((CashRegisterData)parameter).CashRegisterName);
+                MessagingCenter.Send(Xamarin.Forms.Application.Current, "CaissierClicked", ((CaissierData)parameter));
             }
             await PopupNavigation.Instance.PopAllAsync();
         }
         public async void LoadList()
         {
             IsLoading = true; showData = false;
-            var list = (await DependencyService.Get<IDataService>().GetCashRegisterList(((TableauDeBordViewModel)parentvm).Parking));
-            if(list is not null && list.Count>0)
-            foreach (var CashRegister in list)
+
+            if (parentvm.ListCaissier is not null && parentvm.ListCaissier.Count > 0)
             {
-                await Device.InvokeOnMainThreadAsync(() => CashRegisterList.Add(new CashRegisterData(CashRegister)));
+                await Device.InvokeOnMainThreadAsync(() => CaissierList.Add(new CaissierData(0, "—")));
+
+
+                foreach (var Caissier in parentvm.ListCaissier)
+                {
+                    await Device.InvokeOnMainThreadAsync(() => CaissierList.Add(new CaissierData(Caissier.Key, Caissier.Value)));
+                }
             }
             IsLoading = false; showData = true;
         }

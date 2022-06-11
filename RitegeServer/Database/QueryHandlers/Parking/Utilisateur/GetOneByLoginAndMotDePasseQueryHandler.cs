@@ -6,19 +6,19 @@ using RitegeDomain.Database.Entities.ParkingEntities;
 
 using RitegeDomain.Database.Queries.ParkingDBQueries.UtilisateurQueries;
 
-public class GetOneByLoginAndMotDePasseQueryHandler : IRequestHandler<GetOneByLoginAndMotDePasseQuery, Utilisateur>
+public class GetOneByLoginQueryHandler : IRequestHandler<GetOneByLoginQuery, Utilisateur>
 {
     private readonly IUtilisateurRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetOneByLoginAndMotDePasseQueryHandler(IUtilisateurRepository repository, IMapper mapper)
+    public GetOneByLoginQueryHandler(IUtilisateurRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
-    public async Task<Utilisateur> Handle(GetOneByLoginAndMotDePasseQuery request, CancellationToken cancellationToken)
+    public async Task<Utilisateur> Handle(GetOneByLoginQuery request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetOneByLoginAndMotDePasseAsync(request.Login, request.MotDePasse);
+        var entities = await _repository.GetOneByLoginAsync(request.Login);
         return _mapper.Map<Utilisateur>(entities);
     }
 }
