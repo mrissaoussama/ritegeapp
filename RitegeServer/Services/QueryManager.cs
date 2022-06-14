@@ -170,6 +170,11 @@ namespace RitegeServer.Services
                 IdParking = idParking,
             };
             var parkingResponse = await _mediator.Send(parkingQuery);
+
+            var EgressQuery= new RitegeDomain.Database.Queries.ControleAccess.EventQueries.GetAllByDateAndIdDoorAndEventCodeQuery            {
+                
+            };
+
             dashBoardDTO.PlaceMax = parkingResponse.CapaciteParking;
             dashBoardDTO.PlaceDisponible = parkingResponse.CapaciteParking-parkingResponse.PlacesOccupees;
             dashBoardDTO.Caisse = idCaisse.ToString();

@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ritegeapp.Views.DoorView"
+             xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
+             xmlns:local="clr-namespace:ritegeapp.Views"
+             xmlns:extentions="clr-namespace:ritegeapp.Extentions"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:converters1="clr-namespace:ritegeapp.Converters"
+             xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             Title="Recettes">
+ <ContentPage.Resources>
+  <ResourceDictionary>
+   <converters1:TypeTicketToStringConverter x:Key="TypeTicketToString" />
+   <converters1:NullToDashConverter x:Key="NullToDash" />
+  </ResourceDictionary>
+ </ContentPage.Resources>
+
+ <ContentPage.Content>
+   <!--no result label-->
+  <Grid  HorizontalOptions="FillAndExpand"
+         VerticalOptions="FillAndExpand"
+         BackgroundColor="{StaticResource BackgroundColor}">
+   <Grid.RowDefinitions>
+    <RowDefinition Height="50"></RowDefinition>
+   </Grid.RowDefinitions>
+   <Frame  BackgroundColor="Transparent"
+        BorderColor="{StaticResource FrameBorderColor}"
+           Margin="0,5,0,0" Padding="0">
+    <Grid>
+     <Grid.RowDefinitions></Grid.RowDefinitions>
+     <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+   
+     <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.parking.png}"
+          Scale="0.9" HorizontalOptions="Center" VerticalOptions="Center"
+            Margin="0,0,-9,0"
+            xct:IconTintColorEffect.TintColor="{StaticResource FrameIconColor}"
+            xct:TouchEffect.PressedScale="0.7"
+            xct:TouchEffect.PressedOpacity="0.7">
+      <Image.GestureRecognizers>
+       <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
+      </Image.GestureRecognizers>
+     </Image>
+
+      <Label Grid.ColumnSpan="7"
+             Grid.Column="1"
+             Style="{DynamicResource fontGilroyMedium12}"
+             skeleton:Skeleton.IsBusy="{Binding StateManager.ParkingIsLoading}"
+             skeleton:Skeleton.BackgroundColor="{StaticResource Primary}"
+             skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
+             HorizontalOptions="Center"
+             VerticalOptions="Center"
+             FontSize="20" 
+             Margin="0,0,0,0"
+             Text="Parking_1">
+       <Label.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
+       </Label.GestureRecognizers>
+      </Label>
+    </Grid>
+   </Frame>
+   <ActivityIndicator Scale="0.5" 
+                         Color="{StaticResource Primary}"
+                      Grid.Row="1"
+                      IsVisible="{Binding StateManager.ShowLoadingIndicator}"
+                         IsRunning="true" />
+   <Label FontSize="Medium"
+          Grid.Row="1"
+          TextColor="{StaticResource TextColor}"
+           IsVisible="{Binding StateManager.ShowNoFilterResultLabel}"
+           LineBreakMode="WordWrap">
+     <Label.FormattedText>
+      <!--no result label-->
+      <FormattedString>
+      <Span Text="Pas de resultat, Cliquer "
+            Grid.Row="1"
+            TextColor="{StaticResource TextColor}" />
+       <Span Text="Ici"
+             TextColor="{StaticResource Primary}">
+        <Span.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding ClearFilterCommand}" />
+        </Span.GestureRecognizers>
+       </Span>
+      <Span Text=" pour désactiver le filtre"
+            Grid.Row="1"
+            TextColor="{StaticResource TextColor}" />
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+   <Label FontSize="Medium"
+          Grid.Row="1"
+          TextColor="{StaticResource TextColor}"
+           IsVisible="{Binding StateManager.ShowNoDataReceived}"
+           LineBreakMode="WordWrap">
+     <Label.FormattedText>
+      <!--no result label-->
+      <FormattedString>
+       <Span Text="Pas de resultat, Cliquer "
+             TextColor="{StaticResource TextColor}" />
+       <Span Text="ici"
+            TextColor="{StaticResource Primary}">
+        <Span.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+        </Span.GestureRecognizers>
+       </Span>
+       <Span Text=" pour réessayer"
+             TextColor="{StaticResource TextColor}" />
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+    <Label FontSize="Medium"
+           TextColor="{StaticResource TextColor}"
+           IsVisible="{Binding StateManager.ShowNoInternetLabel}"
+           Grid.Row="1"
+           LineBreakMode="WordWrap">
+     <Label.FormattedText>
+      <!--no result label-->
+      <FormattedString>
+       <Span Text="Pas de connexion, Activer Wifi ou Données Mobile puis cliquer "
+             TextColor="{StaticResource TextColor}" />
+       <Span Text="ici"
+            TextColor="{StaticResource Primary}">
+        <Span.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
+        </Span.GestureRecognizers>
+       </Span>
+       <Span Text=" pour réessayer"
+             TextColor="{StaticResource TextColor}" />
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+   <RefreshView Grid.Row="1"
+                IsRefreshing="false"
+                IsEnabled="false"
+                IsVisible="{Binding StateManager.ShowData}">
+    <ScrollView
+                 IsVisible="{Binding StateManager.ShowData}">
+      <CollectionView ItemsSource="{Binding ListDoor}"
+                
+                BackgroundColor="{StaticResource BackgroundColor}"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill"
+               >
+      <CollectionView.ItemTemplate>
+        <DataTemplate>
+        <Frame BackgroundColor="Transparent" BorderColor="{StaticResource FrameBorderColor}" Padding="10">
+          <Grid>
+       
+           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.parkingdoor.png}"
+                Scale="1" WidthRequest="10"
+                  xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+                  Grid.Column="0"></Image>
+           <Label Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding DoorName}"
+                  HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large"
+                  TextColor="white"></Label>
+           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.state.png}"
+                  Scale="0.5"
+                  xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+                  Grid.Column="3"></Image>
+           <CheckBox  Grid.Column="4" 
+                Color="{StaticResource Primary}"
+                   IsChecked="{Binding DoorState}"></CheckBox>
+        </Grid>
+                 </Frame>
+
+                </DataTemplate>
+       </CollectionView.ItemTemplate>
+     </CollectionView>
+     </ScrollView>
+    </RefreshView>
+    <!--custom dots menu with image support-->
+    <!--<RelativeLayout>
+     <ListView x:Name="SecondaryToolbarListView" 
+               VerticalOptions="Start"
+               HorizontalOptions="Fill"
+               WidthRequest="150" Unfocused="SecondaryToolbarListView_Unfocused"
+               IsVisible="False"
+               ItemTapped="SecondaryToolbarListView_ItemTapped"
+               RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=-160}">
+      <ListView.ItemTemplate>
+       <DataTemplate>
+        <ViewCell >
+         <StackLayout  Orientation="Horizontal"
+                       BackgroundColor="White"
+                       Spacing="10"
+                       Padding="5,5,5,5">
+          <Image HeightRequest="30"
+                 HorizontalOptions="Start"
+                 VerticalOptions="Center"
+                 Source="{Binding ImagePath}" />
+          <Label FontSize="15"
+                 VerticalOptions="Center"
+                 HorizontalOptions="Start"
+                 Text="{Binding MenuText}" />
+         </StackLayout>
+        </ViewCell>
+       </DataTemplate>
+      </ListView.ItemTemplate>
+     </ListView>
+    </RelativeLayout>-->
+   </Grid>
+ </ContentPage.Content>
+</ContentPage>

@@ -100,7 +100,7 @@
           </Image>
           <Label 
                  Style="{DynamicResource fontGilroyMedium12}"
-                 Margin="0,0,0,5"
+                 Margin="0,0,0,0" HorizontalOptions="Center"
                  FontSize="Large"
                  Text="{Binding Caisse,Converter={StaticResource NullToDash}}">
            <Label.GestureRecognizers>

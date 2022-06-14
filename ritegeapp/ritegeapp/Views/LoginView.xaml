@@ -3,8 +3,8 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                    x:Class="ritegeapp.Views.LoginView"
                  x:Name="LoginPage"
-      
-                 BackgroundColor="{StaticResource BackgroundColor}"
+                            xmlns:extentions="clr-namespace:ritegeapp.Extentions"
+                            BackgroundColor="{StaticResource BackgroundColor}"
                  >
  <ContentPage.Content>
   <StackLayout Orientation="Vertical"
@@ -13,21 +13,21 @@
    <BoxView HeightRequest="10" />
    <Image HorizontalOptions="Center"
           WidthRequest="300"
-          Source="xamarin_logo.png" />
+          Source="{extentions:ImageResource ritegeapp.images.LabelIcons.logo.png}" />
    <Frame   BackgroundColor="{StaticResource BackgroundColor}" BorderColor="{StaticResource Primary}"
           HasShadow="False">
     <StackLayout Orientation="Vertical" BackgroundColor="Transparent"
                  Spacing="10">
      <Entry x:Name="Email"
             Text="{Binding Email}"
-            IsEnabled="{Binding  CanClickButtonOrFields}"
+            IsReadOnly="{Binding  CanClickButtonOrFields,Converter={StaticResource BooleanNegation}}"
             Placeholder="Email"
             PlaceholderColor="White"
             HeightRequest="40"
             Keyboard="Email"
             TextColor="White" />
      <Entry x:Name="Password"
-            IsEnabled="{Binding  CanClickButtonOrFields}"
+            IsReadOnly="{Binding  CanClickButtonOrFields,Converter={StaticResource BooleanNegation}}"
             Text="{Binding Password}"
             Placeholder="Mot de passe"
             PlaceholderColor="White"

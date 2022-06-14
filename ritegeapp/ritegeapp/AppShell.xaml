@@ -112,6 +112,11 @@
   <ShellContent Route="AlertView"
                 ContentTemplate="{DataTemplate local:AlertView}" />
  </FlyoutItem>
+ <FlyoutItem Title="Portes"
+             Icon="{extentions:ImageResource ritegeapp.images.MenuIcons.parkingdoor.png}">
+  <ShellContent Route="DoorView"
+                ContentTemplate="{DataTemplate local:DoorView}" />
+ </FlyoutItem>
  <FlyoutItem Title="Alertes"
              IsVisible="False"
              x:Name="login">

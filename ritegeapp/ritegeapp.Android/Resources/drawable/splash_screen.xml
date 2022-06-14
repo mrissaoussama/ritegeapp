@@ -8,6 +8,6 @@
     <bitmap
         android:src="@drawable/icon"
         android:tileMode="disabled"
-        android:gravity="center" android:layout_gravity="center"/>
+        android:gravity="center"/>
   </item>
 </layer-list>

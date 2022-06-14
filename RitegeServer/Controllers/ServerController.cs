@@ -79,12 +79,80 @@ namespace RitegeServer.ServerControllers
                 };
                 Borne? TicketBorneResponse = await _mediator.Send(TicketBorneQuery);
 
-                if (TicketBorneResponse.IdBorne!=0)
+                if (TicketBorneResponse.IdBorne != 0)
                 {
                     var dto = new InfoTicketDTO();
                     dto.MontantPaye = (decimal)AddTicketResponse.Tarif;
                     dto.DateHeureEntree = AddTicketResponse.DateHeureDebutStationnement;
-                    if(AddTicketResponse.DateHeureFinStationnement!=null)
+                    if (AddTicketResponse.DateHeureFinStationnement != null)
+                        dto.DateHeureSortie = (DateTime)AddTicketResponse.DateHeureFinStationnement;
+
+                    dto.BorneEntree = TicketBorneResponse.NomBorne;
+
+                    var getAssociatedSessionquery = new RitegeDomain.Database.Queries.ParkingDBQueries.SessionQueries.GetOneByTicketLogCaissierAndTicketDates
+                    {
+                        LogCaissier = AddTicketResponse.LogCaissier,
+                        DateStart = AddTicketResponse.DateHeureDebutStationnement,
+                        DateEnd = AddTicketResponse.DateHeureFinStationnement
+                    };
+                    Session? getAssociatedSessionResoponse = await _mediator.Send(getAssociatedSessionquery);
+                    if (getAssociatedSessionResoponse.IdSessions != 0)
+                    {
+                        var updateSessionEarningsCommand = new RitegeDomain.Database.Commands.Parking.SessionCommands.UpdateSessionEarningsByIdCommand
+                        {
+                            IdSessions = getAssociatedSessionResoponse.IdSessions,
+                            Montant = ticketToAdd.Tarif
+                        };
+                        int? updateSessionEarningsResoponse = await _mediator.Send(updateSessionEarningsCommand);
+
+                        var getParkingByIdQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.ParkingQueries.GetOneByIdParkingQuery
+                        {
+                            IdParking = TicketBorneResponse.IdParking
+                        };
+                        Parking? getParkingByIdResponse = await _mediator.Send(getParkingByIdQuery);
+                        await mobileClientHandler.SendTicketDataToListeningClients(dto, getParkingByIdResponse.IdSociete, getParkingByIdResponse.IdParking);
+                        DashBoardDTO dash = new();
+                        dash.RecetteParking = dto.MontantPaye;
+                        dash.RecetteCaisse = dto.MontantPaye;
+                        dash.RecetteCaissier = dto.MontantPaye;
+                        dash.Caisse = getAssociatedSessionResoponse.idCaisse.ToString();
+                        dash.NbTickets = 1;
+
+                        await mobileClientHandler.SendDashboardDataToListeningClients(dash, getParkingByIdResponse.IdSociete, getParkingByIdResponse.IdParking, getAssociatedSessionResoponse.idCaisse);
+                    }
+                    else return BadRequest("session not found");
+                }
+            
+                return Ok(AddTicketResponse);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("DoorStateChanged")]
+        public async Task<ActionResult<int>> DoorStateChanged(CreateTicketCommand ticketToAdd)
+        {
+            try
+            {
+                Ticket? AddTicketResponse = await _mediator.Send(ticketToAdd);
+                var TicketBorneQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.BorneQueries.GetOneByIdQuery
+                {
+                    Id = ticketToAdd.idBorneEntree
+                };
+                Borne? TicketBorneResponse = await _mediator.Send(TicketBorneQuery);
+
+                if (TicketBorneResponse.IdBorne != 0)
+                {
+                    var dto = new InfoTicketDTO();
+                    dto.MontantPaye = (decimal)AddTicketResponse.Tarif;
+                    dto.DateHeureEntree = AddTicketResponse.DateHeureDebutStationnement;
+                    if (AddTicketResponse.DateHeureFinStationnement != null)
                         dto.DateHeureSortie = (DateTime)AddTicketResponse.DateHeureFinStationnement;
 
                     dto.BorneEntree = TicketBorneResponse.NomBorne;
@@ -97,18 +165,19 @@ namespace RitegeServer.ServerControllers
                     };
                     Session? getAssociatedSessionResoponse = await _mediator.Send(getAssociatedSessionquery);
 
-                    var updateSessionEarningsCommand= new RitegeDomain.Database.Commands.Parking.SessionCommands.UpdateSessionEarningsByIdCommand
+                    var updateSessionEarningsCommand = new RitegeDomain.Database.Commands.Parking.SessionCommands.UpdateSessionEarningsByIdCommand
                     {
-                        IdSessions=getAssociatedSessionResoponse.IdSessions,Montant=ticketToAdd.Tarif
+                        IdSessions = getAssociatedSessionResoponse.IdSessions,
+                        Montant = ticketToAdd.Tarif
                     };
                     int? updateSessionEarningsResoponse = await _mediator.Send(updateSessionEarningsCommand);
-                    
+
                     var getParkingByIdQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.ParkingQueries.GetOneByIdParkingQuery
                     {
                         IdParking = TicketBorneResponse.IdParking
                     };
                     Parking? getParkingByIdResponse = await _mediator.Send(getParkingByIdQuery);
-                   await mobileClientHandler.SendTicketDataToListeningClients(dto, getParkingByIdResponse.IdSociete, getParkingByIdResponse.IdParking);
+                    await mobileClientHandler.SendTicketDataToListeningClients(dto, getParkingByIdResponse.IdSociete, getParkingByIdResponse.IdParking);
                     DashBoardDTO dash = new();
                     dash.RecetteParking = dto.MontantPaye;
                     dash.RecetteCaisse = dto.MontantPaye;
@@ -116,9 +185,9 @@ namespace RitegeServer.ServerControllers
                     dash.Caisse = getAssociatedSessionResoponse.idCaisse.ToString();
                     dash.NbTickets = 1;
 
-                    await mobileClientHandler.SendDashboardDataToListeningClients(dash, getParkingByIdResponse.IdSociete, getParkingByIdResponse.IdParking,getAssociatedSessionResoponse.idCaisse);
+                    await mobileClientHandler.SendDashboardDataToListeningClients(dash, getParkingByIdResponse.IdSociete, getParkingByIdResponse.IdParking, getAssociatedSessionResoponse.idCaisse);
                 }
-            
+
                 return Ok(AddTicketResponse);
 
             }
@@ -127,8 +196,30 @@ namespace RitegeServer.ServerControllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("Login")]
+        public async Task<ActionResult<int>> Login()
+        {
+            try
+            {
 
+                SessionRepository SessionR = new();
+                await SessionR.UpdateSessionDatesAsync();
+                TicketRepository TicketR = new();
+                await TicketR.UpdateTicketDatesAsync();
+                EvenementRepository evenementRepository = new();
+                await evenementRepository.UpdateEvennementDateAsync();
+                EventRepository eventRepository = new();
+                return await eventRepository.UpdateEventDateAsync();
 
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(0);
+            }
+        }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

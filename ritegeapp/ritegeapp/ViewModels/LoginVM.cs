@@ -105,7 +105,11 @@ namespace ritegeapp.ViewModels
                 return;
             }
             try
-            { 
+            {
+                IsLoading = false;
+                CanClickButtonOrFields = true;
+                Email = string.Empty;
+                password = string.Empty;
                 MessagingCenter.Send(Xamarin.Forms.Application.Current, "SwitchToDashboardView");
             }
             catch(Exception e)

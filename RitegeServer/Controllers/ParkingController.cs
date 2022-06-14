@@ -41,22 +41,22 @@ namespace RitegeServer.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Route("GetCashierListByParking")]
-        public async Task<ActionResult<Dictionary<int, string>>> GetCashierListByParking(int idparking)
-        {
-            try
-            {
+        //[HttpGet]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[Route("GetCashierListByParking")]
+        //public async Task<ActionResult<Dictionary<int, string>>> GetCashierListByParking(int idparking)
+        //{
+        //    try
+        //    {
 
-                return Ok(await queryManager.GetCashierListByParking(idparking));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //        return Ok(await queryManager.GetCashierListByParking(idparking));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
          [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -223,6 +223,22 @@ namespace RitegeServer.Controllers
             try
             {
                 return Ok(await queryManager.GetDoors(idParking));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPatch]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("ChangeDoorState")]
+        public async Task<ActionResult<bool?>> ChangeDoorState(int idDoor,bool IsOpen)
+        {
+            try
+            {
+                return Ok(true);
 
             }
             catch (Exception ex)

@@ -22,12 +22,15 @@
     <None Remove="images\LabelIcons\event2.png" />
     <None Remove="images\LabelIcons\gear.png" />
     <None Remove="images\LabelIcons\home.png" />
+    <None Remove="images\LabelIcons\logo.png" />
     <None Remove="images\LabelIcons\moneybag.png" />
     <None Remove="images\LabelIcons\parking.png" />
+    <None Remove="images\LabelIcons\parkingdoor.png" />
     <None Remove="images\LabelIcons\parkingearnings.png" />
     <None Remove="images\LabelIcons\person.png" />
     <None Remove="images\LabelIcons\police.png" />
     <None Remove="images\LabelIcons\staff.png" />
+    <None Remove="images\LabelIcons\state.png" />
     <None Remove="images\LabelIcons\statistics.png" />
     <None Remove="images\LabelIcons\subscribercard.png" />
     <None Remove="images\LabelIcons\ticket.png" />
@@ -40,6 +43,7 @@
     <None Remove="images\MenuIcons\event.png" />
     <None Remove="images\MenuIcons\home.png" />
     <None Remove="images\MenuIcons\logout.png" />
+    <None Remove="images\MenuIcons\parkingdoor.png" />
     <None Remove="images\MenuIcons\receipt.jpg" />
     <None Remove="images\MenuIcons\subscription.png" />
     <None Remove="images\MenuIcons\ticket.png" />
@@ -61,6 +65,8 @@
     <EmbeddedResource Include="images\LabelIcons\event.png" />
     <EmbeddedResource Include="images\LabelIcons\event2.png" />
     <EmbeddedResource Include="images\LabelIcons\home.png" />
+    <EmbeddedResource Include="images\LabelIcons\logo.png" />
+    <EmbeddedResource Include="images\LabelIcons\parkingdoor.png" />
     <EmbeddedResource Include="images\LabelIcons\staff.png" />
   </ItemGroup>
 
@@ -83,6 +89,7 @@
     <EmbeddedResource Include="images\LabelIcons\calendar.png" />
     <EmbeddedResource Include="images\LabelIcons\contract.png" />
     <EmbeddedResource Include="images\LabelIcons\police.png" />
+    <EmbeddedResource Include="images\LabelIcons\state.png" />
     <EmbeddedResource Include="images\LabelIcons\statistics.png" />
     <EmbeddedResource Include="images\LabelIcons\subscribercard.png" />
     <EmbeddedResource Include="images\LabelIcons\ticket.png" />
@@ -97,6 +104,7 @@
     <EmbeddedResource Include="images\MenuIcons\event.png" />
     <EmbeddedResource Include="images\MenuIcons\home.png" />
     <EmbeddedResource Include="images\MenuIcons\logout.png" />
+    <EmbeddedResource Include="images\MenuIcons\parkingdoor.png" />
     <EmbeddedResource Include="images\MenuIcons\ticket.png" />
     <EmbeddedResource Include="Resources\LangFrensh.xml" />
   </ItemGroup>
@@ -140,6 +148,9 @@
     </Compile>
     <Compile Update="Views\CaissierListView.xaml.cs">
       <DependentUpon>CaissierListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DoorView.xaml.cs">
+      <DependentUpon>DoorView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>

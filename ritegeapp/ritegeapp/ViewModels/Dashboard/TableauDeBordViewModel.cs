@@ -50,7 +50,23 @@ namespace ritegeapp.ViewModels
             ParkingList = new();
             CashRegisterList = new();
             SubscribeToEvents();
-           // InitData();
+            // InitData();
+            //Device.StartTimer(TimeSpan.FromSeconds(2), () =>
+            //{
+            //    // Do something
+            //    PlaceOccupe += 5;
+            //    PlaceDisponible -= 5;
+            //    if(PlaceDisponible<-1)
+            //    {
+            //        PlaceDisponible = 100;
+            //        PlaceOccupe = 0;
+            //    }
+            //    if (PlaceOccupe > 100)
+            //    {PlaceOccupe=100;
+            //        PlaceOccupe = 0;
+            //    }
+            //    return true; // True = Repeat again, False = Stop the timer
+            //});
         }
         public void SubscribeToEvents()
         {
@@ -156,8 +172,8 @@ namespace ritegeapp.ViewModels
         private void SetData(DashBoardDTO data)
         {
  
-            FluxBorneTotal += 10;
-            FluxCaisseTotal += 15;
+            FluxBorneTotal=12;
+            FluxCaisseTotal = 15;
             FluxBorne = data.FluxBorne;
             FluxCaisse = data.FluxCaisse;
             if(data.Caisse is not null)
@@ -169,7 +185,7 @@ namespace ritegeapp.ViewModels
 
           RecetteParking = data.RecetteParking;
             NomPrenomCaissier = data.NomPrenomCaissier;
-            EtatCaisse = data.EtatCaisse;
+            EtatCaisse = true;
             NbAdministrateur = data.NbAdministrateur;
             NbAutorite = data.NbAutorite;
            NbEgress = data.NbEgress;
