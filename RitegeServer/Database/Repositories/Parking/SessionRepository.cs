@@ -184,7 +184,7 @@ namespace RitegeDomain.Database.Repositories
             using (SqlConnection con = new(connectionString))
             {
                 string query;
-                query = "update parkingdb.sessions  set montant =case when montant is null then @pricetoadd else montant + @pricetoadd end where idSessions = @idsessions";
+                query = "update parkingdb.sessions  set montant =case when montant is null then @pricetoAdd else montant + @pricetoAdd end where idSessions = @Idsessions";
 
                 using (SqlCommand cmd = new(query))
                 {
@@ -194,7 +194,29 @@ namespace RitegeDomain.Database.Repositories
                     
                     con.Open();
                     //should be always 1
-                    var affectedqueriesawait =cmd.ExecuteNonQueryAsync();
+                    var affectedqueriesawait =await cmd.ExecuteNonQueryAsync();
+                    con.Close();
+
+                    return 1;
+                }
+            }
+        }
+        public async Task<int> UpdateSessionDatesAsync()
+        {
+            Session session = new();
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+                query = "UPDATE parkingdb.parkingdb.sessions SET datedebut = cast(@Date as datetime) + cast(cast(datedebut as time) as datetime),DateFin = cast(@Date as datetime) + cast(cast(DateFin as time) as datetime)";
+
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                    cmd.Parameters.Add("@Date", SqlDbType.DateTime2).Value = DateTime.Today;
+
+                    con.Open();
+                    //should be always 1
+                    var affectedqueriesawait = await cmd.ExecuteNonQueryAsync();
                     con.Close();
 
                     return 1;

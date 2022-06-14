@@ -70,11 +70,18 @@
            TextColor="{StaticResource LabelColor}"
            Grid.Row="4"
                        Grid.Column="0" />
-    <Label Text="{Binding RecetteTotal}"
+    <Label
            HorizontalOptions="EndAndExpand"
                        Grid.Row="4"
                        Grid.Column="1"
-                                   TextColor="{StaticResource Primary}"  />
+           TextColor="{StaticResource Primary}">
+     <Label.FormattedText>
+      <FormattedString>
+       <Span Text="{Binding RecetteTotal,StringFormat='{0:G29}' }"></Span>
+       <Span Text=" DT"></Span>
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
     <Button TextColor="{StaticResource Primary}"
             BackgroundColor="Transparent"
             Grid.Row="5"

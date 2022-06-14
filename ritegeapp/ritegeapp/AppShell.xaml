@@ -49,7 +49,8 @@
                             </VisualState>
                             <VisualState x:Name="Selected">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+         <Setter Property="BackgroundColor"
+                 Value="{StaticResource BackgroundColor}" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -82,42 +83,43 @@
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
  <FlyoutItem Title="Tableau De Bord" x:Name="dashboard"
-             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.home.png}">
+             Icon="{extentions:ImageResource ritegeapp.images.MenuIcons.home.png}">
   <ShellContent Route="TableauDeBord"
                 ContentTemplate="{DataTemplate local:TableauDeBord}" />
  </FlyoutItem>
  <FlyoutItem Title="Gestion Sessions Caissiers"
-             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.cashier.png}">
+             Icon="{extentions:ImageResource ritegeapp.images.MenuIcons.cashier.png}">
   <ShellContent Route="GestionDesSessionsCaissiers"
                 ContentTemplate="{DataTemplate local:GestionDesSessionsCaissiers}" />
  </FlyoutItem>
  <FlyoutItem Title="Gestion Recettes"
-             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.ticket.png}">
+             Icon="{extentions:ImageResource ritegeapp.images.MenuIcons.ticket.png}">
   <ShellContent Route="GestionRecette"
                 ContentTemplate="{DataTemplate local:GestionRecettes}" />
  </FlyoutItem>
  <FlyoutItem Title="Gestion Abonnement"
-             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.contract.png}">
+             Icon="{extentions:ImageResource ritegeapp.images.MenuIcons.contract.png}">
   <ShellContent Route="Gestion Abonnement"
                 ContentTemplate="{DataTemplate local:GestionAbonnement}" />
  </FlyoutItem>
  <FlyoutItem Title="Evenements"
-             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.event.png}">
+             Icon="{extentions:ImageResource ritegeapp.images.MenuIcons.event.png}">
   <ShellContent Route="EventView"
                 ContentTemplate="{DataTemplate local:EventView}" />
  </FlyoutItem>
  <FlyoutItem Title="Alertes"
-             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.alert2.png}">
+             Icon="{extentions:ImageResource ritegeapp.images.MenuIcons.alert.png}">
   <ShellContent Route="AlertView"
                 ContentTemplate="{DataTemplate local:AlertView}" />
  </FlyoutItem>
- <FlyoutItem Title="Alertes" IsVisible="False" x:Name="login"
-             Icon="{extentions:ImageResource ritegeapp.images.LabelIcons.alert2.png}">
-  <ShellContent Route="AlertView"
+ <FlyoutItem Title="Alertes"
+             IsVisible="False"
+             x:Name="login">
+  <ShellContent Route="LoginView"
                 ContentTemplate="{DataTemplate local:LoginView}" />
  </FlyoutItem>
  <MenuItem Text="Déconnecter"
-           StyleClass="MenuItemLayoutStyle"
+           Icon="{extentions:ImageResource ritegeapp.images.MenuIcons.logout.png}" StyleClass="MenuItemLayoutStyle"
            Clicked="MenuItem_Clicked"></MenuItem>
 
  <!--

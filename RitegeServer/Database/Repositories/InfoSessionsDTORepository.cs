@@ -19,7 +19,7 @@ namespace RitegeDomain.Database.Repositories
                 if (idCaissier==0)
                     query = "SELECT  s.idcaisse,s.idSessions,s.logCaissier ,s.montant,s.DateDebut,s.DateFin, Nomcaisse from parkingdb.caisse c,parkingdb.sessions s where s.idCaisse=c.idCaisse and  DateDebut >= @start and( DateFin<=@finish or DateFin is null)";
                 else
-                    query = "SELECT  s.idcaisse,s.idSessions,s.logCaissier ,s.montant,s.DateDebut,s.DateFin, Nomcaisse from parkingdb.caisse c, parkingdb.sessions s where s.idCaisse = c.idCaisse and s.logCaissier like (select login from parkingdb.utilisateur where idUtilisateur=@idCaissier)";
+                    query = "SELECT  s.idcaisse,s.idSessions,s.logCaissier ,s.montant,s.DateDebut,s.DateFin, Nomcaisse from parkingdb.caisse c, parkingdb.sessions s where s.idCaisse = c.idCaisse and s.logCaissier like (select login from parkingdb.utilisateur where idUtilisateur=@idCaissier) and  DateDebut >= @start and( DateFin<=@finish or DateFin is null)";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;

@@ -45,23 +45,11 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private bool resetFilterButton = false;
         [ObservableProperty]
-        private bool caissierSortMode,canClickCaissierList;
+        private bool caissierSortMode;
         [ObservableProperty]
         private bool dateCaissierSortMode;
         [ObservableProperty]
-        private bool showLoadingIndicator;
-        [ObservableProperty]
-        private bool showData;
-        [ObservableProperty]
-        private bool showNoDataReceived;
-        [ObservableProperty]
-        private bool showNoInternetLabel;
-        [ObservableProperty]
-        private bool listIsRefreshing = false;
-        [ObservableProperty]
-        private bool showTotal = false;
-        [ObservableProperty]
-        private bool canTapFilterImages = false;
+        private ViewStateManager stateManager = new();
         [ObservableProperty]
         private decimal totalMoney;
         #endregion      
@@ -84,7 +72,7 @@ namespace ritegeapp.ViewModels
         {
             if (data == null || data.Count == 0)
             {
-                await Device.InvokeOnMainThreadAsync(() => ShowNoDataReceivedMessage());
+                await Device.InvokeOnMainThreadAsync(() => StateManager.ShowNoDataReceivedMessage());
             }
             else
             {
@@ -109,7 +97,7 @@ namespace ritegeapp.ViewModels
                     ListCaissierToShow.Add(c);
                 }
             }
-            ShowDataView();
+            StateManager.ShowDataView();
         }
         private void GroupByDateCaissier()
         {
@@ -131,47 +119,7 @@ namespace ritegeapp.ViewModels
             }
 
         }
-        public void ShowLoading()
-        {
-            CanTapFilterImages = false;
-            ShowTotal = false;
-            ShowLoadingIndicator = true;
-            ShowNoFilterResultLabel = false;
-            ShowData = false; ShowNoDataReceived = false;
-        }
-        public void ShowNoFilterMessage()
-        {
-            ShowNoInternetLabel = false;
-            ShowTotal = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = true;
-            ShowData = false; ShowNoDataReceived = false;
-        }
-        public void ShowDataView()
-        {
-            CanTapFilterImages = true;
-            ShowTotal = true;
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = false;
-            ShowData = true; ShowNoDataReceived = false;
-        }
-        public void ShowNoInternetView()
-        {
-            ShowNoInternetLabel = true;
-            ShowTotal = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = false;
-            ShowData = false; ShowNoDataReceived = false;
-        }
-        public void ShowNoDataReceivedMessage()
-        {
-            ShowTotal = false;
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = false;
-            ShowData = false; ShowNoDataReceived = true;
-        }
+      
         private void CalculateListTotal(List<InfoSessionsDTO> dto)
         {
             TotalMoney = dto.Sum(x => x.Recette);
@@ -195,8 +143,7 @@ namespace ritegeapp.ViewModels
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                CanClickCaissierList = false;
-                ShowLoading();
+                StateManager.ShowLoading();
                 if(Initialized==false)
                 {
                     Initialized = true;
@@ -205,12 +152,12 @@ namespace ritegeapp.ViewModels
                 }
 
                 await DataReceivedAsync(await dataService.GetCashierData(dateStart, dateEnd.AddDays(1).AddTicks(-1), IdCaissier));
-                CanClickCaissierList = true;
+              
 
             }
             else
             if (ListDto.Count == 0)
-                ShowNoInternetView();
+                StateManager.ShowNoInternetView();
         }
         public async Task CaissierClicked(int idCashRegister, string CaissierName)
         {
@@ -220,12 +167,9 @@ namespace ritegeapp.ViewModels
             {
                 IdCaissier = idCashRegister;
                 Caissier = CaissierName;
-                CanClickCaissierList = false;
-                ShowLoading();
                 
                 await DataReceivedAsync(await dataService.GetCashierData(dateStart, dateEnd.AddDays(1).AddTicks(-1), IdCaissier));
-                ShowDataView();
-                CanClickCaissierList = true;
+                StateManager.ShowDataView();
                 Debug.WriteLine("different caisse");
             }
         }
@@ -244,7 +188,7 @@ namespace ritegeapp.ViewModels
         [ICommand]
         private async void OpenCaissierList(object obj)
         {
-            if (CanClickCaissierList)
+            if (StateManager.CanClickCaissierList)
                 await PopupNavigation.Instance.PushAsync(new CaissierListView(this));
         }
 

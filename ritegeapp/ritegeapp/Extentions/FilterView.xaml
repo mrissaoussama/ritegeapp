@@ -47,7 +47,7 @@
     <DatePicker Format="dd/MM/yyyy"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
-                FontSize="Small"
+                FontSize="Small" MinimumDate="{Binding DateStart}"
                 x:Name="DateEndLabel"
                 Date="{Binding DateEnd}"
                 TextColor="{StaticResource LabelColor}" />
@@ -64,11 +64,11 @@
            x:Name="SearchTextBoxField"
            Placeholder="Recherche" VerticalOptions="End"
            FontSize="Small"
-           PlaceholderColor="{StaticResource Primary}"
-           TextColor="{StaticResource Primary}"></Entry>
+           PlaceholderColor="{StaticResource LabelColor}"
+           TextColor="{StaticResource LabelColor}"></Entry>
    <Grid  Grid.Row="1"
-          Grid.ColumnSpan="2"
-          Grid.Column="4">
+          Grid.ColumnSpan="3"
+          Grid.Column="3">
     <Image Source="search.png"
            x:Name="CanTapSearchText"
            Scale="0.7"
@@ -77,7 +77,6 @@
     <Image Source="clearfilter.png"
            x:Name="CanClearFilter"
            Scale="0.7"
-           IsEnabled="{Binding CanClearFilterCommand}"
            xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
            Grid.Column="1"
            xct:TouchEffect.PressedOpacity="0.7"></Image>
@@ -87,6 +86,12 @@
            xct:TouchEffect.PressedOpacity="0.6"
            xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
            Grid.Column="2"></Image>
+    <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.statistics.png}"
+           x:Name="statistics"
+           Scale="0.7"
+           xct:TouchEffect.PressedOpacity="0.6"
+           xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
+           Grid.Column="3"></Image>
    </Grid>
   </Grid>
  </Frame.Content>

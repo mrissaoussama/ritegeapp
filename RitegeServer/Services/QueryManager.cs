@@ -196,9 +196,9 @@ namespace RitegeServer.Services
                     _configuration["Jwt:Issuer"],
                     _configuration["Jwt:Audience"],
                     claims,
-                    expires: DateTime.Now.AddMinutes(int.Parse(_configuration["Jwt:Expires"])),
+                    expires: DateTime.Now.AddHours(int.Parse(_configuration["Jwt:Expires"])),
                     signingCredentials: signIn);
-                System.Diagnostics.Debug.WriteLine("User Logged in. token: " + token);
+                System.Diagnostics.Debug.WriteLine("User Logged in. token: " + DateTime.Now.AddHours(int.Parse(_configuration["Jwt:Expires"])) + token);
 
                 return (new JwtSecurityTokenHandler().WriteToken(token));
             }

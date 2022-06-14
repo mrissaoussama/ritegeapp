@@ -425,6 +425,28 @@ namespace RitegeDomain.Database.Repositories
             }
             return total;
         }
+        public async Task<int> UpdateEvennementDateAsync()
+        {
+            Session session = new();
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+                query = "UPDATE parkingdb.parkingdb.evenement SET dateEvent = cast(@Date as datetime) + cast(cast(dateEvent as time) as datetime)";
+
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                    cmd.Parameters.Add("@Date", SqlDbType.DateTime2).Value = DateTime.Today;
+
+                    con.Open();
+                    //should be always 1
+                    var affectedqueriesawait = await cmd.ExecuteNonQueryAsync();
+                    con.Close();
+
+                    return 1;
+                }
+            }
+        }
 
         public async Task<int> GetTodayAbonneAsync(int idParking, int idCaisse)
         {

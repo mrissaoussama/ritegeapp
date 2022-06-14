@@ -71,6 +71,8 @@ namespace ritegeapp.Extentions
             var control = (FilterViewCaissier)bindable;
             var command = (CommunityToolkit.Mvvm.Input.RelayCommand<object>)newValue;
             TouchEffect.SetCommand(control.SearchTextBoxField, command);
+            TouchEffect.SetCommand(control.CaissierFrame, command);
+
         }
 
         public bool CanTapSearchTextBool
@@ -175,8 +177,9 @@ BindableProperty.Create("ShowStatistics", typeof(bool), typeof(CommunityToolkit.
             var control = (FilterViewCaissier)bindable;
             var command = (CommunityToolkit.Mvvm.Input.RelayCommand<object>)newValue;
             TouchEffect.SetCommand(control.CanTapSearchText, command);
+
         }
-  
+
         private static void CanClearFilterCommandChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var control = (FilterViewCaissier)bindable;
@@ -191,6 +194,7 @@ BindableProperty.Create("ShowStatistics", typeof(bool), typeof(CommunityToolkit.
 
             TouchEffect.SetCommand(control.CanSort, command);
         }
-       
+
+      
     }
 }

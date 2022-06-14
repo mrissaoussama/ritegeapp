@@ -29,19 +29,10 @@ namespace ritegeapp.ViewModels
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
         private DateTime dateEnd = DateTime.Today;
+      
+        public XmlEventCodeStringRetriever codeRetriever = new XmlEventCodeStringRetriever();
         [ObservableProperty]
-        private bool showData;
-        [ObservableProperty]
-        private bool showNoDataReceived;
-        [ObservableProperty]
-        private bool showLoadingIndicator;
-        [ObservableProperty]
-        private bool showNoInternetLabel;
-        [ObservableProperty]
-        private bool showNoFilterResultLabel;
-        [ObservableProperty]
-        private bool listIsRefreshing = false;
-        public XmlErrorCodeStringRetriever codeRetriever = new XmlErrorCodeStringRetriever();
+        private ViewStateManager stateManager = new();
         #endregion        
         ISignalRService signalRService;
         IDataService dataService;
@@ -64,7 +55,7 @@ namespace ritegeapp.ViewModels
         {
             if (data == null || data.Count == 0)
             {
-                await Device.InvokeOnMainThreadAsync(() => ShowNoDataReceivedMessage());
+                await Device.InvokeOnMainThreadAsync(() => StateManager.ShowNoDataReceivedMessage());
             }
             else
             {
@@ -74,8 +65,8 @@ namespace ritegeapp.ViewModels
         public async Task UpdateData(EventDTO data)
         {               data = codeRetriever.GetErrorCodeString(data);
 
-            ListEventToShow.Add(data);
-            ShowDataView();
+            ListEventToShow.Insert(0,data);
+            StateManager.ShowDataView();
         }
         private void SetData(List<EventDTO> data)
         {
@@ -83,51 +74,9 @@ namespace ritegeapp.ViewModels
             for (int i = 0; i < data.Count; i++)
                 data[i] = codeRetriever.GetErrorCodeString(data[i]);
             data.ForEach(x => ListEventToShow.Add(x));
-            ShowDataView();
+            StateManager.ShowDataView();
         }
-        public void ShowLoading()
-        {
-            ShowNoFilterResultLabel = false;
-            ShowLoadingIndicator = true;
-            ShowNoInternetLabel = false;
-            ShowData = false;
-            ShowNoDataReceived = false;
-        }
-        public void ShowNoFilterMessage()
-        {
-            ShowNoFilterResultLabel = true;
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowData = false;
-            ShowNoDataReceived = false;
-        }
-        public void ShowDataView()
-        {
-            ShowNoFilterResultLabel = false;
-
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowData = true;
-            ShowNoDataReceived = false;
-        }
-        public void ShowNoInternetView()
-        {
-            ShowNoFilterResultLabel = false;
-
-            ShowNoInternetLabel = true;
-            ShowLoadingIndicator = false;
-            ShowData = false;
-            ShowNoDataReceived = false;
-        }
-        public void ShowNoDataReceivedMessage()
-        {
-            ShowNoFilterResultLabel = false;
-
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowData = false;
-            ShowNoDataReceived = true;
-        }
+   
         [ICommand]
         private async void ClearFilter(object obj)
         {
@@ -145,18 +94,21 @@ namespace ritegeapp.ViewModels
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
+                StateManager.ShowLoading();
+
                 if(Initialized==false)
                 {
                     Initialized = true;
-                    await signalRService.ListenForEventData();
+                    
+                    await Task.Run(async () => { await signalRService.ListenForEventData(); });
+
                 }
-                ShowLoading();
-           await EventDataReceivedAsync(await dataService.GetEventData(DateStart,DateEnd.AddDays(1).AddTicks(-1)));
+                await EventDataReceivedAsync(await dataService.GetEventData(DateStart,DateEnd.AddDays(1).AddTicks(-1)));
                 await signalRService.Connect();
             }
             else
             if (ListDto.Count == 0)
-                ShowNoInternetView();
+                StateManager.ShowNoInternetView();
         }
     }
 }

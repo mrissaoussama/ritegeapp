@@ -19,14 +19,16 @@ namespace ritegeapp
 
             if (string.IsNullOrEmpty(DependencyService.Get<IDataService>().GetToken().Result))
             {
-                CurrentItem = login;
+                     CurrentItem = login;
             }
             else
             {
                 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjIzNzIzQDMyMzAyZTMxMmUzMEJwbk0xNVlBUHdJM0I4emZ0K2xMNXViaExUN2Fac1RGaGRQWFFZZEtOZWc9");
                  DependencyService.Get<IDataService>().Initialize();
-                 DependencyService.Get<ISignalRService>().Initialize();
-                CurrentItem = dashboard;
+                DependencyService.Get<ISignalRService>().Initialize();
+                DependencyService.Get<ISignalRService>().StartAlertService();
+                
+                  CurrentItem = dashboard;
 
             }
             MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(Xamarin.Forms.Application.Current, "CommunicationError", async (sender, arg) =>
@@ -43,12 +45,12 @@ namespace ritegeapp
              });
             MessagingCenter.Subscribe<Xamarin.Forms.Application >(Xamarin.Forms.Application.Current, "SwitchToLoginView", async (sender) =>
             {
-                CurrentItem = login;
+                 CurrentItem = login;
 
             });
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "SwitchToDashboardView", async (sender) =>
             {
-                CurrentItem = dashboard;
+              CurrentItem = dashboard;
 
                 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjIzNzIzQDMyMzAyZTMxMmUzMEJwbk0xNVlBUHdJM0I4emZ0K2xMNXViaExUN2Fac1RGaGRQWFFZZEtOZWc9");
                 await DependencyService.Get<IDataService>().Initialize();
@@ -64,7 +66,7 @@ namespace ritegeapp
         private void MenuItem_Clicked(object sender, EventArgs e)
         {
             DependencyService.Get<IDataService>().Disconnect();
-            CurrentItem = login;
+             CurrentItem = login;
 
         }
     }

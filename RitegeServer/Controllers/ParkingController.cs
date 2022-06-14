@@ -57,7 +57,7 @@ namespace RitegeServer.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("GetCashRegisterList")]

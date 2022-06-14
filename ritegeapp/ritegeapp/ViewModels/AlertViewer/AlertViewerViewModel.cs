@@ -29,23 +29,13 @@ namespace ritegeapp.ViewModels
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
         private DateTime dateEnd = DateTime.Today;
-        [ObservableProperty]
-        private bool showData;
-        [ObservableProperty]
-        private bool showNoDataReceived;
-        [ObservableProperty]
-        private bool showLoadingIndicator;
-        [ObservableProperty]
-        private bool showNoInternetLabel; 
-        [ObservableProperty]
-        private bool showNoFilterResultLabel;
-        [ObservableProperty]
-        private bool listIsRefreshing = false;
-        private XmlErrorCodeStringRetriever codeRetriever=new XmlErrorCodeStringRetriever();
+  
+        private XmlEventCodeStringRetriever codeRetriever=new XmlEventCodeStringRetriever();
         #endregion
         ISignalRService signalRService;
         IDataService dataService;
-
+        [ObservableProperty]
+        private ViewStateManager stateManager = new();
         public bool Initialized { get; private set; }
 
         public AlertViewerViewModel()
@@ -62,7 +52,7 @@ namespace ritegeapp.ViewModels
         {
             if (data == null || data.Count == 0)
             {
-                await Device.InvokeOnMainThreadAsync(() => ShowNoDataReceivedMessage());
+                await Device.InvokeOnMainThreadAsync(() => StateManager.ShowNoDataReceivedMessage());
             }
             else
             {
@@ -74,8 +64,8 @@ namespace ritegeapp.ViewModels
         {
             data = codeRetriever.GetErrorCodeString(data);
 
-            ListAlertToShow.Add(data);
-            ShowDataView();
+            ListAlertToShow.Insert(0, data);
+            StateManager.ShowDataView();
         }
         private void SetData(List<EventDTO> data)
         {
@@ -83,51 +73,9 @@ namespace ritegeapp.ViewModels
             for (int i = 0; i < data.Count; i++)
                 data[i] = codeRetriever.GetErrorCodeString(data[i]);
             data.ForEach(x => ListAlertToShow.Add(x));
-            ShowDataView();
+            StateManager.ShowDataView();
         }
-        public void ShowLoading()
-        {
-            ShowNoFilterResultLabel = false;
-            ShowLoadingIndicator = true;
-            ShowNoInternetLabel = false;
-            ShowData = false;
-            ShowNoDataReceived = false;
-        }
-        public void ShowNoFilterMessage()
-        {
-            ShowNoFilterResultLabel = true;
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowData = false;
-            ShowNoDataReceived = false;
-        }
-        public void ShowDataView()
-        {
-            ShowNoFilterResultLabel = false;
-
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowData = true;
-            ShowNoDataReceived = false;
-        }
-        public void ShowNoInternetView()
-        {
-            ShowNoFilterResultLabel = false;
-
-            ShowNoInternetLabel = true;
-            ShowLoadingIndicator = false;
-            ShowData = false;
-            ShowNoDataReceived = false;
-        }
-        public void ShowNoDataReceivedMessage()
-        {
-            ShowNoFilterResultLabel = false;
-
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowData = false;
-            ShowNoDataReceived = true;
-        }
+     
         [ICommand]
         private async void ClearFilter(object obj)
         {
@@ -145,13 +93,13 @@ namespace ritegeapp.ViewModels
                     Initialized = true;
                     await signalRService.ListenForAlerts();
                 }
-                ShowLoading();
+                StateManager.ShowLoading();
                 await OnAlertDataReceivedAsync(await dataService.GetAlertData(DateStart, DateEnd.AddDays(1).AddTicks(-1)));
                 await signalRService.Connect();
             }
             else
             if (ListDto.Count == 0)
-                ShowNoInternetView();
+                StateManager.ShowNoInternetView();
         } 
     }
 }

@@ -22,19 +22,19 @@ namespace RitegeServer.Services
             return result;
 
         }
-        public IEnumerable<InfoSessionsDTO> FilterSessionDTO(IEnumerable<InfoSessionsDTO> listToFilter,
-       DateTime dateStart, DateTime dateEnd, string? caissierName)
-        {
-            var result = listToFilter.Where(dto => dto.DateStartSession.Date >= dateStart.Date && dto.DateEndSession.Date <= dateEnd.Date).ToList();
+       // public IEnumerable<InfoSessionsDTO> FilterSessionDTO(IEnumerable<InfoSessionsDTO> listToFilter,
+       //DateTime dateStart, DateTime dateEnd, string? caissierName)
+       // {
+       //     var result = listToFilter.Where(dto => dto.DateStartSession.Date >= dateStart.Date && dto.DateEndSession.Date <= dateEnd.Date).ToList();
 
-            if (string.IsNullOrEmpty(caissierName) == false)
-            {
+       //     if (string.IsNullOrEmpty(caissierName) == false)
+       //     {
 
-                result = result.Where(p => p.Caissier != null && p.Caissier.ToLower().Contains(caissierName.ToLower())).ToList();
-            }
-            return result;
+       //         result = result.Where(p => p.Caissier != null && p.Caissier.ToLower().Contains(caissierName.ToLower())).ToList();
+       //     }
+       //     return result;
 
-        }
+       // }
     
     }
 }

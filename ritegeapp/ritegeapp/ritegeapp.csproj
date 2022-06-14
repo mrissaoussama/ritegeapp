@@ -20,6 +20,7 @@
     <None Remove="images\LabelIcons\contract.png" />
     <None Remove="images\LabelIcons\event.png" />
     <None Remove="images\LabelIcons\event2.png" />
+    <None Remove="images\LabelIcons\gear.png" />
     <None Remove="images\LabelIcons\home.png" />
     <None Remove="images\LabelIcons\moneybag.png" />
     <None Remove="images\LabelIcons\parking.png" />
@@ -32,15 +33,25 @@
     <None Remove="images\LabelIcons\ticket.png" />
     <None Remove="images\LabelIcons\timeend.png" />
     <None Remove="images\LabelIcons\timestart.png" />
+    <None Remove="images\MenuIcons\alert.png" />
     <None Remove="images\MenuIcons\cashier.png" />
+    <None Remove="images\MenuIcons\contract.png" />
     <None Remove="images\MenuIcons\dashboard.png" />
+    <None Remove="images\MenuIcons\event.png" />
+    <None Remove="images\MenuIcons\home.png" />
+    <None Remove="images\MenuIcons\logout.png" />
     <None Remove="images\MenuIcons\receipt.jpg" />
     <None Remove="images\MenuIcons\subscription.png" />
+    <None Remove="images\MenuIcons\ticket.png" />
     <None Remove="Resources\LangFrensh.xml" />
   </ItemGroup>
 
   <ItemGroup>
     <ApplicationDefinition Include="images\LabelIcons\parking.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="images\LabelIcons\gear.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,13 +88,16 @@
     <EmbeddedResource Include="images\LabelIcons\ticket.png" />
     <EmbeddedResource Include="images\LabelIcons\timeend.png" />
     <EmbeddedResource Include="images\LabelIcons\timestart.png" />
-    <EmbeddedResource Include="images\MenuIcons\dashboard.png" />
+    <EmbeddedResource Include="images\MenuIcons\alert.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="images\MenuIcons\cashier.png" />
-    <EmbeddedResource Include="images\MenuIcons\receipt.jpg" />
-    <EmbeddedResource Include="images\MenuIcons\subscription.png" />
+    <EmbeddedResource Include="images\MenuIcons\contract.png" />
+    <EmbeddedResource Include="images\MenuIcons\event.png" />
+    <EmbeddedResource Include="images\MenuIcons\home.png" />
+    <EmbeddedResource Include="images\MenuIcons\logout.png" />
+    <EmbeddedResource Include="images\MenuIcons\ticket.png" />
     <EmbeddedResource Include="Resources\LangFrensh.xml" />
   </ItemGroup>
 

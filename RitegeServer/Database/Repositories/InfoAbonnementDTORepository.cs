@@ -21,35 +21,21 @@ namespace RitegeDomain.Database.Repositories
             {
                 string query;
                 if (string.IsNullOrEmpty(name))
-                     query = "SELECT ab.dateAffectationabonnementcol," +
-                        "ab.dateActivation," +
-                        "ab.dateDesactivation," +
-                        "ab.etatAffectation," +
-                        "a.montant," + "nom,prenom ," +
-
-                        "a.nomAbonnement," +
-                        "pa.periodeAbonnement " +
-                        "FROM parkingdb.abonnement a,parkingdb.affectationabonnement ab, parkingdb.periodeAbonnement pa,parkingdb.abonne" +
-                        " where" +
-                        " a.idAbonnement = ab.idAbonnement and" +
-                        " pa.ordre = a.periodeAbonnement and " + 
-                        "DateActivation >=@start and DateDesactivation<=@finish";
-                else
                     query = "SELECT ab.dateAffectationabonnementcol," +
-                        "ab.dateActivation," +
-                        "ab.dateDesactivation," +
-                        "ab.etatAffectation," +
-                        "a.montant," +
-                        "nom,prenom,"+
-                        "a.nomAbonnement," +
-                        "pa.periodeAbonnement " +
-                        "FROM parkingdb.abonnement a,parkingdb.affectationabonnement ab, parkingdb.periodeAbonnement pa,parkingdb.abonne" +
-                        " where" +
-                        " a.idAbonnement = ab.idAbonnement and" +
-                        " pa.ordre = a.periodeAbonnement and " +
-                        "DateActivation>=@start" +
-                        " and DateDesactivation<=@finish " +
-                        "and nomAbonnement like @name";
+                       "ab.dateActivation," +
+                       "ab.dateDesactivation," +
+                       "ab.etatAffectation," +
+                       "a.montant," + "nom,prenom ," +
+
+                       "a.nomAbonnement," +
+                       "pa.periodeAbonnement " +
+                       "FROM parkingdb.abonnement a,parkingdb.affectationabonnement ab, parkingdb.periodeAbonnement pa,parkingdb.abonne" +
+                       " where" +
+                       " a.idAbonnement = ab.idAbonnement and" +
+                       " pa.ordre = a.periodeAbonnement and abonne.idAbonne=ab.idAbonne and  etatAffectation in('Activé','Future') and " +
+                       "DateActivation >=@start and DateDesactivation<=@finish";
+                else
+                    query = "SELECT ab.dateAffectationabonnementcol,                         ab.dateActivation,                         ab.dateDesactivation,                         ab.etatAffectation,                         a.montant,  nom,prenom ,                         a.nomAbonnement,                         pa.periodeAbonnement                        FROM parkingdb.abonnement a, parkingdb.affectationabonnement ab,                        parkingdb.periodeAbonnement pa, parkingdb.abonne                         where                         a.idAbonnement = ab.idAbonnement and                         pa.ordre = a.periodeAbonnement and abonne.idAbonne = ab.idAbonne and etatAffectation in('Activé', 'Future') and                         (nom + prenom like @name or nom + ' ' + prenom like @name or prenom + ' ' + nom like @name or prenom + nom like @name) and                        DateActivation >= @start and DateDesactivation<= @finish";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;

@@ -28,7 +28,7 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private bool showNoFilterResultLabel = false;
         [ObservableProperty]
-        private bool resetFilterButton, canClickParkingList,parkingIsLoading;
+        private bool resetFilterButton;
         [ObservableProperty]
         private Dictionary<int, string> parkingList = new();
 
@@ -42,23 +42,11 @@ namespace ritegeapp.ViewModels
         private DateTime dateStart = DateTime.Today;
         [ObservableProperty]
         private DateTime dateEnd = DateTime.Today;
-        [ObservableProperty]
-        private bool showData;
-        [ObservableProperty]
-        private bool showNoDataReceived;
-        [ObservableProperty]
-        private bool showLoadingIndicator;
-        [ObservableProperty]
-        private bool showNoInternetLabel;
-        [ObservableProperty]
-        private bool listIsRefreshing = false;
-        [ObservableProperty]
-        private bool showTotal = false;
-        [ObservableProperty]
-        private bool canTapFilterImages = false;
+
         [ObservableProperty]
         private decimal totalMoney;
- 
+        [ObservableProperty]
+        private ViewStateManager stateManager = new();
         #endregion
         ISignalRService signalRService;
         IDataService dataService;
@@ -77,6 +65,7 @@ namespace ritegeapp.ViewModels
          
             MessagingCenter.Subscribe<Xamarin.Forms.Application, InfoTicketDTO>(Xamarin.Forms.Application.Current, "GetTicketData", async (sender, data) =>
             {
+                StateManager.ShowLoading();
                 ListDto.Add(data);
                 NewDataReceivedAsync(data); CalculateListTotal();
             });
@@ -91,7 +80,7 @@ namespace ritegeapp.ViewModels
         {
             if (data == null || data.Count == 0)
             {
-                await Device.InvokeOnMainThreadAsync(() => ShowNoDataReceivedMessage());
+                await Device.InvokeOnMainThreadAsync(() => StateManager.ShowNoDataReceivedMessage());
             }
             else
             {
@@ -100,7 +89,7 @@ namespace ritegeapp.ViewModels
                     ListDto = (data);
                     await Device.InvokeOnMainThreadAsync(() =>
                     {
-                        GroupByDate(); CalculateListTotal();
+                        DataReceived(); CalculateListTotal();
                     });
                 }
               
@@ -113,65 +102,17 @@ namespace ritegeapp.ViewModels
         }
         private void NewDataReceivedAsync(InfoTicketDTO infoTicketDTOs)
         {
-            ListRecetteToShow.Add(infoTicketDTOs);
-            ShowDataView();
+            ListRecetteToShow.Insert(0,infoTicketDTOs);
+            StateManager.ShowDataView();
         }
-        private void GroupByDate()
+        private void DataReceived()
         {
             ListRecetteToShow.Clear();
             
             ListDto.ForEach(x => ListRecetteToShow.Add(x));
-            ShowDataView();
+            StateManager.ShowDataView();
         }
-        public void ShowLoading()
-        {
-            CanTapFilterImages = false;
-            ShowTotal = false;
-            ShowLoadingIndicator = true;
-            ShowNoFilterResultLabel = false;
-            ShowData = false; ShowNoDataReceived = false;
-        }
-        public void ShowNoFilterMessage()
-        {
-            ShowNoInternetLabel = false;
-            ShowTotal = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = true;
-            ShowData = false; ShowNoDataReceived = false;
-        }
-        public void ShowDataView()
-        {
-            CanTapFilterImages = true;
-            ShowTotalIfCountIsMoreThanOne();
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = false;
-            ShowData = true;
-            ShowTotal = true;
-            ShowNoDataReceived = false;
-        }
-        public void ShowNoInternetView()
-        {
-            ShowNoInternetLabel = true;
-            ShowTotal = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = false;
-            ShowData = false; ShowNoDataReceived = false;
-        }
-        public void ShowNoDataReceivedMessage()
-        {
-            ShowTotal = false;
-            ShowNoInternetLabel = false; 
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = false;
-            ShowData = false; ShowNoDataReceived = true;
-        }
-        private void ShowTotalIfCountIsMoreThanOne()
-        {
-           if(ListRecetteToShow.Count > 1)
-              ShowTotal = true;
-              TotalMoney = ListRecetteToShow.Sum(x => x.MontantPaye);
-        }
+        
         [ICommand]
         private async void ClearFilter(object obj)
         {
@@ -193,14 +134,14 @@ namespace ritegeapp.ViewModels
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-             ShowLoading();
+                StateManager.ShowLoading();
                 if (Initialized==false)
                 {
                     Initialized = true;
-                    ParkingIsLoading = true;
-                    CanClickParkingList = false;
+                   StateManager. ParkingIsLoading = true;
+                    StateManager.CanClickParkingList = false;
                     ParkingList = await dataService.GetParkingList();
-                    ParkingIsLoading = false;
+                    StateManager.ParkingIsLoading = false;
 
                     if (ParkingList.Count != 0)
                     {
@@ -209,7 +150,7 @@ namespace ritegeapp.ViewModels
 
                         var data = await dataService.GetTicketData(DateStart, DateEnd.AddDays(1).AddTicks(-1), IdParking);
                         await DataReceivedAsync(data);
-                        CanClickParkingList = true;
+                        StateManager.CanClickParkingList = true;
                         await Task.Run(async () => { await signalRService.Connect(); });
                         await signalRService.ListenForTicketData(IdParking);
 
@@ -217,17 +158,17 @@ namespace ritegeapp.ViewModels
                 }
                 else
                 {
-                    CanClickParkingList = false;
+                    StateManager.CanClickParkingList = false;
 
                     var data = await dataService.GetTicketData(DateStart, DateEnd.AddDays(1).AddTicks(-1), IdParking);
                     await DataReceivedAsync(data);
-                    CanClickParkingList = true;
+                    StateManager.CanClickParkingList = true;
                     await Task.Run(async () => { await signalRService.Connect(); });
                 }
             }
             else
             if (ListDto.Count == 0)
-                ShowNoInternetView();
+                StateManager.ShowNoInternetView();
             }
         public async Task ParkingChanged(int idParking, string parkingName)
         {
@@ -236,14 +177,14 @@ namespace ritegeapp.ViewModels
             else
             {
                 ListDto.Clear();
-                CanClickParkingList = false;
+                StateManager.CanClickParkingList = false;
                 IdParking = idParking;
                 ParkingName = parkingName;
-                ShowLoading();
+                StateManager.ShowLoading();
                 ListRecetteToShow.Clear();
                 var data = await dataService.GetTicketData(DateStart, DateEnd.AddDays(1).AddTicks(-1), IdParking);
                 await DataReceivedAsync(data);
-                CanClickParkingList = true;
+                StateManager.CanClickParkingList = true;
                 await Task.Run(async () => { await signalRService.Connect(); });
                 await signalRService.ListenForTicketData(IdParking);
 
@@ -253,7 +194,7 @@ namespace ritegeapp.ViewModels
         [ICommand]
         private async void OpenParkingListView(object obj)
         {
-            if (CanClickParkingList)
+            if (StateManager.CanClickParkingList)
                 await PopupNavigation.Instance.PushAsync(new ParkingListView(this,"Ticket"));
         }
 

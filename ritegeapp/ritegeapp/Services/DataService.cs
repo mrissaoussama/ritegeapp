@@ -116,6 +116,7 @@
                     };
                     uri = QueryHelpers.AddQueryString(uri, parameters);
 
+                    
                     response = await httpClient.GetAsync(uri);
                     if (response.IsSuccessStatusCode)
                     {
@@ -164,7 +165,7 @@
 			var handler = new HttpClientHandler(); 
 #endif
             var httpclient = new HttpClient(handler);
-            httpclient.Timeout = TimeSpan.FromSeconds(30);
+       //     httpclient.Timeout = TimeSpan.FromSeconds(3);
             return httpclient;
         }
         public async Task<T> GetData<T>(string DataURL, Dictionary<string, string> args)

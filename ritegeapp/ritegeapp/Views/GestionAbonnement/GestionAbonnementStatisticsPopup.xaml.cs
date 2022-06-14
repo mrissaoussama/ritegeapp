@@ -12,7 +12,7 @@ namespace ritegeapp.Views
         public GestionAbonnementStatisticsPopup(IGestionAbonnementViewModel viewmodel)
         {
             InitializeComponent();
-            BindingContext = DependencyService.Get<IGestionAbonnementViewModel>();
+            BindingContext =new GestionAbonnementStatisticsPopupViewModel(viewmodel);
         }
 
         private void OnClose(object sender, EventArgs e)

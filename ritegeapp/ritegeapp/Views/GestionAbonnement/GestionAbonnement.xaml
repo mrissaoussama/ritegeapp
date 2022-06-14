@@ -2,44 +2,56 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ritegeapp.Views.GestionAbonnement"
+             x:Name="GestionAbonnementPage"
              xmlns:extentions="clr-namespace:ritegeapp.Extentions"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
              xmlns:viewmodels="clr-namespace:ritegeapp.ViewModels"
+             xmlns:converters1="clr-namespace:ritegeapp.Converters"
              Title="Gestion Abonnement"
              BackgroundColor="{StaticResource BackgroundColor}">
- <ContentPage.ToolbarItems>
-  <ToolbarItem Text="Statistiques"
-               Command="{Binding OpenStatisticsWindowCommand}"
-               Order="Secondary"
-               Priority="0" />
- </ContentPage.ToolbarItems>
+ <ContentPage.Resources>
+  <ResourceDictionary>
+   <converters1:DateToStringConverter x:Key="DateToString" />
+   <converters1:BoolToStringOnlineStatusConverter x:Key="BoolToStringOnlineStatus" />
+   <converters1:BoolToColorOnlineStatusConverter x:Key="BoolToColorOnlineStatus" />
+   <converters1:IntToGradientColorConverter x:Key="IntToGradientColor" />
+   <converters1:IntToProgressConverter x:Key="IntToProgress" />
+   <converters1:IntToBoolStatusConverter x:Key="IntToBoolStatus" />
+   <converters1:NullToDashConverter x:Key="NullToDash" />
+   <converters1:StateToColorConverter x:Key="StateToColor" />
+  </ResourceDictionary>
+ </ContentPage.Resources>
  <ContentPage.Content>
   <Grid BackgroundColor="{StaticResource BackgroundColor}"
         Margin="0,5,0,0">
    <Grid.RowDefinitions>
     <RowDefinition Height="110"></RowDefinition>
-    <RowDefinition Height="30"></RowDefinition>
+    <RowDefinition Height="45"></RowDefinition>
    </Grid.RowDefinitions>
    <extentions:FilterView             x:DataType="viewmodels:GestionAbonnementViewModel"
                                       DateStart="{Binding DateStart,Mode=TwoWay}"
                                       DateEnd="{Binding DateEnd}"
                                       SearchTextBoxEntry="{Binding SearchTextBox}"
-                                      CanTapSearchTextBool="{Binding CanTapFilterImages}"
+                                      CanTapSearchTextBool="{Binding StateManager.CanTapFilterImages}"
+                                      TextChangedCommand="{Binding TextChangedCommand}"
                                       CanTapSearchTextCommand="{Binding SearchTextCommand}"
-                                      CanClearFilterBool="{Binding CanTapFilterImages}"
+                                      CanClearFilterBool="{Binding StateManager.CanTapFilterImages}"
                                       CanClearFilterCommand="{Binding ClearFilterCommand}"
-                                      CanSortBool="{Binding CanTapFilterImages}"
+                                      CanSortBool="{Binding StateManager.CanTapFilterImages}"
+                                      ShowStatistics="true"
+                                      ShowStatisticsCommand="{Binding OpenStatisticsWindowCommand}"
                                       CanSortCommand="{Binding ChangeGroupByViewCommand}"></extentions:FilterView>
-   <ActivityIndicator   Scale="0.5"
-                        Color="{StaticResource Primary}"
-                        Grid.Row="2"
-                        IsVisible="{Binding ShowLoadingIndicator}"
-                        IsRunning="true" />
+   <ActivityIndicator Scale="0.5"
+                      Color="{StaticResource Primary}"
+                      Grid.Row="2"
+                      IsVisible="{Binding StateManager.ShowLoadingIndicator}"
+                      IsRunning="true" />
+
    <Label FontSize="Medium"
           Grid.Row="1"
           TextColor="{StaticResource LabelColor}"
-          IsVisible="{Binding ShowNoFilterResultLabel}"
+          IsVisible="{Binding StateManager.ShowNoFilterResultLabel}"
           LineBreakMode="WordWrap">
     <Label.FormattedText>
      <!--no result label-->
@@ -47,7 +59,7 @@
       <Span Text="Pas de resultat, Cliquer "
             TextColor="{StaticResource LabelColor}" />
       <Span Text="Ici"
-            TextColor="{StaticResource LabelColor}">
+            TextColor="{StaticResource Primary}">
        <Span.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding ClearFilterCommand}" />
        </Span.GestureRecognizers>
@@ -60,7 +72,7 @@
    <Label FontSize="Medium"
           Grid.Row="1"
           TextColor="{StaticResource LabelColor}"
-          IsVisible="{Binding ShowNoDataReceived}"
+          IsVisible="{Binding StateManager.ShowNoDataReceived}"
           LineBreakMode="WordWrap">
     <Label.FormattedText>
      <!--no result label-->
@@ -68,7 +80,7 @@
       <Span Text="Pas de resultat, Cliquer "
             TextColor="{StaticResource LabelColor}" />
       <Span Text="ici"
-            TextColor="{StaticResource LabelColor}">
+            TextColor="{StaticResource Primary}">
        <Span.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
        </Span.GestureRecognizers>
@@ -81,7 +93,7 @@
    <Label FontSize="Medium"
           Grid.Row="1"
           TextColor="{StaticResource LabelColor}"
-          IsVisible="{Binding ShowNoInternetLabel}"
+          IsVisible="{Binding StateManager.ShowNoInternetLabel}"
           LineBreakMode="WordWrap">
     <Label.FormattedText>
      <!--no result label-->
@@ -89,7 +101,7 @@
       <Span Text="Pas de connexion, Activer Wifi ou Données Mobile puis cliquer "
             TextColor="{StaticResource LabelColor}" />
       <Span Text="ici"
-            TextColor="{StaticResource LabelColor}">
+            TextColor="{StaticResource Primary}">
        <Span.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding GetDataCommand}" />
        </Span.GestureRecognizers>
@@ -103,8 +115,9 @@
           BorderColor="{StaticResource Primary}"
           BackgroundColor="Transparent"
           Grid.Row="1"
-          IsVisible="{Binding ShowTotal}">
+          IsVisible="{Binding StateManager.ShowTotal}">
     <Label FontSize="Small"
+           IsVisible="{Binding StateManager.ShowTotal}"
            HorizontalOptions="Center"
            VerticalOptions="Center"
            Text="{Binding TotalMoney}"
@@ -121,13 +134,12 @@
      </Label.FormattedText>
     </Label>
    </Frame>
-   <RefreshView Grid.Row="2" 
-                IsRefreshing="{Binding ListIsRefreshing}"
-                IsEnabled="{Binding ShowData}"
-                Command="{Binding GetDataCommand}"
-                IsVisible="{Binding ShowData}">
+   <RefreshView Grid.Row="2"
+                IsRefreshing="false"
+                IsEnabled="false"
+                IsVisible="{Binding StateManager.ShowData}">
     <ScrollView Grid.Row="1"
-                IsVisible="{Binding ShowNoFilterResultLabel,Converter={StaticResource BooleanNegation}}">
+                IsVisible="{Binding StateManager.ShowNoFilterResultLabel,Converter={StaticResource BooleanNegation}}">
      <StackLayout BackgroundColor="Transparent">
       <Grid VerticalOptions="Fill"
             BackgroundColor="Transparent"
@@ -161,7 +173,7 @@
                               Margin="10,0,10,0">
                   <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.person.png}"
                          WidthRequest="20"
-                         xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                         xct:IconTintColorEffect.TintColor="{StaticResource IconColor}"></Image>
                
                  <Label FontSize="Medium"
                          TextColor="{StaticResource LabelColor}"
@@ -185,7 +197,7 @@
                   <BindableLayout.ItemTemplate>
                    <DataTemplate>
                     <Grid>
-                     <Frame BorderColor="{StaticResource Primary}"
+                     <Frame BorderColor="{Binding Etat,Converter={StaticResource StateToColor}}"
                             InputTransparent="True"
                             Margin="5,5,5,5" Padding="5"
                             BackgroundColor="{StaticResource BackgroundColor}">
@@ -207,7 +219,7 @@
                           </Grid.ColumnDefinitions>
                           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
                                  WidthRequest="20"
-                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                                 xct:IconTintColorEffect.TintColor="{StaticResource IconColor}"></Image>
                           <Label Grid.Column="1"
                                  FontSize="Small"
                                  TextColor="{StaticResource LabelColor}"
@@ -215,7 +227,7 @@
                           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendarcheckmark.png}"
                                  Grid.Column="2"
                                  WidthRequest="20"
-                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                                 xct:IconTintColorEffect.TintColor="{StaticResource IconColor}"></Image>
                           <Label FontSize="Small"
                                  TextColor="{StaticResource LabelColor}"
                                  Grid.Column="3"
@@ -308,7 +320,7 @@
                               Margin="10,0,10,0">
                   <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendar.png}"
                          WidthRequest="20"
-                         xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                         xct:IconTintColorEffect.TintColor="{StaticResource IconColor}"></Image>
                   <Label FontSize="Medium"
                          BackgroundColor="{StaticResource BackgroundColor}"
                          TextColor="{StaticResource LabelColor}"
@@ -331,7 +343,8 @@
                   <BindableLayout.ItemTemplate>
                    <DataTemplate>
                     <Grid>
-                     <Frame BorderColor="{StaticResource Primary}"
+                     <Frame  BorderColor="{Binding Etat,Converter={StaticResource StateToColor}}"
+
                             InputTransparent="True"
                             Padding="5"
                             Margin="5,5,5,5"
@@ -354,7 +367,7 @@
                           </Grid.ColumnDefinitions>
                           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.contract.png}"
                                  WidthRequest="20"
-                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                                 xct:IconTintColorEffect.TintColor="{StaticResource IconColor}"></Image>
                           <Label Grid.Column="1"
                                  FontSize="Small"
                                  TextColor="{StaticResource LabelColor}"
@@ -362,7 +375,7 @@
                           <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.calendarcheckmark.png}"
                                  Grid.Column="2"
                                  WidthRequest="20"
-                                 xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                                 xct:IconTintColorEffect.TintColor="{StaticResource IconColor}"></Image>
                           <Label FontSize="Small"
                                  TextColor="{StaticResource LabelColor}"
                                  Grid.Column="3"

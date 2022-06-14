@@ -21,7 +21,7 @@ namespace RitegeDomain.Database.Repositories
             using (SqlConnection con = new(connectionString))
             {
                 string query;
-                    query = "SELECT [indexEvent]      ,[dateEvent]      ,[HeureEvent]      ,[DoorNumber]      ,[userNumber]      ,[codeEvent]      ,[Flux]   FROM[controleaccessdb].[controleaccessdb].[event] e where e.doornumber in(select iddoor from [controleaccessdb].[controleaccessdb].door where idparking in (select idparking from parkingdb.dbo.parking where idparking=@idSociete)) and dateEvent between @dateStart and @dateEnd";
+                    query = "SELECT [indexEvent]      ,[dateEvent]      ,[HeureEvent]      ,[DoorNumber]      ,[userNumber]      ,[codeEvent]      ,[Flux]   FROM[controleaccessdb].[controleaccessdb].[event] e where e.doornumber in(select iddoor from [controleaccessdb].[controleaccessdb].door where idparking in (select idparking from parkingdb.dbo.parking where idparking=@idSociete)) and dateEvent between @dateStart and @dateEnd order by dateEvent desc,heureEvent desc";
           
                 using (SqlCommand cmd = new(query))
                 {

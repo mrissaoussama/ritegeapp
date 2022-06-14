@@ -121,6 +121,28 @@ namespace RitegeDomain.Database.Repositories
             }
             return total;
         }
+        public async Task<int> UpdateTicketDatesAsync()
+        {
+            Session session = new();
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+                query = "UPDATE parkingdb.parkingdb.ticket SET dateHeureDebutStationnement = cast(@Date as datetime) + cast(cast(dateHeureDebutStationnement as time) as datetime),dateHeureFinStationnement = cast(@Date as datetime) + cast(cast(dateHeureFinStationnement as time) as datetime)";
+
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                    cmd.Parameters.Add("@Date", SqlDbType.DateTime2).Value = DateTime.Today;
+
+                    con.Open();
+                    //should be always 1
+                    var affectedqueriesawait = await cmd.ExecuteNonQueryAsync();
+                    con.Close();
+
+                    return 1;
+                }
+            }
+        }
 
         public TicketRepository()
         {

@@ -27,41 +27,30 @@ namespace ritegeapp.ViewModels
         public List<InfoAbonnementDTO> ListDto = new();
         [ObservableProperty]
         public ObservableRangeCollection<GroupAbonnement> listAbonnementToShow = new();
-        [ObservableProperty]
-        public ObservableRangeCollection<DateAbonnement> listDateAbonnementToShow = new();
-        [ObservableProperty]
-        private string searchTextBox = "";
+        public ObservableRangeCollection<GroupAbonnement> listAbonnement = new();
 
         [ObservableProperty]
-        private DateTime dateStart = DateTime.Today;
+        public ObservableRangeCollection<DateAbonnement> listDateAbonnementToShow = new();
+        public ObservableRangeCollection<DateAbonnement> listDateAbonnement = new();
+
         [ObservableProperty]
-        private DateTime dateEnd = DateTime.Today.AddMonths(3);
+        private string searchTextBox = "";
         [ObservableProperty]
-        private bool showNoFilterResultLabel = false;
+        private DateTime dateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
         [ObservableProperty]
-        private bool resetFilterButton = false;
-        [ObservableProperty]
-        private bool showLoadingIndicator;
-        [ObservableProperty]
-        private bool showData;
-        [ObservableProperty]
-        private bool showNoDataReceived;
-        [ObservableProperty]
-        private bool showNoInternetLabel;
-        [ObservableProperty]
-        private bool listIsRefreshing = false;
+        private DateTime dateEnd = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(6);
         [ObservableProperty]
         private bool abonnementSortMode;
         [ObservableProperty]
         private bool dateAbonnementSortMode;
         [ObservableProperty]
-        private bool showTotal = false;
-        [ObservableProperty]
-        private bool canTapFilterImages = false;
-        [ObservableProperty]
         private decimal totalMoney;
+        
+        [ObservableProperty]
+        private ViewStateManager stateManager=new();
         #endregion
         IDataService dataService;
+        private int searchLength;
         public GestionAbonnementViewModel()
         {
             dataService = DependencyService.Get<IDataService>();
@@ -72,23 +61,28 @@ namespace ritegeapp.ViewModels
         {
             if (data == null || data.Count == 0)
             {
-                await Device.InvokeOnMainThreadAsync(() => ShowNoDataReceivedMessage());
+                await Device.InvokeOnMainThreadAsync(() => StateManager.ShowNoDataReceivedMessage());
             }
             else
             {
                 ListDto = (data);
                 ListAbonnementToShow.Clear();
                 ListDateAbonnementToShow.Clear();
+                listAbonnement.Clear();
+                listDateAbonnement.Clear();
                 UpdateLists(await GroupByAbonnement(), await GroupByDateAbonnement());
             }
         }
 
         public void UpdateLists(List<GroupAbonnement> groupAbonnements, List<DateAbonnement> dateAbonnements)
         {
-            ListAbonnementToShow.AddRange(groupAbonnements);
-            ListDateAbonnementToShow.AddRange(dateAbonnements);
+            listAbonnement.AddRange(groupAbonnements);
+            listDateAbonnement.AddRange(dateAbonnements);
+
+            ListAbonnementToShow = new(listAbonnement);
+            ListDateAbonnementToShow = new(listDateAbonnement);
             CalculateListTotal(ListAbonnementToShow.ToList());
-            ShowDataView();
+            StateManager.ShowDataView();
         }
 
         public async Task<List<GroupAbonnement>> GroupByAbonnement()
@@ -136,51 +130,7 @@ namespace ritegeapp.ViewModels
             }
             return Dto;
         }
-        public void ShowLoading()
-        {
-            ShowTotal = false;
-            ShowLoadingIndicator = true;
-            ShowNoFilterResultLabel = false;
-            ShowData = false; 
-            ShowNoDataReceived = false;
-        }
-        public void ShowNoFilterMessage()
-        {
-            ShowNoInternetLabel = false;
-            ShowTotal = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = true;
-            ShowData = false; 
-            ShowNoDataReceived = false;
-        }
-        public void ShowDataView()
-        {
-            CanTapFilterImages = true;
-            ShowTotal = true;
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = false;
-            ShowData = true; 
-            ShowNoDataReceived = false;
-        }
-        public void ShowNoInternetMessage()
-        {
-            ShowNoInternetLabel = true;
-            ShowTotal = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = false;
-            ShowData = false; 
-            ShowNoDataReceived = false;
-        }
-        public void ShowNoDataReceivedMessage()
-        {
-            ShowTotal = false;
-            ShowNoInternetLabel = false;
-            ShowLoadingIndicator = false;
-            ShowNoFilterResultLabel = false;
-            ShowData = false; 
-            ShowNoDataReceived = true;
-        }
+    
 
         [ICommand]
         public async void SearchText(object obj)
@@ -192,13 +142,13 @@ namespace ritegeapp.ViewModels
         {
             if ((Application.Current as App).IsOnline)
             {
-                ShowLoading();
+                StateManager.ShowLoading();
                 var list = await dataService.GetAbonnementData(DateStart, DateEnd.AddDays(1).AddTicks(-1), SearchTextBox);
                 await OnDataReceivedAsync(list);
             }
             else
             if (ListDto.Count == 0)
-                ShowNoInternetMessage();
+                StateManager.ShowNoInternetView();
         }
         [ICommand]
         public void ChangeGroupByView(object obj)
@@ -209,15 +159,65 @@ namespace ritegeapp.ViewModels
         [ICommand]
         public async void ClearFilter(object obj)
         {
-            DateStart = DateTime.Today;
-            DateEnd = DateTime.Today.AddMonths(3);
+            DateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            DateEnd = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(6);
             SearchTextBox = "";
             await GetData();
         }
         [ICommand]
-        public async void OpenStatisticsPopup(object obj)
+        public async void OpenStatisticsWindow(object obj)
         {
             await PopupNavigation.Instance.PushAsync(new GestionAbonnementStatisticsPopup(this));
         }
+        [ICommand]
+        public async void TextChanged(object obj)
+        {
+            Debug.WriteLine("changed");
+            StateManager.ShowLoading();
+                ListAbonnementToShow.Clear();
+                    ListDateAbonnementToShow.Clear();
+            if (!string.IsNullOrEmpty(SearchTextBox))
+            {
+                for (var i = 0; i < listAbonnement.Count; i++)
+                {
+                    if (listAbonnement[i].NomPrenomAbonne.ToLower().Contains(SearchTextBox.ToLower()))
+                    {
+                        ListAbonnementToShow.Add(listAbonnement[i]);
+                    }
+                }
+for (var i = 0; i < listAbonnement.Count; i++)
+{
+for (var abonnement = 0; abonnement < listDateAbonnement[i].ListAbonnement.Count; abonnement++)
+{
+if (listDateAbonnement[i].ListAbonnement[abonnement].NomPrenomAbonne.ToLower().Contains(SearchTextBox.ToLower()))
+{
+    var item = listDateAbonnement[i].ListAbonnement[abonnement];
+    if (ListDateAbonnementToShow.ElementAtOrDefault(i) == null)
+    {
+        ListDateAbonnementToShow.Add(listDateAbonnement[i]);
+        ListDateAbonnementToShow[ListDateAbonnementToShow.Count-1].ListAbonnement.Clear();
     }
+    ListDateAbonnementToShow[ListDateAbonnementToShow.Count - 1].ListAbonnement.Add(item);
 }
+}
+
+}
+            }
+            if (string.IsNullOrEmpty(SearchTextBox))
+            {
+                ListAbonnementToShow = new(listAbonnement);
+                ListDateAbonnementToShow = new(listDateAbonnement);
+
+            }
+            ////else
+            ////{
+            ////    searchLength = searchTextBox.Length;
+            ////    ListAbonnementToShow = listAbonnement;
+            ////    ListDateAbonnementToShow = listDateAbonnement;
+            ////}
+            CalculateListTotal(ListAbonnementToShow.ToList());
+                StateManager.ShowDataView();
+            }
+
+        }
+    }

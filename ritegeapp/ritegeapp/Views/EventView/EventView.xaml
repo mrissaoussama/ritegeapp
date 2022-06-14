@@ -60,7 +60,7 @@
       <DatePicker Format="dd/MM/yyyy"
                   HorizontalOptions="Center"
                   VerticalOptions="Center"
-                  MinimumDate="{Binding DateEnd}"
+                  MinimumDate="{Binding DateStart}"
                   FontSize="Small"
                   x:Name="DateEndLabel"
                   Date="{Binding DateEnd}"
@@ -71,13 +71,12 @@
             Grid.Column="6">
       <Image Source="search.png"
              x:Name="CanTapSearchText"
-             xct:TouchEffect.Command="{Binding SearchCommand}"
+             xct:TouchEffect.Command="{Binding GetDataCommand}"
              xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
              xct:TouchEffect.PressedScale="0.7"
              xct:TouchEffect.PressedOpacity="0.7"></Image>
       <Image Source="clearfilter.png"
              x:Name="CanClearFilter"
-             IsEnabled="{Binding CanClearFilterCommand}"
              xct:TouchEffect.Command="{Binding ClearFilterCommand}"
              xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
              Grid.Column="1"
@@ -90,12 +89,12 @@
    <ActivityIndicator Scale="0.5"
                       Color="{StaticResource Primary}"
                       Grid.Row="1"
-                      IsVisible="{Binding ShowLoadingIndicator}"
+                      IsVisible="{Binding StateManager.ShowLoadingIndicator}"
                       IsRunning="true" />
    <Label FontSize="Medium"
           Grid.Row="1"
           TextColor="{StaticResource LabelColor}"
-          IsVisible="{Binding ShowNoFilterResultLabel}"
+          IsVisible="{Binding StateManager.ShowNoFilterResultLabel}"
           LineBreakMode="WordWrap">
     <Label.FormattedText>
      <!--no result label-->
@@ -104,7 +103,7 @@
             Grid.Row="1"
             TextColor="{StaticResource LabelColor}" />
       <Span Text="Ici"
-            TextColor="{StaticResource LabelColor}">
+            TextColor="{StaticResource Primary}">
        <Span.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding ClearFilterCommand}" />
        </Span.GestureRecognizers>
@@ -118,7 +117,7 @@
    <Label FontSize="Medium"
           Grid.Row="1"
           TextColor="{StaticResource LabelColor}"
-          IsVisible="{Binding ShowNoDataReceived}"
+          IsVisible="{Binding StateManager.ShowNoDataReceived}"
           LineBreakMode="WordWrap">
     <Label.FormattedText>
      <!--no result label-->
@@ -138,7 +137,7 @@
    </Label>
    <Label FontSize="Medium"
           TextColor="{StaticResource LabelColor}"
-          IsVisible="{Binding ShowNoInternetLabel}"
+          IsVisible="{Binding StateManager.ShowNoInternetLabel}"
           Grid.Row="1"
           LineBreakMode="WordWrap">
     <Label.FormattedText>
@@ -158,22 +157,19 @@
     </Label.FormattedText>
    </Label>
    <RefreshView Grid.Row="1"
-                IsRefreshing="{Binding ListIsRefreshing}"
-                IsEnabled="{Binding ShowData}"
-                Command="{Binding GetDataCommand}"
-                IsVisible="{Binding ShowData}">
-    <ScrollView IsVisible="{Binding ShowData}">
-     <ListView ItemsSource="{Binding ListEventToShow}"
-               SeparatorVisibility="None"
-               SeparatorColor="Transparent"
+                IsRefreshing="False"
+                IsEnabled="False"
+                >
+    <ScrollView IsVisible="{Binding StateManager.ShowData}">
+     <CollectionView ItemsSource="{Binding ListEventToShow}"
+             
                BackgroundColor="{StaticResource BackgroundColor}"
                HorizontalOptions="Fill"
                VerticalOptions="Fill"
-               HasUnevenRows="True">
-      <ListView.ItemTemplate>
+           >
+      <CollectionView.ItemTemplate>
        <DataTemplate>
-        <ViewCell StyleId="no-selection">
-         <ViewCell.View>
+     
           <Grid VerticalOptions="FillAndExpand">
            <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -184,10 +180,10 @@
                   BackgroundColor="{StaticResource BackgroundColor}">
             <syncfusion:SfExpander IconColor="{StaticResource Primary}" 
                                    HeaderBackgroundColor="{StaticResource BackgroundColor}">
-             s
+               
              <syncfusion:SfExpander.Header>
               <Grid>
-               <StackLayout Orientation="Horizontal"
+               <StackLayout Orientation="Horizontal" Grid.ColumnSpan="2"
                             Margin="10,0,10,0">
                 <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.event2.png}"
                        WidthRequest="20"
@@ -205,6 +201,25 @@
                  </Label.FormattedText>
                 </Label>
                </StackLayout>
+               <StackLayout Orientation="Horizontal" Grid.Column="2"
+                            Margin="10,0,10,0">
+                <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.gear.png}"
+                       WidthRequest="20"
+                       xct:IconTintColorEffect.TintColor="{StaticResource Primary}"></Image>
+                <Label FontSize="Small"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       TextColor="{StaticResource LabelColor}"
+                       FontAttributes="Bold">
+                 <Label.FormattedText>
+                  <FormattedString>
+                    <Span Text="{Binding CodeEvent}"></Span>
+               
+                  </FormattedString>
+                 </Label.FormattedText>
+                </Label>
+               </StackLayout >
               </Grid>
              </syncfusion:SfExpander.Header>
              <syncfusion:SfExpander.Content Margin="0,5,0,0">
@@ -230,17 +245,11 @@
                        Grid.Row="2"
                        TextColor="{StaticResource LabelColor}"
                        Text="{Binding UserNumber}"></Label>
+           
                <Label Grid.Row="3"
-                      TextColor="{StaticResource LabelColor}"
-                      Text="Id Tag:"></Label>
-               <Label Grid.Row="3"
-                      Grid.Column="1"
-                      TextColor="{StaticResource LabelColor}"
-                      Text="{Binding CodeEvent}"></Label>
-               <Label Grid.Row="4"
                       TextColor="{StaticResource LabelColor}"
                       Text="Description:"></Label>
-               <Label Grid.Row="4"
+               <Label Grid.Row="3"
                       Grid.Column="1"
                       TextColor="{StaticResource LabelColor}"
                       Text="{Binding DescriptionEvent,Converter={StaticResource NullToDash}}">
@@ -251,11 +260,10 @@
             </syncfusion:SfExpander>
            </Frame>
           </Grid>
-         </ViewCell.View>
-        </ViewCell>
+       
        </DataTemplate>
-      </ListView.ItemTemplate>
-     </ListView>
+      </CollectionView.ItemTemplate>
+     </CollectionView>
     </ScrollView>
    </RefreshView>
    <!--custom dots menu with image support-->

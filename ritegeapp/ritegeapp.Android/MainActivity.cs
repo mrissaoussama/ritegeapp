@@ -34,7 +34,14 @@ namespace ritegeapp.Droid
             Creating += onCreating;
             Creating(this, EventArgs.Empty);
 
-            LocalNotificationCenter.CreateNotificationChannel();
+            LocalNotificationCenter.CreateNotificationChannel(
+                        new Plugin.LocalNotification.Platforms.Android.NotificationChannelRequest
+                        {
+                            Id = $"Alert_Channel",
+                            Name = "Alert",
+                            Description = "Notifications des alerts",
+                        });
+
             LoadApplication(new App());
 
             LocalNotificationCenter.NotifyNotificationTapped(Intent);

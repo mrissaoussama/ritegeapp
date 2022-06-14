@@ -26,17 +26,18 @@ namespace ritegeapp.ViewModels
         [ObservableProperty]
         private string parking,nomPrenomCaissier,caissier,caisse;
         [ObservableProperty]
-        private bool etatCaisse,isLoading,eventListLoading,isRefreshing,showData,canClickParkingOrCashRegister,initialized,cashRegisterIsLoading,parkingIsLoading;
+        private bool etatCaisse,initialized;
         [ObservableProperty]
-        private int? placeDisponible,placeMax,placeOccupe,nbTickets,nbAdministrateur,nbAutorite,nbEgress,nbAbonne,nbEvents;
+        private int? placeDisponible,placeMax,placeOccupe,nbTickets,nbAdministrateur,nbAutorite,nbEgress,nbAbonne,nbEvents,fluxBorneTotal, fluxCaisseTotal;
         [ObservableProperty]
         private int idParking, idCaisse;
         [ObservableProperty]
-        Decimal? recetteParking, recetteCaissier, recetteCaisse, fluxBorneTotal, fluxCaisseTotal;
+        Decimal? recetteParking, recetteCaissier, recetteCaisse;
         [ObservableProperty]
         private Dictionary<int, string> parkingList, cashRegisterList;
         public List<ParkingEvent> eventList = new();
-
+        [ObservableProperty]
+        private ViewStateManager stateManager = new();
         #endregion
 
         IDataService dataService;
@@ -113,7 +114,7 @@ namespace ritegeapp.ViewModels
             FluxBorneTotal = null;
             FluxCaisseTotal = null;
 
-            CanClickParkingOrCashRegister = false;
+            StateManager.CanClickParkingOrCashRegister = false;
         }
         private void InitData()
         {
@@ -137,14 +138,14 @@ namespace ritegeapp.ViewModels
             this.PlaceOccupe = null;
             FluxBorneTotal = 99999;
             FluxCaisseTotal = 99999;
-            CanClickParkingOrCashRegister = false;
+            StateManager.CanClickParkingOrCashRegister = false;
 
         }
         private async Task OnDataReceivedAsync(DashBoardDTO data)
         {
             if (data == null)
             {
-                await Device.InvokeOnMainThreadAsync(() => ShowNoDataReceivedMessage());
+                await Device.InvokeOnMainThreadAsync(() => StateManager.ShowNoDataReceivedMessage());
                 SetDataToNull();
             }
             else
@@ -159,7 +160,7 @@ namespace ritegeapp.ViewModels
             FluxCaisseTotal += 15;
             FluxBorne = data.FluxBorne;
             FluxCaisse = data.FluxCaisse;
-
+            if(data.Caisse is not null)
             if (IdCaisse == int.Parse(data.Caisse))
             {            RecetteCaissier = data.RecetteCaissier;
 
@@ -177,29 +178,15 @@ namespace ritegeapp.ViewModels
      
             PlaceMax = data.PlaceMax;
             this.PlaceDisponible = data.PlaceDisponible;
-            this.PlaceOccupe = PlaceMax - data.PlaceDisponible; 
-            ShowDataView();
+            this.PlaceOccupe = PlaceMax - data.PlaceDisponible;
+            StateManager.ShowDataView();
 
         }
-        public void ShowLoading()
-        {
-            CanClickParkingOrCashRegister = false;
-
-            IsLoading = true; ShowData = false;
-        }
-        public void ShowDataView()
-        {
-            CanClickParkingOrCashRegister = true;
-
-            IsLoading = false; IsRefreshing = false; ShowData = true;
-        }
-        public void ShowNoDataReceivedMessage()
-        {
-        }
+      
         [ICommand]
         private async void GetDataButton(object obj)
         {
-            await GetData(); IsRefreshing = false;
+            await GetData(); StateManager.IsRefreshing = false;
         }
         public async Task GetData()
         {
@@ -207,24 +194,24 @@ namespace ritegeapp.ViewModels
             {
                 if (initialized == false)
                 {
-                    ShowLoading();
+                    StateManager.ShowLoading();
 
                     initialized = true;
-                    ParkingIsLoading = true;
+                    StateManager.ParkingIsLoading = true;
                     //await Task.Run(async () => {  ParkingList= await dataService.GetParkingList(); });
                     ParkingList = await dataService.GetParkingList();
-                    ParkingIsLoading = false;
+                    StateManager.ParkingIsLoading = false;
                     if(ParkingList is not null)
                     if (ParkingList.Count != 0)
                     {
                         IdParking = ParkingList.First().Key;
                         Parking = ParkingList.First().Value;
-                        CashRegisterIsLoading = true;
+                            StateManager.CashRegisterIsLoading = true;
                         CashRegisterList = await dataService.GetCashRegisterList(IdParking);
-                        //CashRegisterList = dataService.GetCashRegisterList(IdParking).Result;
-                        //await Task.Run(async () => { CashRegisterList = await dataService.GetCashRegisterList(IdParking); });
-                      
-                        CashRegisterIsLoading = false;
+                            //CashRegisterList = dataService.GetCashRegisterList(IdParking).Result;
+                            //await Task.Run(async () => { CashRegisterList = await dataService.GetCashRegisterList(IdParking); });
+
+                            StateManager.CashRegisterIsLoading = false;
                         if (CashRegisterList.Count != 0)
                         {
                             Caisse = CashRegisterList.First().Value;
@@ -269,19 +256,19 @@ namespace ritegeapp.ViewModels
             {
                 SetDataToNull();
             }
-            ShowDataView();
+            StateManager.ShowDataView();
         }
         [ICommand]
 
         private async void OpenParkingListView(object obj)
         {
-            if(CanClickParkingOrCashRegister)
+            if(StateManager.CanClickParkingOrCashRegister)
             await PopupNavigation.Instance.PushAsync(new ParkingListView(this,"Dashboard"));
         }
         [ICommand]
         private async void OpenCashRegisterListView(object obj)
         {
-            if (CanClickParkingOrCashRegister)
+            if (StateManager.CanClickParkingOrCashRegister)
                 await PopupNavigation.Instance.PushAsync(new CashRegisterListView(this));
         }
 
@@ -293,9 +280,7 @@ namespace ritegeapp.ViewModels
             {
                 IdParking = idParking;
                 Parking = nameParking;
-                CashRegisterIsLoading = true;
-                CanClickParkingOrCashRegister = false;
-                IsLoading = true;
+                StateManager.ShowLoading();
                 await signalRService.ListenForDashboardData(idParking, null);
                 await Task.Run(async () => { CashRegisterList = await dataService.GetCashRegisterList(IdParking); });
 
@@ -306,10 +291,7 @@ namespace ritegeapp.ViewModels
                     await OnDataReceivedAsync(await dataService.GetDashboardData(IdParking, IdCaisse));
 
                 }
-                IsLoading = false;
-                CashRegisterIsLoading = false;
-                CanClickParkingOrCashRegister = true;
-
+                StateManager.ShowDataView();
                 Debug.WriteLine("different parking");
             }
         }
@@ -322,12 +304,12 @@ namespace ritegeapp.ViewModels
             {
                 IdCaisse = idCashRegister;
                 Caisse = nomCashRegister;
-                CanClickParkingOrCashRegister = false;
-                IsLoading = true;
+                StateManager.ShowLoading();
+
                 await signalRService.ListenForDashboardData(null, idCashRegister);
                     await OnDataReceivedAsync(await dataService.GetDashboardData(IdParking, IdCaisse));
-                IsLoading = false;
-                CanClickParkingOrCashRegister = true;
+                StateManager.ShowDataView();
+
                 Debug.WriteLine("different caisse");
             }
         }

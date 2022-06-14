@@ -24,7 +24,7 @@ namespace RitegeDomain.Database.Repositories
                 {
                     cmd.Connection = con;
                     cmd.Parameters.Add("@DateEvent", SqlDbType.Date).Value = DateEvent;
-                    cmd.Parameters.Add("@HeureEvent", SqlDbType.NVarChar).Value = HeureEvent;
+                    cmd.Parameters.Add("@HeureEvent", SqlDbType.Time).Value = TimeSpan.Parse( HeureEvent);
                     cmd.Parameters.Add("@DoorNumber", SqlDbType.SmallInt).Value = DoorNumber;
                     cmd.Parameters.Add("@UserNumber", SqlDbType.SmallInt).Value = UserNumber;
                     cmd.Parameters.Add("@CodeEvent", SqlDbType.SmallInt).Value = CodeEvent;
@@ -124,6 +124,27 @@ namespace RitegeDomain.Database.Repositories
             return Event;
         }
 
+        public async Task<int> UpdateEventDateAsync()
+        {
+            using (SqlConnection con = new(connectionString))
+            {
+                string query;
+                query = "UPDATE controleaccessdb.Event  SET dateEvent = cast(@Date as datetime)";
+
+                using (SqlCommand cmd = new(query))
+                {
+                    cmd.Connection = con;
+                    cmd.Parameters.Add("@Date", SqlDbType.DateTime2).Value = DateTime.Today;
+
+                    con.Open();
+                    //should be always 1
+                    var affectedqueriesawait = await cmd.ExecuteNonQueryAsync();
+                    con.Close();
+
+                    return 1;
+                }
+            }
+        }
 
 
 

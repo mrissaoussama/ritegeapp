@@ -32,17 +32,12 @@ namespace ritegeapp.ViewModels
         public Task<List<GroupAbonnement>> GroupByAbonnement();
 
         public void CalculateListTotal(List<GroupAbonnement> dto);
-            public void ShowLoading();
-            public void ShowNoFilterMessage();
-        public void ShowDataView();
-        public void ShowNoInternetMessage();
-        public void ShowNoDataReceivedMessage();
-
+        
         public void SearchText(object obj);
 
         public Task GetData();
         public void ChangeGroupByView(object obj);
         public void ClearFilter(object obj);
-        public void OpenStatisticsPopup(object obj);
+        public void OpenStatisticsWindow(object obj);
     }
 }

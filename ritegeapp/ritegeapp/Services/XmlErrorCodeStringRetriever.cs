@@ -9,12 +9,12 @@ using System.Xml;
 
 namespace ritegeapp.Services
 {
-    public class XmlErrorCodeStringRetriever
+    public class XmlEventCodeStringRetriever
     {
         Assembly assembly = typeof(App).GetTypeInfo().Assembly;
 
         string xmlEmbeddedResourcePath = "ritegeapp.Resources.LangFrensh.xml";
-        public XmlErrorCodeStringRetriever()
+        public XmlEventCodeStringRetriever()
         {
 
         }

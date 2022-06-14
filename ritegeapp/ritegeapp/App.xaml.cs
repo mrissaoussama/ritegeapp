@@ -15,9 +15,9 @@ namespace ritegeapp
 {
     public partial class App : Application
     {
-         //public const string ServerURL = "https://192.168.1.14:45458";
+         public const string ServerURL = "https://192.168.1.14:45458";
         // public const string ServerURL = "http://192.168.1.14:45455";
-        public const string ServerURL = "https://ritegeserver.conveyor.cloud";
+       // public const string ServerURL = "https://ritegeserver.conveyor.cloud";
         public const string HubConnectionURL = ServerURL+"/Server";
 
         public bool IsOnline; public bool IsShowingAlert = false;
@@ -41,9 +41,7 @@ namespace ritegeapp
         private async void onStarting(object sender, EventArgs args) {
         
         
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjIzNzIzQDMyMzAyZTMxMmUzMEJwbk0xNVlBUHdJM0I4emZ0K2xMNXViaExUN2Fac1RGaGRQWFFZZEtOZWc9");
-            await DependencyService.Get<IDataService>().Initialize();
-            await DependencyService.Get<ISignalRService>().Initialize();
+    
 
         }
         void RegisterDependencies()
