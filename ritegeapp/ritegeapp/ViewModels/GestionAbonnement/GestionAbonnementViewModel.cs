@@ -132,12 +132,12 @@ namespace ritegeapp.ViewModels
         }
     
 
-        [ICommand]
+        [RelayCommand]
         public async void SearchText(object obj)
         {
             await GetData();
         }
-        [ICommand]
+        [RelayCommand]
         public async Task GetData()
         {
             if ((Application.Current as App).IsOnline)
@@ -150,13 +150,13 @@ namespace ritegeapp.ViewModels
             if (ListDto.Count == 0)
                 StateManager.ShowNoInternetView();
         }
-        [ICommand]
+        [RelayCommand]
         public void ChangeGroupByView(object obj)
         {
             AbonnementSortMode = !AbonnementSortMode;
             DateAbonnementSortMode = !DateAbonnementSortMode;
         }
-        [ICommand]
+        [RelayCommand]
         public async void ClearFilter(object obj)
         {
             DateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
@@ -164,12 +164,12 @@ namespace ritegeapp.ViewModels
             SearchTextBox = "";
             await GetData();
         }
-        [ICommand]
+        [RelayCommand]
         public async void OpenStatisticsWindow(object obj)
         {
             await PopupNavigation.Instance.PushAsync(new GestionAbonnementStatisticsPopup(this));
         }
-        [ICommand]
+        [RelayCommand]
         public async void TextChanged(object obj)
         {
             Debug.WriteLine("changed");

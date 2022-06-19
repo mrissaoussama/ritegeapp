@@ -17,7 +17,7 @@ public class GetOneByIdQueryHandler : IRequestHandler<GetOneByIdQuery, Door>
     }
     public async Task<Door> Handle(GetOneByIdQuery request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetOneByIdSocieteAsync(request.Id);
+        var entities = await _repository.GetOneByIdAsync(request.Id);
         return _mapper.Map<Door>(entities);
     }
 }

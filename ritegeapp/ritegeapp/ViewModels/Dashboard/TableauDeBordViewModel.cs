@@ -199,7 +199,7 @@ namespace ritegeapp.ViewModels
 
         }
       
-        [ICommand]
+        [RelayCommand]
         private async void GetDataButton(object obj)
         {
             await GetData(); StateManager.IsRefreshing = false;
@@ -274,14 +274,14 @@ namespace ritegeapp.ViewModels
             }
             StateManager.ShowDataView();
         }
-        [ICommand]
+        [RelayCommand]
 
         private async void OpenParkingListView(object obj)
         {
             if(StateManager.CanClickParkingOrCashRegister)
             await PopupNavigation.Instance.PushAsync(new ParkingListView(this,"Dashboard"));
         }
-        [ICommand]
+        [RelayCommand]
         private async void OpenCashRegisterListView(object obj)
         {
             if (StateManager.CanClickParkingOrCashRegister)
@@ -329,7 +329,7 @@ namespace ritegeapp.ViewModels
                 Debug.WriteLine("different caisse");
             }
         }
-        //[ICommand]
+        //[RelayCommand]
         //private async void OpenEventListView(object obj)
         //{
         //    if (eventList != null || eventList.Count != 0)

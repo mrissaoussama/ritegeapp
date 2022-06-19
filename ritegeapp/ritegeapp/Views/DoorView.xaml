@@ -9,7 +9,7 @@
              xmlns:converters1="clr-namespace:ritegeapp.Converters"
              xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
              BackgroundColor="{StaticResource BackgroundColor}"
-             Title="Recettes">
+             Title="Portes">
  <ContentPage.Resources>
   <ResourceDictionary>
    <converters1:TypeTicketToStringConverter x:Key="TypeTicketToString" />

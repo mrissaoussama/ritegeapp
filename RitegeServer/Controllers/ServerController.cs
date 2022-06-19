@@ -136,59 +136,41 @@ namespace RitegeServer.ServerControllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("DoorStateChanged")]
-        public async Task<ActionResult<int>> DoorStateChanged(CreateTicketCommand ticketToAdd)
+        public async Task<ActionResult<int>> DoorStateChanged(DoorData door)
         {
             try
             {
-                Ticket? AddTicketResponse = await _mediator.Send(ticketToAdd);
-                var TicketBorneQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.BorneQueries.GetOneByIdQuery
+                var doorQuery = new RitegeDomain.Database.Queries.ControleAccess.DoorQueries.GetOneByIdQuery
                 {
-                    Id = ticketToAdd.idBorneEntree
+                    Id = door.idDoor
                 };
-                Borne? TicketBorneResponse = await _mediator.Send(TicketBorneQuery);
-
-                if (TicketBorneResponse.IdBorne != 0)
+                Door? doorResponse = await _mediator.Send(doorQuery);
+                if (doorResponse == null || doorResponse.IdPorte == 0)
                 {
-                    var dto = new InfoTicketDTO();
-                    dto.MontantPaye = (decimal)AddTicketResponse.Tarif;
-                    dto.DateHeureEntree = AddTicketResponse.DateHeureDebutStationnement;
-                    if (AddTicketResponse.DateHeureFinStationnement != null)
-                        dto.DateHeureSortie = (DateTime)AddTicketResponse.DateHeureFinStationnement;
-
-                    dto.BorneEntree = TicketBorneResponse.NomBorne;
-
-                    var getAssociatedSessionquery = new RitegeDomain.Database.Queries.ParkingDBQueries.SessionQueries.GetOneByTicketLogCaissierAndTicketDates
-                    {
-                        LogCaissier = AddTicketResponse.LogCaissier,
-                        DateStart = AddTicketResponse.DateHeureDebutStationnement,
-                        DateEnd = AddTicketResponse.DateHeureFinStationnement
-                    };
-                    Session? getAssociatedSessionResoponse = await _mediator.Send(getAssociatedSessionquery);
-
-                    var updateSessionEarningsCommand = new RitegeDomain.Database.Commands.Parking.SessionCommands.UpdateSessionEarningsByIdCommand
-                    {
-                        IdSessions = getAssociatedSessionResoponse.IdSessions,
-                        Montant = ticketToAdd.Tarif
-                    };
-                    int? updateSessionEarningsResoponse = await _mediator.Send(updateSessionEarningsCommand);
-
-                    var getParkingByIdQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.ParkingQueries.GetOneByIdParkingQuery
-                    {
-                        IdParking = TicketBorneResponse.IdParking
-                    };
-                    Parking? getParkingByIdResponse = await _mediator.Send(getParkingByIdQuery);
-                    await mobileClientHandler.SendTicketDataToListeningClients(dto, getParkingByIdResponse.IdSociete, getParkingByIdResponse.IdParking);
-                    DashBoardDTO dash = new();
-                    dash.RecetteParking = dto.MontantPaye;
-                    dash.RecetteCaisse = dto.MontantPaye;
-                    dash.RecetteCaissier = dto.MontantPaye;
-                    dash.Caisse = getAssociatedSessionResoponse.idCaisse.ToString();
-                    dash.NbTickets = 1;
-
-                    await mobileClientHandler.SendDashboardDataToListeningClients(dash, getParkingByIdResponse.IdSociete, getParkingByIdResponse.IdParking, getAssociatedSessionResoponse.idCaisse);
+                    return BadRequest("Door Not Found");
                 }
+                var updateDoorQuery= new RitegeDomain.Database.Queries.ControleAccess.DoorQueries.UpdateDoorStateByIdQuery
+                    {
+                        IdDoor = door.idDoor, Activated=door.DoorState
+                    };
+                    int? updareDoorResponse = await _mediator.Send(updateDoorQuery);
+                    if(updareDoorResponse<=0)
+                    {
+                    return BadRequest("Door Not Updated");
+                    }
 
-                return Ok(AddTicketResponse);
+                var getDoorCompanyQuery = new RitegeDomain.Database.Queries.ControleAccess.SocieteQueries.GetOneByIdParkingQuery
+                {
+                    IdParking = (int)doorResponse.IdParking
+                };
+                Societe? getDoorCompanyResponse = await _mediator.Send(getDoorCompanyQuery);
+                if (getDoorCompanyResponse == null || getDoorCompanyResponse.IdSociete == 0)
+                {
+                    return BadRequest("Company Not Found");
+                }
+               await mobileClientHandler.SendDoorStateChangeToListeningClients(door, getDoorCompanyResponse.IdSociete, (int)doorResponse.IdParking);
+
+                return Ok(1);
 
             }
             catch (Exception ex)

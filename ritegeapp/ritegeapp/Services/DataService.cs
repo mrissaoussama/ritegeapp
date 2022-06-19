@@ -394,5 +394,18 @@
 
             }
         }
+
+        public async Task<List<DoorData>> GetDoorList(int idParking)
+        {
+
+            var parameters = new Dictionary<string, string>
+            {
+                { nameof(idParking), idParking.ToString()},
+                //	{ nameof(dateEnd), dateEnd.ToString("O") },
+
+            };
+            var list = await GetData<List<DoorData>>("/Parking/GetDoors", parameters);
+            return list;
+        }
     }
 }

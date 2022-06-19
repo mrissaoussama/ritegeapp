@@ -12,7 +12,7 @@ namespace RitegeServer.Services
         Task<Dictionary<int, string>> GetCashierListByParking(int idparking);
         Task<Dictionary<int, string>> GetCashRegisterList(int idparking);
         Task<DashBoardDTO> GetDashboardData(int idParking, int idCaisse);
-        Task<Dictionary<int, string>> GetDoors(int idParking);
+        Task<List<DoorData>> GetDoors(int idParking);
         Task<IEnumerable<EventDTO>> GetEventData(DateTime dateStart, DateTime dateEnd, int idsociete);
         Task<Dictionary<int, string>> GetParkingList(int idSociete);
         Task<IEnumerable<InfoTicketDTO>> GetTicketData(DateTime dateStart, DateTime dateEnd, int idParking);

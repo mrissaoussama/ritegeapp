@@ -123,7 +123,7 @@ namespace ritegeapp.Extentions
             set { SetValue(CanTapSearchTextCommandProperty, value); }
         }
         public static readonly BindableProperty CanTapSearchTextCommandProperty =
-       BindableProperty.Create("CanTapSearchTextCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: CanTapSearchTextCommandChanged);
+       BindableProperty.Create("CanTapSearchTextCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(RelayCommand), BindingMode.TwoWay, propertyChanged: CanTapSearchTextCommandChanged);
 
         private static void CanTapSearchTextCommandChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -140,7 +140,7 @@ namespace ritegeapp.Extentions
         }
 
         public static readonly BindableProperty CanClearFilterCommandProperty =
-       BindableProperty.Create("CanClearFilterCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: CanClearFilterCommandChanged);
+       BindableProperty.Create("CanClearFilterCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(RelayCommand), BindingMode.TwoWay, propertyChanged: CanClearFilterCommandChanged);
 
         private static void CanClearFilterCommandChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -159,7 +159,7 @@ namespace ritegeapp.Extentions
         }
 
         public static readonly BindableProperty CanSortCommandProperty =
-    BindableProperty.Create("CanSortCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: CanSortCommandChanged);
+    BindableProperty.Create("CanSortCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(RelayCommand), BindingMode.TwoWay, propertyChanged: CanSortCommandChanged);
 
         private static void CanSortCommandChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -176,7 +176,7 @@ namespace ritegeapp.Extentions
             set { SetValue(TextChangedCommandProperty, value); }
         }
         public static readonly BindableProperty TextChangedCommandProperty =
-BindableProperty.Create("TextChangedCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: TextChangedCommandChanged);
+BindableProperty.Create("TextChangedCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(RelayCommand), BindingMode.TwoWay, propertyChanged: TextChangedCommandChanged);
 
         private static void TextChangedCommandChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -209,7 +209,7 @@ BindableProperty.Create("ShowStatistics", typeof(bool), typeof(CommunityToolkit.
         }
 
         public static readonly BindableProperty ShowStatisticsCommandProperty =
-       BindableProperty.Create("StatisticsCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: ShowStatisticsCommandChanged);
+       BindableProperty.Create("StatisticsCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(RelayCommand), BindingMode.TwoWay, propertyChanged: ShowStatisticsCommandChanged);
         private static void ShowStatisticsCommandChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var control = (FilterView)bindable;

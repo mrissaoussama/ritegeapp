@@ -124,7 +124,7 @@ namespace ritegeapp.ViewModels
         {
             TotalMoney = dto.Sum(x => x.Recette);
         }
-        [ICommand]
+        [RelayCommand]
         private async void ClearFilter(object obj)
         {
             dateStart = DateTime.Today;
@@ -133,12 +133,12 @@ namespace ritegeapp.ViewModels
             ShowNoFilterResultLabel = false;
             await GetData();
         }
-        [ICommand]
+        [RelayCommand]
         private async void SearchText(object obj)
         {
             await GetData();
         }
-        [ICommand]
+        [RelayCommand]
         public async Task GetData()
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
@@ -173,19 +173,19 @@ namespace ritegeapp.ViewModels
                 Debug.WriteLine("different caisse");
             }
         }
-        [ICommand]
+        [RelayCommand]
         private void SortBy(object obj)
         {
             CaissierSortMode = !CaissierSortMode;
             DateCaissierSortMode = !DateCaissierSortMode;  
         }
-        [ICommand]
+        [RelayCommand]
         private async void OpenStatisticsWindow(object obj)
         {
             await PopupNavigation.Instance.PushAsync(new GestionCaissierStatisticsPopup(this));
         }
         
-        [ICommand]
+        [RelayCommand]
         private async void OpenCaissierList(object obj)
         {
             if (StateManager.CanClickCaissierList)

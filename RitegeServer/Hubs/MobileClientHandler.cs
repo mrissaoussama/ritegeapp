@@ -9,6 +9,7 @@ namespace RitegeServer.Hubs
         public string ConnectionId { get; set; }
         public string IdClient { get; set; }
         public int CurrentDashboardParkingId { get; set; }
+        public int CurrentDoorParkingId { get; set; }
         public int CurrentTicketParkingId { get; set; }
         public bool IsListeningToEvents { get; set; }
         public int CurrentCashRegisterId { get; set; }
@@ -99,15 +100,15 @@ namespace RitegeServer.Hubs
             }
 
         }
-        public void SetTicketParking(string idSociete, string connectionId, int idparking)
+        public void SetDoorParking(string idSociete, string connectionId, int idparking)
         {
-            Debug.WriteLine("ticket changed to " + idparking);
+            Debug.WriteLine("door changed to " + idparking);
 
             if (MobileClients.Keys.Contains(idSociete))
             {
                 foreach (var mobileClient in MobileClients[idSociete].Where(client => client.ConnectionId == connectionId))
                 {
-                    mobileClient.CurrentTicketParkingId = idparking;
+                    mobileClient.CurrentDoorParkingId = idparking;
                 }
             }
         }
@@ -135,6 +136,17 @@ namespace RitegeServer.Hubs
                 {
                     mobileClient.IsListeningToEvents = IsListening;
                 }
+            }
+        }
+
+        public async Task SendDoorStateChangeToListeningClients(DoorData doorData, int idSociete,int idParking)
+        {
+            if (MobileClients.ContainsKey(idSociete.ToString()))
+            {
+                var listeningDashboardClients = MobileClients[idSociete.ToString()].
+                    Where(client => client.CurrentDoorParkingId == idParking)
+                    .Select(mobileclient => mobileclient.ConnectionId).Distinct().ToList();
+                await _hubContext.Clients.Users(listeningDashboardClients).SendAsync("DoorStateChanged", doorData);
             }
         }
     }

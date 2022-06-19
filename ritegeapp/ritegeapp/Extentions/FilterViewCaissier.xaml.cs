@@ -65,7 +65,7 @@ namespace ritegeapp.Extentions
             set => SetValue(CaissierCommandProperty, value);
         }
         public static readonly BindableProperty CaissierCommandProperty =
-       BindableProperty.Create("CaissierCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: CaissierCommandChanged);
+       BindableProperty.Create("CaissierCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(RelayCommand), BindingMode.TwoWay, propertyChanged: CaissierCommandChanged);
         private static void CaissierCommandChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var control = (FilterViewCaissier)bindable;
@@ -100,12 +100,12 @@ namespace ritegeapp.Extentions
 
 
         public static readonly BindableProperty CanTapSearchTextCommandProperty =
-       BindableProperty.Create("CanTapSearchTextCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: CanTapSearchTextCommandChanged);
+       BindableProperty.Create("CanTapSearchTextCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(RelayCommand), BindingMode.TwoWay, propertyChanged: CanTapSearchTextCommandChanged);
 
         public static readonly BindableProperty CanClearFilterCommandProperty =
-       BindableProperty.Create("CanClearFilterCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: CanClearFilterCommandChanged);
+       BindableProperty.Create("CanClearFilterCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(RelayCommand), BindingMode.TwoWay, propertyChanged: CanClearFilterCommandChanged);
         public static readonly BindableProperty CanSortCommandProperty =
-    BindableProperty.Create("CanSortCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: CanSortCommandChanged);
+    BindableProperty.Create("CanSortCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(RelayCommand), BindingMode.TwoWay, propertyChanged: CanSortCommandChanged);
 
 
         public string ShowStatistics
@@ -127,7 +127,7 @@ BindableProperty.Create("ShowStatistics", typeof(bool), typeof(CommunityToolkit.
         }
 
         public static readonly BindableProperty ShowStatisticsCommandProperty =
-       BindableProperty.Create("StatisticsCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(ICommand), BindingMode.TwoWay, propertyChanged: ShowStatisticsCommandChanged);
+       BindableProperty.Create("StatisticsCommand", typeof(IRelayCommand), typeof(CommunityToolkit.Mvvm.Input.RelayCommand), default(RelayCommand), BindingMode.TwoWay, propertyChanged: ShowStatisticsCommandChanged);
         private static void ShowStatisticsCommandChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var control = (FilterViewCaissier)bindable;

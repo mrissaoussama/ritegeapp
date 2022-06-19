@@ -20,5 +20,6 @@ namespace ritegeapp.Services
         Task StopListeningForDashboardData();
         Task StopListeningForEventData();
         Task StopListeningForTicketData();
+        Task ListenForDoorData(int idParking);
     }
 }

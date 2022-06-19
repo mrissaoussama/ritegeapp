@@ -30,7 +30,7 @@ namespace ritegeapp.Services
         private bool isListeningToEvents;
 
         public HubConnection HubConnection { get; set; }
-
+        public bool isListeningToDoors { get; private set; }
 
         public async Task Initialize()
         {
@@ -100,6 +100,33 @@ namespace ritegeapp.Services
             }
             isListeningToTicketData = false;
         }
+
+        public async Task ListenForDoorData(int idParking)
+        {
+            await Initialize(); if (HubConnection.State == HubConnectionState.Connected)
+            {
+                await HubConnection.InvokeAsync("SetDoorParking", idParking);
+                if (isListeningToDoors == false)
+                {
+                    isListeningToDoors = true;
+
+                    HubConnection.On<DoorData>("DoorStateChanged", (data) =>
+                    {
+                        MessagingCenter.Send(Xamarin.Forms.Application.Current, "DoorStateChanged", data);
+                    });
+                }
+            }
+        }
+        public async Task StopListeningForDoorData()
+        {
+            if (HubConnection.State == HubConnectionState.Connected)
+            {
+                await HubConnection.InvokeAsync("SetDoorParking", -1);
+                HubConnection.Remove("DoorStateChanged");
+            }
+            isListeningToDoors = false;
+        }
+
         public async Task ListenForDashboardData(int? idparking, int? idcaisse)
         {
             await Initialize(); 

@@ -30,12 +30,12 @@ namespace ritegeapp.ViewModels
         private bool isLoading = true;
         [ObservableProperty]
         private bool showData = false;
-        [ICommand]
+        [RelayCommand]
         private async void BackgroundClicked(object parameter)
         {
             await PopupNavigation.Instance.PopAllAsync();
         }
-        [ICommand]
+        [RelayCommand]
         private async void ParkingClicked(object parameter)
         {
             if(ViewName=="Dashboard")
@@ -45,7 +45,10 @@ namespace ritegeapp.ViewModels
             else
                 if (ViewName=="Ticket")
                 MessagingCenter.Send(Xamarin.Forms.Application.Current, "TicketViewParkingClicked", ((ParkingData)parameter));
+            else if(ViewName == "Door")
+                       MessagingCenter.Send(Xamarin.Forms.Application.Current, "DoorViewParkingClicked", ((ParkingData)parameter));
             await PopupNavigation.Instance.PopAllAsync();
+            
         }
         public async void LoadList()
         {

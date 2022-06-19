@@ -13,7 +13,7 @@
    <BoxView HeightRequest="10" />
    <Image HorizontalOptions="Center"
           WidthRequest="300"
-          Source="{extentions:ImageResource ritegeapp.images.LabelIcons.logo.png}" />
+          Source="{extentions:ImageResource ritegeapp.images.logo.png}" />
    <Frame   BackgroundColor="{StaticResource BackgroundColor}" BorderColor="{StaticResource Primary}"
           HasShadow="False">
     <StackLayout Orientation="Vertical" BackgroundColor="Transparent"

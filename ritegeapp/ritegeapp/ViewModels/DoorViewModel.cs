@@ -54,11 +54,8 @@ namespace ritegeapp.ViewModels
         {
             signalRService = DependencyService.Get<ISignalRService>();
             dataService = DependencyService.Get<IDataService>();
-
-    
             MessagingCenter.Subscribe<Xamarin.Forms.Application, DoorData>(Xamarin.Forms.Application.Current, "DoorStateChanged", async (sender, data) =>
             {
-                StateManager.ShowLoading();
                 DoorStateChanged(data); 
             });
             MessagingCenter.Subscribe<Xamarin.Forms.Application, ParkingData>(Xamarin.Forms.Application.Current, "DoorViewParkingClicked", async (sender, arg) =>
@@ -76,29 +73,28 @@ namespace ritegeapp.ViewModels
             }
             else
             {
-
-                {
                     await Device.InvokeOnMainThreadAsync(() =>
                     {
-                        DataReceived(data); 
+                        SetData(data); 
                     });
-                }
-              
             }
         }
 
-        private void DoorStateChanged(DoorData DoorDatas)
+        private void DoorStateChanged(DoorData doorData)
         {
-            ListDoor.Insert(0,DoorDatas);
-            StateManager.ShowDataView();
+            StateManager.ShowLoading();
+
+            foreach (var item in ListDoor.Where(door => door.idDoor == doorData.idDoor))
+                            item.DoorState = doorData.DoorState;
+                StateManager.ShowDataView();
         }
-        private void DataReceived(List<DoorData> list)
+        private void SetData(List<DoorData> list)
         {
             ListDoor = new(list);
             StateManager.ShowDataView();
         }
         
-        [ICommand]
+        [RelayCommand]
         private async void ClearFilter(object obj)
         {
             DateStart = DateTime.Today;
@@ -107,95 +103,39 @@ namespace ritegeapp.ViewModels
             ShowNoFilterResultLabel = false;
             await GetData();
         }
-        [ICommand]
+        [RelayCommand]
 
         private async void Search(object obj)
         {
-         
             await GetData();
         }
-        [ICommand]
+        [RelayCommand]
         public async Task GetData()
         {
-            var door1 = new DoorData { DoorName = "Porte_1", DoorState = true };
-            var door2 = new DoorData { DoorName = "Porte_2", DoorState = true };
-            var door3 = new DoorData { DoorName = "Porte_3", DoorState = false };
-            var door4 = new DoorData { DoorName = "Porte_4", DoorState = true };
-            var door5 = new DoorData { DoorName = "Porte_5", DoorState = false };
-            var door6 = new DoorData { DoorName = "Porte_6", DoorState = true };
-            var door7 = new DoorData { DoorName = "Porte_7", DoorState = true };
-            var door8 = new DoorData { DoorName = "Porte_8", DoorState = false };
-            var door9 = new DoorData { DoorName = "Porte_9", DoorState = false };
-            ListDoor.Add(door1);
-            ListDoor.Add(door2);
-            ListDoor.Add(door3);
-            ListDoor.Add(door4);
-            ListDoor.Add(door5);
-            ListDoor.Add(door6);
-            ListDoor.Add(door7);
-            ListDoor.Add(door8);
-            ListDoor.Add(door9);
+            StateManager.ShowLoading();
+            await DataReceivedAsync(await dataService.GetDoorList(IdParking));
             StateManager.ShowDataView();
-            //if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-            //{
-            //    StateManager.ShowLoading();
-            //    if (Initialized==false)
-            //    {
-            //        Initialized = true;
-            //       StateManager. ParkingIsLoading = true;
-            //        StateManager.CanClickParkingList = false;
-            //        ParkingList = await dataService.GetParkingList();
-            //        StateManager.ParkingIsLoading = false;
-
-            //        if (ParkingList.Count != 0)
-            //        {
-            //            IdParking = ParkingList.First().Key;
-            //            ParkingName = ParkingList.First().Value;
-
-            //            var data = await dataService.GetTicketData(DateStart, DateEnd.AddDays(1).AddTicks(-1), IdParking);
-            //            await DataReceivedAsync(data);
-            //            StateManager.CanClickParkingList = true;
-            //            await Task.Run(async () => { await signalRService.Connect(); });
-            //            await signalRService.ListenForTicketData(IdParking);
-
-            //        }
-            //    }
-            //    else
-            //    {
-            //        StateManager.CanClickParkingList = false;
-
-            //        var data = await dataService.GetTicketData(DateStart, DateEnd.AddDays(1).AddTicks(-1), IdParking);
-            //        await DataReceivedAsync(data);
-            //        StateManager.CanClickParkingList = true;
-            //        await Task.Run(async () => { await signalRService.Connect(); });
-            //    }
-            //}
-            //else
-            //if (ListDto.Count == 0)
-            //    StateManager.ShowNoInternetView();
         }
         public async Task ParkingChanged(int idParking, string parkingName)
         {
-            //if (ParkingName == parkingName)
-            //    Debug.WriteLine("same parking");
-            //else
-            //{
-            //    ListDto.Clear();
-            //    StateManager.CanClickParkingList = false;
-            //    IdParking = idParking;
-            //    ParkingName = parkingName;
-            //    StateManager.ShowLoading();
-            //    ListRecetteToShow.Clear();
-            //    var data = await dataService.GetTicketData(DateStart, DateEnd.AddDays(1).AddTicks(-1), IdParking);
-            //    await DataReceivedAsync(data);
-            //    StateManager.CanClickParkingList = true;
-            //    await Task.Run(async () => { await signalRService.Connect(); });
-            //    await signalRService.ListenForTicketData(IdParking);
+            if (ParkingName == parkingName)
+                Debug.WriteLine("same parking");
+            else
+            {
+                StateManager.CanClickParkingList = false;
+                IdParking = idParking;
+                ParkingName = parkingName;
+                StateManager.ShowLoading();
+                ListDoor.Clear();
+                await DataReceivedAsync(await dataService.GetDoorList(IdParking));
+                StateManager.CanClickParkingList = true;
+                await Task.Run(async () => { await signalRService.Connect(); });
+                await signalRService.ListenForDoorData(IdParking);
 
-            //    Debug.WriteLine("different parking");
-         //   }
+                Debug.WriteLine("different parking");
+            }
         }
-        [ICommand]
+        [RelayCommand]
         private async void OpenParkingListView(object obj)
         {
             if (StateManager.CanClickParkingList)

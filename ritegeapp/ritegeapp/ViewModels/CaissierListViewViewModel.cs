@@ -24,12 +24,12 @@ namespace ritegeapp.ViewModels
         private bool isLoading = true;
         [ObservableProperty]
         private bool showData = false;
-        [ICommand]
+        [RelayCommand]
         private async void BackgroundClicked(object parameter)
         {
             await PopupNavigation.Instance.PopAllAsync();
         }
-        [ICommand]
+        [RelayCommand]
         private async void CaissierClicked(object parameter)
         {
             Debug.WriteLine(((CaissierData)parameter).CaissierName);

@@ -77,19 +77,19 @@ namespace ritegeapp.ViewModels
             StateManager.ShowDataView();
         }
    
-        [ICommand]
+        [RelayCommand]
         private async void ClearFilter(object obj)
         {
             DateStart = DateTime.Today;
             DateEnd = DateTime.Today.AddDays(1).AddTicks(-1);
             await GetData();
         }
-        [ICommand]
+        [RelayCommand]
         private async void EventExpanded(object obj)
         {
             Debug.WriteLine(obj);
         }
-        [ICommand]
+        [RelayCommand]
         public async Task GetData()
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)

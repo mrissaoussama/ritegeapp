@@ -209,13 +209,16 @@ namespace RitegeServer.Services
             }
             return null;
         }
-        public async Task<Dictionary<int, string>> GetDoors(int idParking)
+        public async Task<List<DoorData>> GetDoors(int idParking)
         {
 
-            var query = new RitegeDomain.Database.Queries.ControleAccess.DoorQueries.GetOneByIdQuery { Id = idParking };
+            var query = new RitegeDomain.Database.Queries.ControleAccess.DoorQueries.GetAllByIdParkingQuery { IdParking = idParking };
             var response = await _mediator.Send(query);
-            Dictionary<int, string> doorList = new();
-            doorList.Add(response.IdDoor, response.DoorName);
+            List<DoorData> doorList = new();
+            foreach(var item in response)
+            {
+                doorList.Add(new DoorData { DoorName=item.DoorName,DoorState= (bool)item.Activated,idDoor=item.IdDoor });
+            }
             //Dictionary<int, string> doorList = new();
             //foreach (var item in response)
             //{

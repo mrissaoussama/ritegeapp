@@ -35,7 +35,7 @@ namespace ritegeapp.Droid
             Creating(this, EventArgs.Empty);
 
             LocalNotificationCenter.CreateNotificationChannel(
-                        new Plugin.LocalNotification.Platforms.Android.NotificationChannelRequest
+                        new Plugin.LocalNotification.Platforms.NotificationChannelRequest
                         {
                             Id = $"Alert_Channel",
                             Name = "Alert",

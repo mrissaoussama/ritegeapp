@@ -58,7 +58,7 @@ namespace ritegeapp.ViewModels
             IsLoading = false;
         }
 
-        [ICommand]
+        [RelayCommand]
 
         public async Task GetData()
         {

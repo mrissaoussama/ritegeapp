@@ -36,6 +36,7 @@
     <None Remove="images\LabelIcons\ticket.png" />
     <None Remove="images\LabelIcons\timeend.png" />
     <None Remove="images\LabelIcons\timestart.png" />
+    <None Remove="images\logo.png" />
     <None Remove="images\MenuIcons\alert.png" />
     <None Remove="images\MenuIcons\cashier.png" />
     <None Remove="images\MenuIcons\contract.png" />
@@ -65,7 +66,8 @@
     <EmbeddedResource Include="images\LabelIcons\event.png" />
     <EmbeddedResource Include="images\LabelIcons\event2.png" />
     <EmbeddedResource Include="images\LabelIcons\home.png" />
-    <EmbeddedResource Include="images\LabelIcons\logo.png" />
+    <EmbeddedResource Include="images\logo.png" />
+    <Page Include="images\LabelIcons\logo.png" />
     <EmbeddedResource Include="images\LabelIcons\parkingdoor.png" />
     <EmbeddedResource Include="images\LabelIcons\staff.png" />
   </ItemGroup>
@@ -110,22 +112,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview4" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-preview.4.22251.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-preview.5.22303.8" />
 
-    <PackageReference Include="Plugin.LocalNotification" Version="9.2.1-preview04" />
+    <PackageReference Include="Plugin.LocalNotification" Version="9.2.1-preview05" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
-    <PackageReference Include="Syncfusion.Xamarin.Expander" Version="20.1.0.58" />
-    <PackageReference Include="System.Net.Http.Json" Version="7.0.0-preview.4.22229.4" />
+    <PackageReference Include="Syncfusion.Xamarin.Expander" Version="20.1.0.60" />
+    <PackageReference Include="System.Net.Http.Json" Version="7.0.0-preview.5.22301.12" />
 
     <PackageReference Include="Xam.Plugins.Forms.ProgressRing" Version="0.1.2" />
     <PackageReference Include="Xamarin.Bin.CircularProgressbar" Version="1.0.1" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.2" />
     <PackageReference Include="Xamarin.CommunityToolkit.Markup" Version="2.0.2" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2401" />  
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />  
     <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.763-beta" />  
     <PackageReference Include="Xamarin.Forms.Skeleton" Version="2.0.0" />

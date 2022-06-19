@@ -113,7 +113,7 @@ namespace ritegeapp.ViewModels
             StateManager.ShowDataView();
         }
         
-        [ICommand]
+        [RelayCommand]
         private async void ClearFilter(object obj)
         {
             DateStart = DateTime.Today;
@@ -122,14 +122,14 @@ namespace ritegeapp.ViewModels
             ShowNoFilterResultLabel = false;
             await GetData();
         }
-        [ICommand]
+        [RelayCommand]
 
         private async void Search(object obj)
         {
          
             await GetData();
         }
-        [ICommand]
+        [RelayCommand]
         public async Task GetData()
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
@@ -191,7 +191,7 @@ namespace ritegeapp.ViewModels
                 Debug.WriteLine("different parking");
             }
         }
-        [ICommand]
+        [RelayCommand]
         private async void OpenParkingListView(object obj)
         {
             if (StateManager.CanClickParkingList)

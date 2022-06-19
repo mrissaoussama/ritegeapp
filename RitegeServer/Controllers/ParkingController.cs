@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using RitegeDomain.Database.Queries.ParkingDBQueries;
 using RitegeDomain.DTO;
 using RitegeDomain.Model;
+using RitegeServer.Hubs;
 using RitegeServer.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,8 +19,10 @@ namespace RitegeServer.Controllers
     {
         private readonly IMediator _mediator; public IConfiguration _configuration;
         public IQueryManager queryManager;
-        public ParkingController(IMediator mediator, IConfiguration config, IQueryManager manager)
+        public IWebClientHandler webClientHandler;
+        public ParkingController(IWebClientHandler clientHandler, IMediator mediator, IConfiguration config, IQueryManager manager)
         {
+            this.webClientHandler = clientHandler;
             queryManager = manager;
             _configuration = config;
             _mediator = mediator;
@@ -218,7 +221,7 @@ namespace RitegeServer.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("GetDoors")]
-        public async Task<ActionResult<string?>> GetDoors(int idParking)
+        public async Task<ActionResult<List<DoorData>>> GetDoors(int idParking)
         {
             try
             {
@@ -230,15 +233,17 @@ namespace RitegeServer.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [AllowAnonymous]
         [HttpPatch]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("ChangeDoorState")]
-        public async Task<ActionResult<bool?>> ChangeDoorState(int idDoor,bool IsOpen)
+        public async Task<ActionResult> ChangeDoorState(int societe,int idDoor,bool IsOpen)
         {
             try
             {
-                return Ok(true);
+                await webClientHandler.ChangeDoorStateForParking(societe, idDoor, IsOpen);
+                return Ok();
 
             }
             catch (Exception ex)

@@ -18,7 +18,7 @@ namespace ritegeapp.Services
         public NotificationService()
         {
             if (Device.RuntimePlatform == Device.Android || Device.RuntimePlatform == Device.iOS)
-                LocalNotificationCenter.Current.NotificationTapped += OnLocalNotificationTapped;
+                LocalNotificationCenter.Current.NotificationActionTapped += OnLocalNotificationTapped;
             DependencyService.Register<IMessage>();
 
         }

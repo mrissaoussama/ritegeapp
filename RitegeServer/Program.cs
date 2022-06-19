@@ -52,6 +52,7 @@ builder.Services.AddTransient<ISocieteRepository, SocieteRepository>();
 builder.Services.AddTransient<IParkingRepository, ParkingRepository>();
 builder.Services.AddTransient<IQueryManager, QueryManager>();
 builder.Services.AddSingleton<IMobileClientHandler, MobileClientHandler>();
+builder.Services.AddSingleton<IWebClientHandler,WebClientHandler>();
 
 builder.Services.AddControllers();
 builder.Services.AddHostedService<SendDataHostedService>();
@@ -87,6 +88,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapHub<DataHub>("Server");
+    endpoints.MapHub<WebClientHub>("WebClientServer");
 });
 
 app.Run();

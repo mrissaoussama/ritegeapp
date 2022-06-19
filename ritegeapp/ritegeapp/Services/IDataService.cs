@@ -14,6 +14,7 @@ namespace ritegeapp.Services
         Task<List<InfoSessionsDTO>> GetCashierData(DateTime dateStart, DateTime dateEnd, int? idCaissier);
         Task<Dictionary<int, string>> GetCashierList();
         Task<Dictionary<int, string>> GetCashRegisterList(int idParking);
+        Task<List<DoorData>> GetDoorList(int idParking);
         Task<DashBoardDTO> GetDashboardData(int idParking, int idCaisse);
         Task<T> GetData<T>(string DataURL, Dictionary<string, string> args);
         Task<List<EventDTO>> GetEventData(DateTime dateStart, DateTime dateEnd);

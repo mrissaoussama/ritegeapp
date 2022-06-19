@@ -182,7 +182,7 @@ namespace RitegeDomain.Database.Repositories
                     var affectedqueriesawait = await cmd.ExecuteNonQueryAsync();
                     con.Close();
 
-                    return 1;
+                    return affectedqueriesawait;
                 }
             }
         }

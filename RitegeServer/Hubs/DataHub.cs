@@ -52,7 +52,13 @@ namespace RitegeServer.Hubs
         {
             var IdSociete = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdSociete").Value;
 
-            mobileClientHandler.SetTicketParking(IdSociete.Trim(), Context.UserIdentifier, idparking);
+            mobileClientHandler.SetDoorParking(IdSociete.Trim(), Context.UserIdentifier, idparking);
+        }
+        public void SetDoorParking(int idparking)
+        {
+            var IdSociete = ((ClaimsIdentity)Context.User.Identity).Claims.First(x => x.Type == "IdSociete").Value;
+
+            mobileClientHandler.SetDoorParking(IdSociete.Trim(), Context.UserIdentifier, idparking);
         }
         public void SetCashRegister(int idCashRegister)
         {
