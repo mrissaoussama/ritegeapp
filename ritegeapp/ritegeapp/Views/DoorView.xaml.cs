@@ -22,6 +22,16 @@ namespace ritegeapp.Views
             //);
 
         }
+        protected async override void OnDisappearing()
+        {
+            base.OnDisappearing();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Task.Run(() => ((DoorViewModel)BindingContext).PageLeft());
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            //            Task.Run(async () =>
+            //);
+
+        }
         public DoorView()
         {
             InitializeComponent();
@@ -52,11 +62,7 @@ namespace ritegeapp.Views
         //    SecondaryToolbarListView.IsVisible = !SecondaryToolbarListView.IsVisible;
 
         //}
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-        }
-
+     
         private async void Filter_Clicked(object sender, EventArgs e)
         {
             //       Navigation.ShowPopup(new popup01());

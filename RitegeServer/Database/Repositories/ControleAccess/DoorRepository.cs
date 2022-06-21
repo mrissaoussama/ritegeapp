@@ -102,11 +102,11 @@ namespace RitegeDomain.Database.Repositories
             using (SqlConnection con = new(connectionString))
             {
                 string query;
-                query = "SELECT * FROM controleaccessdb.Door where idparking in (select idparking from parkingdb.dbo.parking where idsociete=@id)";
+                query = "SELECT * FROM controleaccessdb.Door where idparking=@idParking";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;
-                    cmd.Parameters.Add("@IdDoor", SqlDbType.Int).Value = idparking;
+                    cmd.Parameters.Add("@idParking", SqlDbType.Int).Value = idparking;
 
 
                     con.Open();

@@ -189,8 +189,15 @@
                     else
                     {
                         uri = QueryHelpers.AddQueryString(uri, args);
+                        if (DataURL == "/Parking/ChangeDoorState")
+                        {
+                            response = await httpClient.PostAsync(uri, null);
+                        }
+                        else
+                        {      
                         response = await httpClient.GetAsync(uri);
-                    }
+                             }
+                }
                     if (response.IsSuccessStatusCode)
                     {
                         System.Diagnostics.Debug.WriteLine("got http response");
@@ -380,7 +387,15 @@
             var list = await GetData<List<ParkingEvent>>("/Parking/GetLast10Events", parameters);
             return list;
         }
-
+        public async Task ChangeDoorState(int idDoor, bool IsOpen)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                 { nameof(idDoor), idDoor.ToString()},
+                 { nameof(IsOpen), IsOpen.ToString()}
+            };
+            await GetData<List<ParkingEvent>>("/Parking/ChangeDoorState", parameters);
+        }
         public async Task Disconnect()
         {
             (Application.Current as App).Token = null;
@@ -407,5 +422,7 @@
             var list = await GetData<List<DoorData>>("/Parking/GetDoors", parameters);
             return list;
         }
+
+       
     }
 }

@@ -234,15 +234,17 @@ namespace RitegeServer.Controllers
             }
         }
         [AllowAnonymous]
-        [HttpPatch]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("ChangeDoorState")]
-        public async Task<ActionResult> ChangeDoorState(int societe,int idDoor,bool IsOpen)
+        public async Task<ActionResult> ChangeDoorState(int idDoor,  bool IsOpen)
         {
             try
             {
-                await webClientHandler.ChangeDoorStateForParking(societe, idDoor, IsOpen);
+                var IdSociete = int.Parse(((ClaimsIdentity)User.Identity).Claims.First(x => x.Type == "IdSociete").Value);
+
+                await webClientHandler.ChangeDoorStateForParking(IdSociete, idDoor, IsOpen);
                 return Ok();
 
             }

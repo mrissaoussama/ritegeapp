@@ -22,7 +22,7 @@ namespace RitegeDomain.Database.Repositories
                 if (AlertsOnly == false)
                     query = "SELECT * FROM parkingdb.Evenement where idBorne=@idBorne and dateevent between @date and @dateend";
                 else
-                    query = "SELECT * FROM parkingdb.Evenement where idBorne=@idBorne and dateevent between @date and @dateend and typeevent " + AlertString.GetAlertSqlString();
+                    query = "SELECT * FROM parkingdb.Evenement where idBorne=@idBorne and dateevent between @date and @dateend and typeevent " + EventCodes.GetAlertSqlString();
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;
@@ -63,7 +63,7 @@ namespace RitegeDomain.Database.Repositories
                 if (AlertsOnly == false)
                     query = "SELECT * FROM parkingdb.Evenement where idCaisse=@idCaisse and  dateevent between @date and @dateend";
                 else
-                    query = "SELECT * FROM parkingdb.Evenement where idCaisse=@idCaisse and dateevent between @date and @dateend and typeevent " + AlertString.GetAlertSqlString();
+                    query = "SELECT * FROM parkingdb.Evenement where idCaisse=@idCaisse and dateevent between @date and @dateend and typeevent " + EventCodes.GetAlertSqlString();
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;
@@ -105,7 +105,7 @@ namespace RitegeDomain.Database.Repositories
                 if (AlertsOnly == false)
                     query = "SELECT * FROM parkingdb.Evenement where idBorne=@idBorne and idCaisse=@idCaisse and  dateevent between @date and @dateend";
                 else
-                    query = "SELECT * FROM parkingdb.Evenement where idBorne=@idBorne and idCaisse=@idCaisse and dateevent between @date and @dateend and typeevent " + AlertString.GetAlertSqlString();
+                    query = "SELECT * FROM parkingdb.Evenement where idBorne=@idBorne and idCaisse=@idCaisse and dateevent between @date and @dateend and typeevent " + EventCodes.GetAlertSqlString();
 
                 using (SqlCommand cmd = new(query))
                 {
@@ -150,7 +150,7 @@ namespace RitegeDomain.Database.Repositories
                     query = "SELECT * FROM parkingdb.Evenement where dateevent between @date and @dateend";
                 else
                 {
-                    var alertCodes = AlertString.GetAlertSqlString();
+                    var alertCodes = EventCodes.GetAlertSqlString();
                     query = "SELECT * FROM parkingdb.Evenement where dateevent between @date and @dateend and typeevent " + alertCodes;
                 }
                 using (SqlCommand cmd = new(query))
@@ -192,7 +192,7 @@ namespace RitegeDomain.Database.Repositories
                 if (AlertsOnly == false)
                     query = "SELECT TOP(10) * FROM parkingdb.Evenement where idBorne=@idBorne order by dateEvent desc";
                 else
-                { var alertCodes = AlertString.GetAlertSqlString();
+                { var alertCodes = EventCodes.GetAlertSqlString();
                     query = "SELECT TOP(10) * FROM parkingdb.Evenement where idBorne=@idBorne order by dateEvent desc and typeevent " + alertCodes;
                 } using (SqlCommand cmd = new(query))
                 {
@@ -233,7 +233,7 @@ namespace RitegeDomain.Database.Repositories
                 if (AlertsOnly == false)
                     query = "SELECT TOP(10) * FROM parkingdb.Evenement where idBorne=@idBorne and idCaisse=@idCaisse order by dateEvent desc";
                 else
-                    query = "SELECT TOP(10) * FROM parkingdb.Evenement where idBorne=@idBorne and typeevent " + AlertString.GetAlertSqlString() + " order by dateEvent desc";
+                    query = "SELECT TOP(10) * FROM parkingdb.Evenement where idBorne=@idBorne and typeevent " + EventCodes.GetAlertSqlString() + " order by dateEvent desc";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;
@@ -273,7 +273,7 @@ namespace RitegeDomain.Database.Repositories
                 if (AlertsOnly == false)
                     query = "SELECT TOP(10) * FROM parkingdb.Evenement where  idCaisse=@idCaisse order by dateEvent desc";
                 else
-                    query = "SELECT TOP(10) * FROM parkingdb.Evenement where  idCaisse=@idCaisse and typeevent " + AlertString.GetAlertSqlString() + " order by dateEvent desc";
+                    query = "SELECT TOP(10) * FROM parkingdb.Evenement where  idCaisse=@idCaisse and typeevent " + EventCodes.GetAlertSqlString() + " order by dateEvent desc";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;
@@ -311,7 +311,7 @@ namespace RitegeDomain.Database.Repositories
                 if (AlertsOnly == false)
                     query = "SELECT TOP(10) * FROM parkingdb.Evenement  order by dateEvent desc";
                 else
-                    query = "SELECT TOP(10) * FROM parkingdb.Evenement where  typeevent " + AlertString.GetAlertSqlString() + " order by dateEvent desc";
+                    query = "SELECT TOP(10) * FROM parkingdb.Evenement where  typeevent " + EventCodes.GetAlertSqlString() + " order by dateEvent desc";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;

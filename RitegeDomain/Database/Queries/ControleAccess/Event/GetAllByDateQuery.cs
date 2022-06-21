@@ -10,6 +10,6 @@ public class GetAllByDateQuery : IRequest<IEnumerable<Event>>
 public class GetAllByDateAndIdDoorAndEventCodeQuery : IRequest<IEnumerable<Event>>
 {
     public DateTime Date { get; set; }
-    public int IdDoor { get; set; }
+    public int IdCaisse { get; set; }
     public int EventCode { get; set; }
 }

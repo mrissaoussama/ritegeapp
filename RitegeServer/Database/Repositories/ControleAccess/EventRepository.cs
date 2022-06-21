@@ -42,17 +42,21 @@ namespace RitegeDomain.Database.Repositories
             }
         }
 
-        public  async Task<List<Event>> GetAllByDateAndIdDoorAndEventCodeAsync(DateTime date, int idDoor, int eventCode)
+        public  async Task<List<Event>> GetAllByDateAndIdCaisseAndEventCodeAsync(DateTime date, int idCaisse, int eventCode)
         {
             List<Event> Events = new();
             using (SqlConnection con = new(connectionString))
             {
                 string query;
-                query = "select * from controleaccessdb.event where (dateEvent between @dateStart and @DateEnd) and DoorNumber=@doornumner and codeEvent=@CodeEvent";
+                query = "select * from controleaccessdb.event where (dateEvent between @dateStart and @dateEnd) and DoorNumber = (select c.IdDoor from parkingdb.parkingdb.caisse c where idCaisse = @idCaisse) and codeEvent = @eventCode";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;
-                    cmd.Parameters.Add("@dateevent", SqlDbType.DateTime2).Value = date;
+                    cmd.Parameters.Add("@dateStart", SqlDbType.DateTime2).Value = date.Date;
+                    cmd.Parameters.Add("@dateEnd", SqlDbType.DateTime2).Value = date.Date.AddDays(1).AddTicks(-1);
+                    cmd.Parameters.Add("@idCaisse", SqlDbType.Int).Value = idCaisse;
+                    cmd.Parameters.Add("@eventCode", SqlDbType.Int).Value = eventCode;
+
 
 
                     con.Open();
@@ -71,10 +75,11 @@ namespace RitegeDomain.Database.Repositories
                                 IndiceController = Convert.ToUInt16(sdr["IndiceController"]),
                                 HeureEvent = Convert.ToString(sdr["HeureEvent"]),
                                 Selected = Convert.ToBoolean(sdr["Selected"]),
-                                NumAccessCard = Convert.ToString(sdr["NumAccessCard"]),
-                                Data12 = Convert.ToInt16(sdr["Data12"]),
+                                NumAccessCard = (sdr["NumAccessCard"] != DBNull.Value) ? Convert.ToString(sdr["NumAccessCard"]) : null,
+                                Data12 = (sdr["Data12"] != DBNull.Value) ? Convert.ToInt16(sdr["Data12"]) : null,
                                 Flux = Convert.ToUInt16(sdr["Flux"]),
-                            });
+                            }); 
+                          
                         }
                     }
                     con.Close();

@@ -5,9 +5,11 @@
              xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
              xmlns:local="clr-namespace:ritegeapp.Views"
              xmlns:extentions="clr-namespace:ritegeapp.Extentions"
+             x:Name="DoorViewList"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:converters1="clr-namespace:ritegeapp.Converters"
              xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
+             xmlns:viewmodels="clr-namespace:ritegeapp.ViewModels"
              BackgroundColor="{StaticResource BackgroundColor}"
              Title="Portes">
  <ContentPage.Resources>
@@ -51,10 +53,10 @@
              skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
              HorizontalOptions="Center"
              VerticalOptions="Center"
-             FontSize="20" 
+             FontSize="20" WidthRequest="100"
              Margin="0,0,0,0"
-             Text="Parking_1">
-       <Label.GestureRecognizers>
+            Text="{Binding ParkingName,Converter={StaticResource NullToDash}}">
+      <Label.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding OpenParkingListViewCommand}"></TapGestureRecognizer>
        </Label.GestureRecognizers>
       </Label>
@@ -112,7 +114,7 @@
     <Label FontSize="Medium"
            TextColor="{StaticResource TextColor}"
            IsVisible="{Binding StateManager.ShowNoInternetLabel}"
-           Grid.Row="1"
+           Grid.Row="1" x:Name="DoorList"
            LineBreakMode="WordWrap">
      <Label.FormattedText>
       <!--no result label-->
@@ -158,9 +160,17 @@
                   Scale="0.5"
                   xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
                   Grid.Column="3"></Image>
-           <CheckBox  Grid.Column="4" 
-                Color="{StaticResource Primary}"
-                   IsChecked="{Binding DoorState}"></CheckBox>
+           <CheckBox  Grid.Column="4"  
+                Color="{StaticResource Primary}" 
+                   IsChecked="{Binding DoorState}" >
+           <CheckBox.Behaviors>
+            <xct:EventToCommandBehavior   Command="{Binding BindingContext.DoorCheckBoxClickedCommand, Source={x:Reference DoorViewList}}"
+                                            CommandParameter="{Binding .}"
+                                            EventName="CheckedChanged"
+                                            
+                                       />
+           </CheckBox.Behaviors>
+          </CheckBox>
         </Grid>
                  </Frame>
 

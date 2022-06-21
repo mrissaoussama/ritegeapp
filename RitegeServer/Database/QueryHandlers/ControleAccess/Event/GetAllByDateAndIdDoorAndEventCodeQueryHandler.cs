@@ -17,7 +17,7 @@ public class GetAllByDateAndIdDoorAndEventCodeQueryHandler : IRequestHandler<Get
     }
     public async Task<IEnumerable<Event>> Handle(GetAllByDateAndIdDoorAndEventCodeQuery request, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllByDateAndIdDoorAndEventCodeAsync(request.Date,request.IdDoor,request.EventCode);
+        var entities = await _repository.GetAllByDateAndIdCaisseAndEventCodeAsync(request.Date,request.IdCaisse,request.EventCode);
         return _mapper.Map<IEnumerable<Event>>(entities);
     }
 }

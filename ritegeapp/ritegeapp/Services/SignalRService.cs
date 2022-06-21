@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using Plugin.LocalNotification;
+using ritegeapp.Utils;
 using RitegeDomain.Database.Queries.ParkingDBQueries.UtilisateurQueries;
 using RitegeDomain.DTO;
 using RitegeDomain.Model;
@@ -55,7 +56,7 @@ namespace ritegeapp.Services
                         };
                     }).WithAutomaticReconnect()
                     .Build();
-             //   HubConnection.ServerTimeout = TimeSpan.FromSeconds(3);
+                //   HubConnection.ServerTimeout = TimeSpan.FromSeconds(3);
                 HubConnection.Reconnecting += error =>
                 {
                     MessagingCenter.Send(Xamarin.Forms.Application.Current, "Reconnecting");
@@ -129,13 +130,13 @@ namespace ritegeapp.Services
 
         public async Task ListenForDashboardData(int? idparking, int? idcaisse)
         {
-            await Initialize(); 
+            await Initialize();
             if (HubConnection.State == HubConnectionState.Connected)
             {
                 if (idparking is not null)
-                await HubConnection.InvokeAsync("SetDashboardParking", idparking);
-            if (idcaisse is not null)
-                await HubConnection.InvokeAsync("SetCashRegister", idcaisse);
+                    await HubConnection.InvokeAsync("SetDashboardParking", idparking);
+                if (idcaisse is not null)
+                    await HubConnection.InvokeAsync("SetCashRegister", idcaisse);
                 if (isListeningToDashboardData == false)
                 {
                     isListeningToDashboardData = true;
@@ -147,19 +148,22 @@ namespace ritegeapp.Services
             }
         }
         public async Task StopListeningForDashboardData()
-        {if (HubConnection.State == HubConnectionState.Connected)
+        {
+            if (HubConnection.State == HubConnectionState.Connected)
             {
                 await HubConnection.InvokeAsync("SetDashboardParking", -1);
                 await HubConnection.InvokeAsync("SetCashRegister", -1);
                 HubConnection.Remove("GetDashboardData");
-            }                isListeningToDashboardData = false;
+            }
+            isListeningToDashboardData = false;
 
         }
         public async Task ListenForAlerts()
         {
             await Initialize();
             if (HubConnection.State == HubConnectionState.Connected)
-            {  if (isListeningToAlerts == false)
+            {
+                if (isListeningToAlerts == false)
                 {
                     isListeningToAlerts = true;
                     HubConnection.On<EventDTO>("GetAlertData", async (data) =>
@@ -170,9 +174,9 @@ namespace ritegeapp.Services
                         var parkingEvent = coderetriever.GetErrorCodeString(data);
                         notificationService.CreateAlertNotification(parkingEvent);
                     });
-                      }
-              }
-        
+                }
+            }
+
 
         }
         public async Task ListenForEventData()
@@ -215,10 +219,11 @@ namespace ritegeapp.Services
                 {
                     try
                     {
-                         await HubConnection.StartAsync();
+                        await HubConnection.StartAsync();
                     }
                     catch (Exception ex)
                     {
+                        await Device.InvokeOnMainThreadAsync(() => DependencyService.Get<IMessage>().LongAlert("Pas de Reponse"));
                     }
                 }
                 if (HubConnection.State == HubConnectionState.Connected)

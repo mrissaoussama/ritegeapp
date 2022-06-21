@@ -62,7 +62,10 @@ namespace ritegeapp.ViewModels
             {
                 list = ((GestionRecettesViewModel)parentvm).ParkingList;
             }
-
+            else if (ViewName == "Door")
+            {
+                list = ((DoorViewModel)parentvm).ParkingList;
+            }
             if (list is not null && list.Count>0)
             foreach (var parking in list)
             {

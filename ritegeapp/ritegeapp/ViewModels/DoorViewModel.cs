@@ -83,9 +83,9 @@ namespace ritegeapp.ViewModels
         private void DoorStateChanged(DoorData doorData)
         {
             StateManager.ShowLoading();
-
-            foreach (var item in ListDoor.Where(door => door.idDoor == doorData.idDoor))
-                            item.DoorState = doorData.DoorState;
+            var index = ListDoor.IndexOf(ListDoor.Where(x => x.idDoor == doorData.idDoor).Single());
+            ListDoor.Remove(ListDoor.Where(x => x.idDoor == doorData.idDoor).Single());
+            ListDoor.Insert(index, doorData);
                 StateManager.ShowDataView();
         }
         private void SetData(List<DoorData> list)
@@ -112,9 +112,31 @@ namespace ritegeapp.ViewModels
         [RelayCommand]
         public async Task GetData()
         {
-            StateManager.ShowLoading();
-            await DataReceivedAsync(await dataService.GetDoorList(IdParking));
-            StateManager.ShowDataView();
+            if (Initialized == false)
+            {
+                Initialized = true;
+                StateManager.ParkingIsLoading = true;
+                StateManager.CanClickParkingList = false;
+                ParkingList = await dataService.GetParkingList();
+                StateManager.ParkingIsLoading = false;
+
+                if (ParkingList.Count != 0)
+                {
+                    IdParking = ParkingList.First().Key;
+                    ParkingName = ParkingList.First().Value;
+                    await DataReceivedAsync(await dataService.GetDoorList(IdParking));
+                    StateManager.CanClickParkingList = true;
+                    await Task.Run(async () => { await signalRService.Connect(); });
+                    await signalRService.ListenForDoorData(IdParking);
+
+                }
+            }
+            else
+            {
+                StateManager.ShowLoading();
+                await DataReceivedAsync(await dataService.GetDoorList(IdParking));
+                StateManager.ShowDataView();
+            }
         }
         public async Task ParkingChanged(int idParking, string parkingName)
         {
@@ -140,6 +162,18 @@ namespace ritegeapp.ViewModels
         {
             if (StateManager.CanClickParkingList)
                 await PopupNavigation.Instance.PushAsync(new ParkingListView(this,"Door"));
+        }
+        [RelayCommand]
+        private async void DoorCheckBoxClicked(object obj)
+        {
+            var doordata = obj as DoorData;
+            if(doordata != null)
+            await dataService.ChangeDoorState(doordata.idDoor,doordata.DoorState);
+        }
+        public async Task PageLeft()
+        {
+            Initialized = false;
+        await    signalRService.StopListeningForDoorData();
         }
 
     }

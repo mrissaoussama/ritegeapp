@@ -94,8 +94,9 @@ namespace ritegeapp.ViewModels
           if(!string.IsNullOrEmpty(data.Caisse))
             if (IdCaisse == int.Parse(data.Caisse))
             {
-                
-                this.RecetteCaisse += data.RecetteCaisse;
+                    FluxBorneTotal += data.FluxBorneTotal;
+                    FluxCaisseTotal += data.FluxCaisseTotal;
+                    this.RecetteCaisse += data.RecetteCaisse;
                 this.RecetteCaissier += data.RecetteCaissier;
                 this.NbAdministrateur += data.NbAdministrateur;
                 this.NbAutorite += data.NbAutorite;
@@ -172,8 +173,8 @@ namespace ritegeapp.ViewModels
         private void SetData(DashBoardDTO data)
         {
  
-            FluxBorneTotal=12;
-            FluxCaisseTotal = 15;
+            FluxBorneTotal=data.FluxBorneTotal;
+            FluxCaisseTotal = data.FluxCaisseTotal;
             FluxBorne = data.FluxBorne;
             FluxCaisse = data.FluxCaisse;
             if(data.Caisse is not null)

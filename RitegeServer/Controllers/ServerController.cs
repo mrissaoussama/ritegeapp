@@ -50,7 +50,7 @@ namespace RitegeServer.ServerControllers
                         HeureEvent = eventToAdd.HeureEvent
                     };
                 await mobileClientHandler.SendEventToListeningClients(dto, societeResponse.IdSociete);
-                if (AlertString.AlertCodes.Contains(Convert.ToString( eventToAdd.CodeEvent)))
+                if (EventCodes.AlertCodes.Contains(Convert.ToString( eventToAdd.CodeEvent)))
                 {
 
                     await mobileClientHandler.SendAlertToClients(dto, societeResponse.IdSociete);
@@ -266,7 +266,7 @@ namespace RitegeServer.ServerControllers
                         HeureEvent = eventToAdd.HeureEvent
                     };
                     await mobileClientHandler.SendEventToListeningClients(dto, societeResponse.IdSociete);
-                    if (AlertString.AlertCodes.Contains(Convert.ToString(eventToAdd.CodeEvent)))
+                    if (EventCodes.AlertCodes.Contains(Convert.ToString(eventToAdd.CodeEvent)))
                     {
 
                         await mobileClientHandler.SendAlertToClients(dto, societeResponse.IdSociete);

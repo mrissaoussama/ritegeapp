@@ -113,26 +113,27 @@ namespace RitegeServer.Services
         public async Task<DashBoardDTO> GetDashboardData(int idParking, int idCaisse)
         {
             DashBoardDTO dashBoardDTO = new DashBoardDTO();
-
+            //get session price
             var MontantQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.SessionQueries.GetCurrentSessionQuery { IdParking = idParking, IdCaisse = idCaisse };
             var MontantResponse = await _mediator.Send(MontantQuery);
+            
             if(MontantResponse.Montant is not null)
             dashBoardDTO.RecetteCaissier = (decimal)MontantResponse.Montant;
             if (MontantResponse.idCaisse is not null)
-            {
+            {//get cashier name
                 var CaissierQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.UtilisateurQueries.GetOneByLoginQuery { Login = MontantResponse.LogCaissier };
                 var CaissierResponse = await _mediator.Send(CaissierQuery);
                 dashBoardDTO.NomPrenomCaissier = CaissierResponse.Prenom + " " + CaissierResponse.Nom;
             }
-
+            //get parking total
             var recetteParkingQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.ParkingQueries.GetParkingEarningsByIdQuery { IdParking = idParking };
             var recetteParkingResponse= await _mediator.Send(recetteParkingQuery);
             dashBoardDTO.RecetteParking = recetteParkingResponse;
-
+            //get cash register's today earnings
             var recettedayQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.CaisseQueries.GetTodayEarningsByIdQuery { IdCaisse = idCaisse };
             var recettedayResponse = await _mediator.Send(recettedayQuery);
             dashBoardDTO.RecetteCaisse = recettedayResponse;
-
+            //get ticket number
             var nbticketQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.TicketQueries.GetTodayTicketsQuery
             {
                 IdParking = idParking,
@@ -140,7 +141,7 @@ namespace RitegeServer.Services
             };
             var nbticketResponse = await _mediator.Send(nbticketQuery);
             dashBoardDTO.NbTickets = nbticketResponse;
-
+            //get abonne query
             var nbAbonneQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.EvenementQueries.GetTodayAbonneQuery
             {
                 IdParking = idParking,
@@ -148,7 +149,7 @@ namespace RitegeServer.Services
             };
             var nbAbonneResponse = await _mediator.Send(nbAbonneQuery);
             dashBoardDTO.NbAbonne = nbAbonneResponse;
-
+            //get authority
             var nbAutoriteQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.EvenementQueries.GetTodayAutoriteQuery
             {
                 IdParking = idParking,
@@ -156,7 +157,7 @@ namespace RitegeServer.Services
             };
             var nbAutoriteResponse = await _mediator.Send(nbAutoriteQuery);
             dashBoardDTO.NbAutorite = nbAutoriteResponse;
-
+            //get administrator
             var nbAdministrateurQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.EvenementQueries.GetTodayAdministrateurQuery
             {
                 IdParking = idParking,
@@ -164,18 +165,24 @@ namespace RitegeServer.Services
             };
             var nbAdministrateurResponse = await _mediator.Send(nbAdministrateurQuery);
             dashBoardDTO.NbAdministrateur = nbAdministrateurResponse;
-
+            //get parking id
             var parkingQuery = new RitegeDomain.Database.Queries.ParkingDBQueries.ParkingQueries.GetOneByIdParkingQuery
             {
                 IdParking = idParking,
             };
             var parkingResponse = await _mediator.Send(parkingQuery);
-
-            var EgressQuery= new RitegeDomain.Database.Queries.ControleAccess.EventQueries.GetAllByDateAndIdDoorAndEventCodeQuery            {
-                
+            //get egress
+            var EgressQuery = new RitegeDomain.Database.Queries.ControleAccess.EventQueries.GetAllByDateAndIdDoorAndEventCodeQuery {
+                Date = DateTime.Today, IdCaisse = (int)MontantResponse.idCaisse, EventCode = EventCodes.EgressCode
             };
+            var EgressResponse = await _mediator.Send(EgressQuery);
+            dashBoardDTO.FluxBorneTotal = 0;
+           dashBoardDTO.FluxBorneTotal +=((List<Event>)EgressResponse).Count;
 
+            dashBoardDTO.FluxCaisseTotal = 0;
+            dashBoardDTO.FluxCaisseTotal = dashBoardDTO.NbAbonne + dashBoardDTO.NbAdministrateur + dashBoardDTO.NbAutorite + dashBoardDTO.NbTickets;
             dashBoardDTO.PlaceMax = parkingResponse.CapaciteParking;
+
             dashBoardDTO.PlaceDisponible = parkingResponse.CapaciteParking-parkingResponse.PlacesOccupees;
             dashBoardDTO.Caisse = idCaisse.ToString();
             return (dashBoardDTO);
