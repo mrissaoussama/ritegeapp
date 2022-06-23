@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSignalR();
-builder.Services.AddSignalRCore();
+
 builder.Services.AddSingleton<IUserIdProvider, JWTUserIdProvider>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -81,14 +81,14 @@ if (app.Environment.IsDevelopment())
 app.UseDeveloperExceptionPage();
 //app.UseHttpsRedirection();
 app.UseAuthentication();
-app.UseRouting(); 
+app.UseRouting();
+app.UseCors();
 app.UseAuthorization();
-
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapHub<DataHub>("Server");
-    endpoints.MapHub<WebClientHub>("WebClientServer");
+    endpoints.MapHub<WebClientHub>("WebClientHub");
 });
 
 app.Run();

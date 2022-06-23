@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.AspNetCore.SignalR;
 using RitegeServer.Services;
@@ -9,9 +10,17 @@ using System.Security.Claims;
 
 namespace RitegeServer.Hubs
 {
- 
+    [EnableCors]
     public class WebClientHub : Hub
     {
+        public override Task OnConnectedAsync()
+        {
+            var IdSociete = Context.GetHttpContext().Request.Query["idSociete"];
+            Debug.WriteLine("new webclient with IdSociete= " + IdSociete);
+            Groups.AddToGroupAsync(Context.ConnectionId, IdSociete);
+            webClientHandler.AddWebClient(IdSociete, Context.UserIdentifier);
+            return base.OnConnectedAsync();
+        }
         IWebClientHandler webClientHandler;
         public WebClientHub(IWebClientHandler webClientHandler)
         {
@@ -29,14 +38,7 @@ namespace RitegeServer.Hubs
 
             return base.OnDisconnectedAsync(stopCalled);
         }
-        public override Task OnConnectedAsync()
-        {
-            var IdSociete = Context.GetHttpContext().Request.Query["idSociete"];
-            Debug.WriteLine("new webclient with IdSociete= "+IdSociete);
-            Groups.AddToGroupAsync(Context.ConnectionId, IdSociete);
-            webClientHandler.AddWebClient(IdSociete, Context.UserIdentifier);
-            return base.OnConnectedAsync();
-        }
+     
     
    
       

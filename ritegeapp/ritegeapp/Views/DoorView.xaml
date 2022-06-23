@@ -154,7 +154,8 @@
                   xct:IconTintColorEffect.TintColor="{StaticResource Primary}"
                   Grid.Column="0"></Image>
            <Label Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding DoorName}"
-                  HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large"
+                  WidthRequest="150" 
+                  HorizontalOptions="Center" VerticalOptions="Center" FontSize="Medium"
                   TextColor="white"></Label>
            <Image Source="{extentions:ImageResource ritegeapp.images.LabelIcons.state.png}"
                   Scale="0.5"

@@ -173,14 +173,16 @@ namespace RitegeServer.Services
             var parkingResponse = await _mediator.Send(parkingQuery);
             //get egress
             var EgressQuery = new RitegeDomain.Database.Queries.ControleAccess.EventQueries.GetAllByDateAndIdDoorAndEventCodeQuery {
-                Date = DateTime.Today, IdCaisse = (int)MontantResponse.idCaisse, EventCode = EventCodes.EgressCode
+                Date = DateTime.Today, IdCaisse = idCaisse, EventCode = EventCodes.EgressCode
             };
             var EgressResponse = await _mediator.Send(EgressQuery);
+
+
             dashBoardDTO.FluxBorneTotal = 0;
-           dashBoardDTO.FluxBorneTotal +=((List<Event>)EgressResponse).Count;
+           dashBoardDTO.FluxBorneTotal += dashBoardDTO.NbAbonne + dashBoardDTO.NbAdministrateur + dashBoardDTO.NbAutorite + dashBoardDTO.NbTickets;
 
             dashBoardDTO.FluxCaisseTotal = 0;
-            dashBoardDTO.FluxCaisseTotal = dashBoardDTO.NbAbonne + dashBoardDTO.NbAdministrateur + dashBoardDTO.NbAutorite + dashBoardDTO.NbTickets;
+            dashBoardDTO.FluxCaisseTotal = dashBoardDTO.NbAbonne + dashBoardDTO.NbAdministrateur + dashBoardDTO.NbAutorite + dashBoardDTO.NbTickets+ ((List<Event>)EgressResponse).Count;
             dashBoardDTO.PlaceMax = parkingResponse.CapaciteParking;
 
             dashBoardDTO.PlaceDisponible = parkingResponse.CapaciteParking-parkingResponse.PlacesOccupees;

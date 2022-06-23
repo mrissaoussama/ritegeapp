@@ -79,7 +79,7 @@ namespace RitegeServer.ServerControllers
                 };
                 Borne? TicketBorneResponse = await _mediator.Send(TicketBorneQuery);
 
-                if (TicketBorneResponse.IdBorne != 0)
+                if (true)
                 {
                     var dto = new InfoTicketDTO();
                     dto.MontantPaye = (decimal)AddTicketResponse.Tarif;
