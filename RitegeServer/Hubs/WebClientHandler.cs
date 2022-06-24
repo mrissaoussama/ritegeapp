@@ -34,14 +34,14 @@ namespace RitegeServer.Hubs
         }
 
 
-        public async Task ChangeDoorStateForParking(int idSociete, int idDoor, bool State)
+        public async Task ChangeDoorStateForParking(int idSociete, int idDoor,int idController, bool State)
         {
             if (WebClients.Any(webclient => webclient.IdSociete == idSociete.ToString()))
             {
 
                 var webclient = WebClients.Where(webclient => webclient.IdSociete == idSociete.ToString()).Select(webclient => webclient.ConnectionId).ToList();
 
-                await _hubContext.Clients.Users(webclient).SendAsync("ChangeDoorState", idDoor, State);
+                await _hubContext.Clients.Users(webclient).SendAsync("ChangeDoorState", idDoor,idController, State);
             }
         }
         public async Task OpenDoorForParking(int idSociete, int idDoor)
