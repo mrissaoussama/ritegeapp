@@ -387,11 +387,12 @@
             var list = await GetData<List<ParkingEvent>>("/Parking/GetLast10Events", parameters);
             return list;
         }
-        public async Task ChangeDoorState(int idDoor, bool IsOpen)
+        public async Task ChangeDoorState(int idDoor,int idController, bool IsOpen)
         {
             var parameters = new Dictionary<string, string>
             {
                  { nameof(idDoor), idDoor.ToString()},
+                 { nameof(idController), idController.ToString()},
                  { nameof(IsOpen), IsOpen.ToString()}
             };
             await GetData<List<ParkingEvent>>("/Parking/ChangeDoorState", parameters);

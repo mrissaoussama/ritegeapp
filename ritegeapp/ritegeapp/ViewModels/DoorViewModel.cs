@@ -83,8 +83,9 @@ namespace ritegeapp.ViewModels
         private void DoorStateChanged(DoorData doorData)
         {
             StateManager.ShowLoading();
-            var index = ListDoor.IndexOf(ListDoor.Where(x => x.idDoor == doorData.idDoor).Single());
-            ListDoor.Remove(ListDoor.Where(x => x.idDoor == doorData.idDoor).Single());
+            var index = ListDoor.IndexOf(ListDoor.Where(x => x.IdDoor == doorData.IdDoor).Single());
+            doorData.DoorName = ListDoor[index].DoorName;
+            ListDoor.Remove(ListDoor.Where(x => x.IdDoor == doorData.IdDoor).Single());
             ListDoor.Insert(index, doorData);
                 StateManager.ShowDataView();
         }
@@ -168,7 +169,7 @@ namespace ritegeapp.ViewModels
         {
             var doordata = obj as DoorData;
             if(doordata != null)
-            await dataService.ChangeDoorState(doordata.idDoor,doordata.DoorState);
+            await dataService.ChangeDoorState(doordata.IdDoor,doordata.IdController,doordata.DoorState);
         }
         public async Task PageLeft()
         {

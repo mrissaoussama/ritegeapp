@@ -15,7 +15,7 @@ namespace RitegeDomain.Database.Repositories
             using (SqlConnection con = new(connectionString))
             {
                 string query;
-                query = "SELECT * FROM controleaccessdb.Door where iddoor=@IdDoor";
+                query = "SELECT * FROM controleaccessdb.Door where idPorte=@IdDoor";
                 using (SqlCommand cmd = new(query))
                 {
                     cmd.Connection = con;
@@ -145,7 +145,7 @@ namespace RitegeDomain.Database.Repositories
             using (SqlConnection con = new(connectionString))
             {
                 string query;
-                query = "UPDATE controleaccessdb.Door  SET Activated = @State where idDoor=@IdDoor";
+                query = "UPDATE controleaccessdb.Door  SET Activated = @State where idPorte=@IdDoor";
 
                 using (SqlCommand cmd = new(query))
                 {

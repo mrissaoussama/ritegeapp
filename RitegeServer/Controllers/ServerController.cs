@@ -142,7 +142,7 @@ namespace RitegeServer.ServerControllers
             {
                 var doorQuery = new RitegeDomain.Database.Queries.ControleAccess.DoorQueries.GetOneByIdQuery
                 {
-                    Id = door.idDoor
+                    Id = door.IdDoor
                 };
                 Door? doorResponse = await _mediator.Send(doorQuery);
                 if (doorResponse == null || doorResponse.IdPorte == 0)
@@ -151,7 +151,7 @@ namespace RitegeServer.ServerControllers
                 }
                 var updateDoorQuery= new RitegeDomain.Database.Queries.ControleAccess.DoorQueries.UpdateDoorStateByIdQuery
                     {
-                        IdDoor = door.idDoor, Activated=door.DoorState
+                        IdDoor = door.IdDoor, Activated=door.DoorState
                     };
                     int? updareDoorResponse = await _mediator.Send(updateDoorQuery);
                     if(updareDoorResponse<=0)

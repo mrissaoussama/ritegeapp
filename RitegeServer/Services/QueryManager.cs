@@ -226,7 +226,7 @@ namespace RitegeServer.Services
             List<DoorData> doorList = new();
             foreach(var item in response)
             {
-                doorList.Add(new DoorData { DoorName=item.DoorName,DoorState= (bool)item.Activated,idDoor=item.IdDoor });
+                doorList.Add(new DoorData { DoorName=item.DoorName,IdController= (int)item.IdController, DoorState= (bool)item.Activated,IdDoor= (int)item.IdPorte });
             }
             //Dictionary<int, string> doorList = new();
             //foreach (var item in response)
